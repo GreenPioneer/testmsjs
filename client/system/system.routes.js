@@ -17,7 +17,7 @@
         state: 'system',
         config: {
           url: '/',
-          templateUrl: './system.view.html',
+          templateUrl: './system/system.view.html',
           controller: 'SystemController',
           controllerAs: 'vm',
           title: 'System',

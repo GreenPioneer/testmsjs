@@ -37,10 +37,39 @@ module.exports = {
   title: 'MEANSTACKJS',
 
   assets: {
-    js: ['https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js', 'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-resource.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js', 'https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.min.js',
-      '/client.module.js', '/system/system.module.js', '/exception/exception.module.js', '/logger/logger.module.js', '/router/router.module.js', '/layout/layout.module.js', '/layout/layout.controller.js',
-      '/exception/exception-handler.provider.js', '/exception/exception.js', '/logger/logger.js', '/router/router-helper.provider.js',
-      '/system/system.controller.js', '/system/system.routes.js'],
+    js: [
+      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js',
+      'https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js',
+
+      '/client.module.js',
+      '/system/system.module.js',
+      '/exception/exception.module.js',
+      '/logger/logger.module.js',
+      '/router/router.module.js',
+      '/layout/layout.module.js',
+      '/core/core.module.js',
+      '/core/config.js',
+      '/core/constants.js',
+      '/core/core.route.js',
+      '/core/dataservice.js',
+      '/layout/layout.controller.js',
+      '/exception/exception-handler.provider.js',
+      '/exception/exception.js',
+      '/logger/logger.js',
+      '/router/router-helper.provider.js',
+      '/system/system.controller.js',
+      '/system/system.routes.js'
+
+    ],
     css: ['https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css']
   },
   buildreq: {
