@@ -14,7 +14,8 @@
 
   var config = {
     appErrorPrefix: '[helloWorld Error] ',
-    appTitle: 'helloWorld'
+    appTitle: 'helloWorld',
+    user: window.user
   }
 
   core.value('config', config)

@@ -65,7 +65,11 @@ app.set('views', __dirname + '/client')
 app.get('/', function (req, res) {
   res.render(path.resolve('layout') + '/index.html', {
     title: settings.title,
-    assets: settings.assets
+    assets: settings.assets,
+    user: {
+      'name': 'dinher',
+      'email': 'test@aol.com'
+    }
   })
 })
 

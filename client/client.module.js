@@ -7,7 +7,9 @@
     'app.logger',
     'app.router',
     'app.system',
-    'app.core'
+    'app.core',
+    'app.header',
+    'app.footer'
   ])
 
 })()

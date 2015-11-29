@@ -5,11 +5,15 @@
     .module('app.layout')
     .controller('ShellController', ShellController)
 
-  ShellController.$inject = []
+  ShellController.$inject = ['config', 'logger']
   /* @ngInject */
-  function ShellController () {
+  function ShellController (config, logger) {
     var vm = this
     vm.busyMessage = 'Please wait ...'
+    activate()
 
+    function activate () {
+      console.log(config)
+    }
   }
 })()

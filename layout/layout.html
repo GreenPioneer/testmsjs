@@ -8,8 +8,8 @@
 	  <meta name="fragment" content="!">
     <title>{% block title %}{% endblock %} - Example</title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-  <meta name="keywords" content="loveanimals, love, animals">
-  <meta name="description" content="Love Animals">
+  <meta name="keywords" content="mean stack js">
+  <meta name="description" content="Description">
 	 {% for file in assets.css %}
 	    <link rel="stylesheet" href="{{file}}">
 	  {% endfor %}
@@ -19,11 +19,9 @@
 </head>
 <body ng-app="app" >
 
-    {% block header %}{% endblock %}
     
-    {% block body %}{% endblock %}
+    {% block content %}{% endblock %}
 
-    {% block footer %}{% endblock %}
     {% for file in assets.js %}
 	    <script type="text/javascript" src="{{file}}"></script>
 	{% endfor %}

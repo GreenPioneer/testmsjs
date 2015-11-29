@@ -1,11 +1,12 @@
 <div ng-controller="ShellController">
-	<br>
-	<br>
-	<br>
+	
+	<div ng-include="'header/header.view.html'"> </div>
 	<h1>{{vm.busyMessage}}</h1>
 	<h3>jason busy</h3>
 	<!-- data-ng-include="'/system/views/header.html'" -->
 	<!-- data-ng-include="'/admin/views/index.html'" -->
 	<div ui-view></div>
+
+	<div ng-include="'footer/footer.view.html'"> </div>
 </div>
 
