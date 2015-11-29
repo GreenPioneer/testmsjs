@@ -45,7 +45,7 @@
     }
     vm.delete = function (blogId) {
       var deleteConfirm = confirm('Are you sure you want to delete this blog?')
-      if (deleteConfirm == true) {
+      if (deleteConfirm === true) {
         $http.delete('/api/v1/Blog/' + blogId).then(function (response) {
           console.log(response)
           window.location.reload()

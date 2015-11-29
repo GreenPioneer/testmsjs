@@ -35,20 +35,31 @@ module.exports = {
   // The session cookie name
   sessionName: 'connect.meanstackjs',
   title: 'MEANSTACKJS',
-
+  // // 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js',
+  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js',
+  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js',
+  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js',
+  //       'https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js',
+  //       'https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js',
   assets: {
     js: [
-      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js',
-      'https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js',
+
+      '/bower_components/jquery/dist/jquery.min.js',
+      '/bower_components/bootstrap/dist/js/bootstrap.min.js',
+      '/bower_components/moment/moment.js',
+      '/bower_components/toastr/toastr.min.js',
+      '/bower_components/angular/angular.js',
+      '/bower_components/angular-sanitize/angular-sanitize.js',
+      '/bower_components/angular-animate/angular-animate.js',
+      '/bower_components/angular-resource/angular-resource.js',
+      '/bower_components/angular-ui-router/release/angular-ui-router.js',
+      '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      '/bower_components/angular-moment/angular-moment.js',
 
       '/modules/client.module.js',
       '/modules/system/system.module.js',
@@ -80,8 +91,8 @@ module.exports = {
 
     ],
     css: [
-      'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css',
-      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css',
+      '/bower_components/bootstrap/dist/css/bootstrap.min.css',
+      '/bower_components/font-awesome/css/font-awesome.min.css',
       '/modules/blog/blog.style.css'
     ]
   },
