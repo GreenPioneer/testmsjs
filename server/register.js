@@ -3,6 +3,8 @@ var async = require('async')
 var _ = require('lodash')
 var fs = require('fs')
 var chalk = require('chalk')
+
+// backend
 var lookDir = path.resolve(__dirname, './modules')
 var configs = []
 if (!fs.existsSync(lookDir)) {
@@ -39,26 +41,59 @@ _.forEach(data.modules, function (value, key) {
   })
   configs.push(obj)
 })
-// _.forEach(configs, function (r) {
-//   // console.log('./modules/' + r.name + '/' + r.files[0].orginal)
-//   var req = require('./modules/' + r.name + '/' + r.files[0].orginal)
-//   // console.log(req)
-//   _.forEach(req, function (f, key) {
-//     // console.log(f, key)
-//     exporting[key] = f
-//   // module.exports[key] = f
-//   })
-// // module.exports[r.name] = require(req)
-// })
+
+// frontend
+var frontEndDir = path.resolve(__dirname, '../client/modules')
+var frontEndConfigs = []
+if (!fs.existsSync(frontEndDir)) {
+  console.log('does not existsSync')
+}
+var frontEnddata = {}
+var frontEndexporting = {}
+var frontEndmodules = fs.readdirSync(frontEndDir)
+
+frontEndmodules = _.filter(frontEndmodules, function (n) {
+  return !_.startsWith(n, '.')
+})
+frontEndmodules = _.filter(frontEndmodules, function (n) {
+  return path.extname(n) === ''
+})
+
+frontEnddata.modules = frontEndmodules
+_.forEach(frontEnddata.modules, function (value, key) {
+  var obj = {
+    'name': value,
+    'lookup': frontEndDir + '/' + value
+  }
+  var files = fs.readdirSync(frontEndDir + '/' + value)
+
+  files = _.filter(files, function (n) {
+    return !_.startsWith(n, '.')
+  })
+  obj.files = []
+  _.forEach(files, function (f) {
+    var fileData = _.words(f, /[^. ]+/g)
+    obj.files.push({
+      'type': fileData[1],
+      'ext': fileData[2],
+      'name': fileData[0],
+      'orginal': f
+    })
+  // configs[value].push(f)
+  })
+  frontEndConfigs.push(obj)
+})
 
 function Register (app) {
   this.configs = configs
+  this.frontEndConfigs = frontEndConfigs
   this.app = app
 }
 Register.prototype.all = function () {
   function setup () {
     return {
       configs: this.configs,
+      frontEndConfigs: this.frontEndConfigs,
       app: this.app
     }
   }
@@ -78,17 +113,45 @@ function all (setup) {
         files.models.push(require('./modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'routes') {
-        // files.models.push(require('./modules/' + r.name + '/' + j.orginal))
-        // console.log(systemModel)
-        // console.log(settings)
         settings.app.use('/api/', require('./modules/' + r.name + '/' + j.orginal))
       }
     })
-  // console.log(files)
-  // _.forEach(req, function (f, key) {
-  //   exporting[key] = f
-  // // module.exports[key] = f
-  // })
+  })
+
+  // frontend
+  _.forEach(settings.frontEndConfigs, function (r) {
+    var files = {'models': [],'controllers': []}
+    _.forEach(r.files, function (j) {
+      if (j.type === 'controller') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'module') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'routes') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'style') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'view') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'config') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'factory') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'service') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'provider') {
+        console.log('/modules/' + r.name + '/' + j.orginal)
+      } else {
+        console.log('ELSE/modules/' + r.name + '/' + j.orginal)
+      }
+    })
   })
 }
 function register (options) {
