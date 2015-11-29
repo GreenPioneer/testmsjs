@@ -28,7 +28,7 @@ var app = express()
 /**
  * Aggregation & dynamic api building
  */
-var Models = require('./server/models.js')(app)
+var Register = require('./server/register.js')(app)
 var build = require('buildreq')(settings.buildreq)
 
 /**
@@ -47,7 +47,7 @@ app.use(build.query())
 /**
  * Manual Routes
  */
-Models.all()
+Register.all()
 /**
  * Dynamic Routes
  */
