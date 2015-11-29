@@ -17,7 +17,7 @@
         state: 'login',
         config: {
           url: '/login',
-          templateUrl: './user/login.view.html',
+          templateUrl: 'modules/user/login.view.html',
           controller: 'UserController',
           controllerAs: 'vm'
         }

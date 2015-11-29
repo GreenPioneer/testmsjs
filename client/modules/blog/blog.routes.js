@@ -17,7 +17,7 @@
         state: 'create',
         config: {
           url: '/blog/create',
-          templateUrl: './blog/create.view.html',
+          templateUrl: 'modules/blog/create.view.html',
           controller: 'BlogController',
           controllerAs: 'vm'
         }
@@ -26,7 +26,7 @@
         state: 'edit',
         config: {
           url: '/blog/edit/:id',
-          templateUrl: './blog/edit.view.html',
+          templateUrl: 'modules/blog/edit.view.html',
           controller: 'BlogController',
           controllerAs: 'vm'
         }
@@ -35,7 +35,7 @@
         state: 'list',
         config: {
           url: '/blog/list',
-          templateUrl: './blog/list.view.html',
+          templateUrl: 'modules/blog/list.view.html',
           controller: 'BlogController',
           controllerAs: 'vm'
         }
@@ -44,7 +44,7 @@
         state: 'view',
         config: {
           url: '/blog/view/:id',
-          templateUrl: './blog/view.view.html',
+          templateUrl: 'modules/blog/view.view.html',
           controller: 'BlogController',
           controllerAs: 'vm'
         }

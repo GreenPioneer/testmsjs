@@ -10,6 +10,6 @@
       'app.logger',
       'app.router',
       'ui.router',
-
+      'angularMoment'
     ])
 })()
