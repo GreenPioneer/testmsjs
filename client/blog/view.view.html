@@ -1,0 +1,11 @@
+<div class="container" ng-init="vm.find()">
+    <div class="col-sm-8 blog-main">
+        <div class="blog-post">
+            <h2 class="blog-post-title">{{vm.blog.name}}</h2>
+            <a href="/edit/{{vm.blog._id}}"><i class="fa fa-pencil-square-o"></i></a>
+            <a ng-click="vm.delete(vm.blog._id)"><i class="fa fa-trash"></i></a>
+            <p class="blog-post-meta">{{vm.blog.created |date:'medium'}} by <a href="/user/search/{{vm.blog.author}}">{{vm.blog.author}}</a></p>
+            <p>{{vm.blog.content}}</p>
+        </div>
+    </div>
+</div>

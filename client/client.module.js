@@ -10,7 +10,8 @@
     'app.core',
     'app.header',
     'app.footer',
-    'app.user'
+    'app.user',
+    'app.blog'
   ])
 
 })()
