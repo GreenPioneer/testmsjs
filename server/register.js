@@ -1,3 +1,4 @@
+// NEED TO REFACTOR AND REFINE
 var path = require('path')
 var async = require('async')
 var _ = require('lodash')
@@ -55,7 +56,9 @@ var frontEndmodules = fs.readdirSync(frontEndDir)
 frontEndmodules = _.filter(frontEndmodules, function (n) {
   return !_.startsWith(n, '.')
 })
+var mainFrontendFile = ''
 frontEndmodules = _.filter(frontEndmodules, function (n) {
+  if (path.extname(n) !== '')mainFrontendFile = n
   return path.extname(n) === ''
 })
 
@@ -89,12 +92,13 @@ function Register (app) {
   this.frontEndConfigs = frontEndConfigs
   this.app = app
 }
-Register.prototype.all = function () {
+Register.prototype.all = function (meanSettings) {
   function setup () {
     return {
       configs: this.configs,
       frontEndConfigs: this.frontEndConfigs,
-      app: this.app
+      app: this.app,
+      meanSettings: meanSettings
     }
   }
   // return functions.query(setup.bind(this))
@@ -119,40 +123,75 @@ function all (setup) {
   })
 
   // frontend
+  var frontendFiles = {
+    'controller': [],
+    'module': [],
+    'routes': [],
+    'style': [],
+    'view': [],
+    'config': [],
+    'factory': [],
+    'service': [],
+    'provider': [],
+    'else': []
+  }
+  var frontendFilesFinal = {
+    css: [],
+    js: []
+  }
   _.forEach(settings.frontEndConfigs, function (r) {
-    var files = {'models': [],'controllers': []}
     _.forEach(r.files, function (j) {
       if (j.type === 'controller') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'module') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'routes') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.routes.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'style') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'view') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        // HTML FILES DO NOT NEED TO BE LOADED
+        // MAYBE ADDED TO TEMPLATE CACHE
+        // frontendFiles.view.push('/modules/' + r.name + '/' + j.orginal)
+        // frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'config') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'factory') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.factory.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'service') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.service.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'provider') {
-        console.log('/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.provider.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       } else {
-        console.log('ELSE/modules/' + r.name + '/' + j.orginal)
+        frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
     })
   })
+  frontendFilesFinal.js.unshift(/modules/ + mainFrontendFile)
+  _.forEach(settings.meanSettings.assets.css, function (ms) {
+    frontendFilesFinal.css.unshift(ms)
+  })
+  _.forEach(settings.meanSettings.assets.js, function (ms) {
+    frontendFilesFinal.js.unshift(ms)
+  })
+  settings.app.locals.frontendFilesFinal = frontendFilesFinal
 }
 function register (options) {
   if (options === undefined) {

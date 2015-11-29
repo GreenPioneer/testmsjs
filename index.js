@@ -1,6 +1,7 @@
 /**
  * Module dependencies.
  */
+var settings = require('./configs/settings.js')
 var express = require('express')
 var cookieParser = require('cookie-parser')
 var compress = require('compression')
@@ -20,7 +21,7 @@ var mongoose = require('mongoose')
 var passport = require('passport')
 var expressValidator = require('express-validator')
 var sass = require('node-sass-middleware')
-var settings = require('./configs/settings.js')
+
 /**
  * Create Express server.
  */
@@ -47,7 +48,7 @@ app.use(build.query())
 /**
  * Manual Routes
  */
-Register.all()
+Register.all(settings)
 /**
  * Dynamic Routes
  */
@@ -109,11 +110,12 @@ app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 })
 /**
  * Primary app routes.
  */
+
 app.get('/*', function (req, res) {
   console.log(path.resolve('layout') + '/index.html')
   res.render(path.resolve('layout') + '/index.html', {
     title: settings.title,
-    assets: settings.assets,
+    assets: app.locals.frontendFilesFinal,
     user: {
       'name': 'dinher',
       'email': 'test@aol.com',

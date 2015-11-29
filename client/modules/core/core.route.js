@@ -17,7 +17,7 @@
         state: '404',
         config: {
           url: '/404',
-          templateUrl: 'core/404.html',
+          templateUrl: 'modules/core/404.view.html',
           title: '404'
         }
       }
