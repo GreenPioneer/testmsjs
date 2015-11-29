@@ -87,11 +87,11 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-// app.use(lusca({
-//   csrf: true,
-//   xframe: 'SAMEORIGIN',
-//   xssProtection: true
-// }))
+app.use(lusca({
+  csrf: true,
+  xframe: 'SAMEORIGIN',
+  xssProtection: true
+}))
 app.use(function (req, res, next) {
   res.locals.user = req.user
   next()
@@ -103,7 +103,8 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use(express.static(path.join(__dirname, 'client'), { maxAge: 31557600000 }))
+app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
+app.use(express.static(path.join(__dirname, 'client/modules'), { maxAge: 31557600000 }))
 
 /**
  * Primary app routes.
