@@ -16,7 +16,7 @@
     vm.create = function () {
       $http.post('/api/v1/Blog/', vm.blog).then(function (response) {
         vm.blog = response.data.data
-        window.location.href = '/list'
+        window.location.href = '/blog/list'
       }, function () {
         console.log(arguments)
       })
@@ -38,7 +38,7 @@
     vm.update = function () {
       $http.put('/api/v1/Blog/' + $stateParams.id, vm.blog).then(function (response) {
         vm.blog = response.data.data
-        window.location.href = '/view/' + $stateParams.id
+        window.location.href = '/blog/view/' + $stateParams.id
       }, function () {
         console.log(arguments)
       })
