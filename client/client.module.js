@@ -9,7 +9,8 @@
     'app.system',
     'app.core',
     'app.header',
-    'app.footer'
+    'app.footer',
+    'app.user'
   ])
 
 })()

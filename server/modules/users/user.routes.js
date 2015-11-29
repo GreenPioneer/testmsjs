@@ -1,0 +1,23 @@
+var _ = require('lodash')
+var express = require('express')
+var chalk = require('chalk')
+var passportConf = require('./passport.controller.js')
+var user = require('./user.controller.js')
+var app = express()
+
+app.get('/login', user.getLogin)
+app.post('/login', user.postLogin)
+app.get('/logout', user.logout)
+app.get('/forgot', user.getForgot)
+app.post('/forgot', user.postForgot)
+app.get('/reset/:token', user.getReset)
+app.post('/reset/:token', user.postReset)
+app.get('/signup', user.getSignup)
+app.post('/signup', user.postSignup)
+app.get('/account', passportConf.isAuthenticated, user.getAccount)
+app.post('/account/profile', passportConf.isAuthenticated, user.postUpdateProfile)
+app.post('/account/password', passportConf.isAuthenticated, user.postUpdatePassword)
+app.post('/account/delete', passportConf.isAuthenticated, user.postDeleteAccount)
+app.get('/account/unlink/:provider', passportConf.isAuthenticated, user.getOauthUnlink)
+
+module.exports = app

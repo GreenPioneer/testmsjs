@@ -3,11 +3,11 @@
 
   angular
     .module('app.layout')
-    .controller('ShellController', ShellController)
+    .controller('LayoutController', LayoutController)
 
-  ShellController.$inject = ['config', 'logger']
+  LayoutController.$inject = ['config', 'logger']
   /* @ngInject */
-  function ShellController (config, logger) {
+  function LayoutController (config, logger) {
     var vm = this
     vm.busyMessage = 'Please wait ...'
     activate()

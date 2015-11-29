@@ -59,19 +59,6 @@ var swig = require('swig')
 app.engine('html', swig.renderFile)
 app.set('view engine', 'html')
 app.set('views', __dirname + '/client')
-/**
- * Primary app routes.
- */
-app.get('/', function (req, res) {
-  res.render(path.resolve('layout') + '/index.html', {
-    title: settings.title,
-    assets: settings.assets,
-    user: {
-      'name': 'dinher',
-      'email': 'test@aol.com'
-    }
-  })
-})
 
 /**
  * Express configuration.
@@ -115,8 +102,24 @@ app.use(function (req, res, next) {
   }
   next()
 })
+
 app.use(express.static(path.join(__dirname, 'client'), { maxAge: 31557600000 }))
 
+/**
+ * Primary app routes.
+ */
+app.get('/*', function (req, res) {
+  console.log(path.resolve('layout') + '/index.html')
+  res.render(path.resolve('layout') + '/index.html', {
+    title: settings.title,
+    assets: settings.assets,
+    user: {
+      'name': 'dinher',
+      'email': 'test@aol.com',
+      'authenticated': true
+    }
+  })
+})
 /**
  * Error Handler.
  */
@@ -128,5 +131,4 @@ app.use(errorHandler())
 app.listen(app.get('port'), function () {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'))
 })
-
 module.exports = app

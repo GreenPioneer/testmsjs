@@ -10,7 +10,7 @@
   function HeaderController (config, logger) {
     var vm = this
     activate()
-
+    vm.user = config.user
     function activate () {
     }
   }

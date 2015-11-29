@@ -81,7 +81,7 @@ function all (setup) {
         // files.models.push(require('./modules/' + r.name + '/' + j.orginal))
         // console.log(systemModel)
         // console.log(settings)
-        settings.app.use('/system/', require('./modules/' + r.name + '/' + j.orginal))
+        settings.app.use('/api/', require('./modules/' + r.name + '/' + j.orginal))
       }
     })
   // console.log(files)

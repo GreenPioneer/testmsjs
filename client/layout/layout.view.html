@@ -1,12 +1,10 @@
-<div ng-controller="ShellController">
-	
+<div ng-controller="LayoutController" class="container">
 	<div ng-include="'header/header.view.html'"> </div>
-	<h1>{{vm.busyMessage}}</h1>
-	<h3>jason busy</h3>
-	<!-- data-ng-include="'/system/views/header.html'" -->
-	<!-- data-ng-include="'/admin/views/index.html'" -->
-	<div ui-view></div>
-
+	<div class="row" style="margin-top:50px;">
+        <div class="col-lg-12">
+            <div ui-view></div>
+        </div>
+    </div>	
 	<div ng-include="'footer/footer.view.html'"> </div>
 </div>
 

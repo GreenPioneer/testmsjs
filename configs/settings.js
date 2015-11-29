@@ -52,6 +52,7 @@ module.exports = {
 
       '/client.module.js',
       '/system/system.module.js',
+      '/user/user.module.js',
       '/exception/exception.module.js',
       '/logger/logger.module.js',
       '/router/router.module.js',
@@ -70,7 +71,9 @@ module.exports = {
       '/logger/logger.js',
       '/router/router-helper.provider.js',
       '/system/system.controller.js',
-      '/system/system.routes.js'
+      '/system/system.routes.js',
+      '/user/user.controller.js',
+      '/user/user.routes.js'
 
     ],
     css: ['https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css']
