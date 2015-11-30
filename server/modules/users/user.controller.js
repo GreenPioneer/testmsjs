@@ -29,7 +29,6 @@ exports.getLogin = function (req, res) {
  * Sign in using email and password.
  */
 exports.postLogin = function (req, res, next) {
-  console.log(req.query)
   // req.assert('email', 'Email is not valid').isEmail()
   // req.assert('password', 'Password cannot be blank').notEmpty()
 
@@ -46,14 +45,14 @@ exports.postLogin = function (req, res, next) {
     }
     console.log(err, user, info)
     if (!user) {
-      req.flash('errors', { msg: info.message })
+      // req.flash('errors', { msg: info.message })
       return res.redirect('/login')
     }
     req.logIn(user, function (err) {
       if (err) {
         return next(err)
       }
-      req.flash('success', { msg: 'Success! You are logged in.' })
+      // req.flash('success', { msg: 'Success! You are logged in.' })
       res.redirect(req.session.returnTo || '/')
     })
   })(req, res, next)

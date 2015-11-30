@@ -5,6 +5,7 @@
     .module('app.core', [
       'ngAnimate',
       'ngSanitize',
+      'ngResource',
       'ui.bootstrap',
       'app.exception',
       'app.logger',

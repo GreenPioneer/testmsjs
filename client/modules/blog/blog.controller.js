@@ -4,17 +4,25 @@
   angular
     .module('app.blog', [])
     .controller('BlogController', BlogController)
+    .factory('BlogFactory', BlogFactory)
+    .config(config)
 
-  BlogController.$inject = ['$http', '$stateParams']
+  function config ($httpProvider) {
+    $httpProvider.defaults.xsrfHeaderName = '_csrf'
+    $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'
+  }
+
+  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory']
   /* @ngInject */
-  function BlogController ($http, $stateParams) {
+  function BlogController ($http, $stateParams, BlogFactory) {
     var vm = this
     vm.title = 'System'
     vm.blog = vm.user = {}
     activate()
 
     vm.create = function () {
-      $http.post('/api/v1/Blog/', vm.blog).then(function (response) {
+      var blog = new BlogFactory(vm.blog)
+      blog.$save(function (response) {
         vm.blog = response.data.data
         window.location.href = '/blog/list'
       }, function () {
@@ -59,4 +67,17 @@
       console.log('Activated BlogController View')
     }
   }
+
+  BlogFactory.$inject = ['$resource']
+  /* @ngInject */
+  function BlogFactory ($resource) {
+    return $resource('/api/v1/Blog/:blogId', {
+      blogId: '@_id'
+    }, {
+      update: {
+        method: 'PUT'
+      }
+    })
+  }
+
 })()

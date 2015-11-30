@@ -50,9 +50,12 @@ app.use(build.query())
  */
 Register.all(settings)
 /**
- * Dynamic Routes
+ * Dynamic Routes / Manully enabling them . You can change it back to automatic in the settings
+ * build.routing(app, mongoose) - if reverting back to automatic
  */
-build.routing(app)
+_.forEach(build.routing(app, mongoose), function (m) {
+  app.use(m.route, m.app)
+})
 /**
  * Swig configuration.
  */
@@ -66,16 +69,16 @@ app.set('views', __dirname + '/client')
  */
 app.set('port', process.env.PORT || 3000)
 app.use(compress())
-app.use(sass({
-  src: path.join(__dirname, 'client'),
-  dest: path.join(__dirname, 'client'),
-  debug: true,
-  outputStyle: 'expanded'
-}))
+// app.use(sass({
+//   src: path.join(__dirname, 'client'),
+//   dest: path.join(__dirname, 'client'),
+//   debug: true,
+//   outputStyle: 'expanded'
+// }))
 app.use(logger('dev'))
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressValidator())
 app.use(methodOverride())
 app.use(cookieParser())
@@ -88,11 +91,14 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-app.use(lusca({
-  csrf: true,
-  xframe: 'SAMEORIGIN',
-  xssProtection: true
-}))
+// app.use(lusca({
+//   csrf: {key: 'x-xsrf-token', header: '_csrf'},
+//   xframe: 'SAMEORIGIN',
+//   csp: false,
+//   p3p: false,
+//   hsts: false,
+//   xssProtection: true
+// }))
 app.use(function (req, res, next) {
   res.locals.user = req.user
   next()
@@ -105,15 +111,14 @@ app.use(function (req, res, next) {
 })
 
 app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
-// app.use(express.static(path.join(__dirname, 'client/modules'), { maxAge: 31557600000 }))
 
 /**
  * Primary app routes.
  */
 
 app.get('/*', function (req, res) {
-  console.log(path.resolve('layout') + '/index.html')
-  res.render(path.resolve('layout') + '/index.html', {
+  console.log(path.resolve('server') + '/layout/index.html')
+  res.render(path.resolve('server') + '/layout/index.html', {
     title: settings.title,
     assets: app.locals.frontendFilesFinal,
     user: {
