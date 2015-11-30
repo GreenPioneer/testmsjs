@@ -12,12 +12,13 @@
     $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'
   }
 
-  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory']
+  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config']
   /* @ngInject */
-  function BlogController ($http, $stateParams, BlogFactory) {
+  function BlogController ($http, $stateParams, BlogFactory, config) {
     var vm = this
     vm.title = 'System'
-    vm.blog = vm.user = {}
+    vm.blog = {}
+    vm.user = config.user || {}
     activate()
 
     vm.create = function () {

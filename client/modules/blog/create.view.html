@@ -23,7 +23,7 @@
                 <div class="form-group" ng-class="{ 'has-error' : submitted && blogForm.author.$invalid }">
                     <label for="author" class="col-md-3 control-label">Author</label>
                     <div class="col-md-9">
-                        <input name="author" data-ng-model="vm.blog.author" id="author" placeholder="Author" class="form-control" required>
+                        <input name="author" ng-init="vm.blog.author = vm.user.profile.name" data-ng-model="vm.blog.author" id="author" placeholder="Author" class="form-control" required>
                         <div ng-show="submitted && blogForm.author.$invalid" class="help-block">
                             <p ng-show="blogForm.author.$error.required">Author is required</p>
                         </div>
