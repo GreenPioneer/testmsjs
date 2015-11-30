@@ -36,13 +36,13 @@
                 <ul class="navbar-nav nav auth-link">
                     <li ng-show="!vm.user.email"><a style="color:white"  href='/login'>Log In</a></li> <!-- ng-show="!vm.user.authenticated" -->
                     <li ng-show="!vm.user.email"><a style="color:white" href='/signup'>Sign Up</a></li>
-                    <li uib-dropdown  ng-show="vm.user.email">
+                    <li uib-dropdown  ng-show="vm.user.profile.name">
                       <a style="color:white" href id="simple-dropdown" uib-dropdown-toggle>
                         {{vm.user.profile.name}}<span class="caret"></span>
                       </a>
                       <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
                         <li><a href='/account'>Account</a></li>
-                        <li><a href='/api/logout'>Logout</a></li>
+                        <li><a href='#' ng-click='vm.logout()'>Logout</a></li>
                       </ul>
                     </li>
                 </ul>

@@ -12,6 +12,14 @@
     activate()
     vm.location = 'Header'
     vm.user = config.user
+
+    vm.logout = function () {
+      vm.user = config.user = {}
+
+      $http.get('/api/logout').success(function (data) {
+        // do something
+      })
+    }
     function activate () {
     }
   }
