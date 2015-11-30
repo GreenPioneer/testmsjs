@@ -63,6 +63,7 @@ exports.postLogin = function (req, res, next) {
  * Log out.
  */
 exports.logout = function (req, res) {
+  console.log('logggggo out')
   req.logout()
   res.redirect('/')
 }
@@ -83,25 +84,28 @@ exports.getSignup = function (req, res) {
  * Create a new local account.
  */
 exports.postSignup = function (req, res, next) {
-  req.assert('email', 'Email is not valid').isEmail()
-  req.assert('password', 'Password must be at least 4 characters long').len(4)
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password)
+  // req.assert('email', 'Email is not valid').isEmail()
+  // req.assert('password', 'Password must be at least 4 characters long').len(4)
+  // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password)
 
-  var errors = req.validationErrors()
+  // var errors = req.validationErrors()
 
-  if (errors) {
-    req.flash('errors', errors)
-    return res.redirect('/signup')
-  }
+  // if (errors) {
+  //   req.flash('errors', errors)
+  //   return res.redirect('/signup')
+  // }
 
   var user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    profile: {
+      name: req.body.profile.name
+    }
   })
 
   User.findOne({ email: req.body.email }, function (err, existingUser) {
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' })
+      // req.flash('errors', { msg: 'Account with that email address already exists.' })
       return res.redirect('/signup')
     }
     user.save(function (err) {
@@ -135,16 +139,17 @@ exports.postUpdateProfile = function (req, res, next) {
     if (err) {
       return next(err)
     }
-    user.email = req.body.email || ''
-    user.profile.name = req.body.name || ''
-    user.profile.gender = req.body.gender || ''
-    user.profile.location = req.body.location || ''
-    user.profile.website = req.body.website || ''
+    user = _.merge(user, req.body)
+    // user.email = req.body.email || ''
+    // user.profile.name = req.body.name || ''
+    // user.profile.gender = req.body.gender || ''
+    // user.profile.location = req.body.location || ''
+    // user.profile.website = req.body.website || ''
     user.save(function (err) {
       if (err) {
         return next(err)
       }
-      req.flash('success', { msg: 'Profile information updated.' })
+      // req.flash('success', { msg: 'Profile information updated.' })
       res.redirect('/account')
     })
   })

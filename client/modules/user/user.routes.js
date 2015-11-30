@@ -21,6 +21,24 @@
           controller: 'UserController',
           controllerAs: 'vm'
         }
+      },
+      {
+        state: 'signup',
+        config: {
+          url: '/signup',
+          templateUrl: 'modules/user/signup.view.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+        }
+      },
+      {
+        state: 'account',
+        config: {
+          url: '/account',
+          templateUrl: 'modules/user/account.view.html',
+          controller: 'UserController',
+          controllerAs: 'vm'
+        }
       }
     ]
   }

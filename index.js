@@ -42,21 +42,6 @@ mongoose.connection.on('error', function () {
 })
 
 /**
- * Dynamic Query Builder
- */
-app.use(build.query())
-/**
- * Manual Routes
- */
-Register.all(settings)
-/**
- * Dynamic Routes / Manully enabling them . You can change it back to automatic in the settings
- * build.routing(app, mongoose) - if reverting back to automatic
- */
-_.forEach(build.routing(app, mongoose), function (m) {
-  app.use(m.route, m.app)
-})
-/**
  * Swig configuration.
  */
 var swig = require('swig')
@@ -110,6 +95,25 @@ app.use(function (req, res, next) {
   next()
 })
 
+/**
+ * Dynamic Query Builder
+ */
+app.use(build.query())
+/**
+ * Manual Routes
+ */
+Register.all(settings)
+/**
+ * Dynamic Routes / Manully enabling them . You can change it back to automatic in the settings
+ * build.routing(app, mongoose) - if reverting back to automatic
+ */
+_.forEach(build.routing(app, mongoose), function (m) {
+  app.use(m.route, m.app)
+})
+
+/**
+ * Make Client Folder Public
+ */
 app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
 
 /**
@@ -117,15 +121,18 @@ app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 })
  */
 
 app.get('/*', function (req, res) {
-  console.log(path.resolve('server') + '/layout/index.html')
+  if (_.isUndefined(req.user))req.user = {}
+
+  if (req.user) {
+    req.user.authenticated = true
+  } else {
+    req.user.authenticated = false
+  }
+  console.log(req.user)
   res.render(path.resolve('server') + '/layout/index.html', {
     title: settings.title,
     assets: app.locals.frontendFilesFinal,
-    user: {
-      'name': 'dinher',
-      'email': 'test@aol.com',
-      'authenticated': true
-    }
+    user: req.user
   })
 })
 /**
