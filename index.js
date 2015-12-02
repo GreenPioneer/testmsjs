@@ -121,12 +121,11 @@ app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 })
  */
 
 app.get('/*', function (req, res) {
-  if (_.isUndefined(req.user))req.user = {}
-
-  if (req.user) {
-    req.user.authenticated = true
-  } else {
+  if (_.isUndefined(req.user)) {
+    req.user = {}
     req.user.authenticated = false
+  } else {
+    req.user.authenticated = true
   }
   console.log(req.user)
   res.render(path.resolve('server') + '/layout/index.html', {

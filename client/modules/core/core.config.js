@@ -1,10 +1,13 @@
+/* global angular:false toastr:false, moment:false */
+
 ;(function () {
   'use strict'
 
   var core = angular.module('app.core')
 
   core.config(toastrConfig)
-
+  core.constant('toastr', toastr)
+  core.constant('moment', moment)
   toastrConfig.$inject = ['toastr']
   /* @ngInject */
   function toastrConfig (toastr) {

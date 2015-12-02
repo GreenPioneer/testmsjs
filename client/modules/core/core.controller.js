@@ -2,8 +2,8 @@
   'use strict'
 
   angular
-    .module('app.layout')
-    .controller('LayoutController', LayoutController)
+    .module('app.core')
+    .controller('CoreController', LayoutController)
 
   LayoutController.$inject = ['config', 'logger']
   /* @ngInject */

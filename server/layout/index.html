@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="{{file}}"> {% endfor %}
 </head>
 
-<body ng-app="app" id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-    <div ng-include="'modules/layout/layout.view.html'">
+<body ng-app="app">
+    <div ng-include="'modules/core/core.view.html'">
     </div>
     <script type="text/javascript">
         window.user = {{user|json|safe}};
