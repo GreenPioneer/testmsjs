@@ -7,9 +7,7 @@
       'ngSanitize',
       'ngResource',
       'ui.bootstrap',
-      'app.exception',
-      'app.logger',
-      'app.router',
+      'app.util',
       'ui.router',
       'angularMoment'
     ])

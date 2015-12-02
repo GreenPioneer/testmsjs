@@ -2,10 +2,8 @@
   'use strict'
 
   angular.module('app', [
-    'app.exception',
-    'app.logger',
-    'app.router',
-    'app.system',
+    'app.util',
+    'app.index',
     'app.core',
     'app.header',
     'app.footer',
