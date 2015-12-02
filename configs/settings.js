@@ -125,7 +125,7 @@ module.exports = {
     routing: {
       schema: true,
       url: '/api/v1/',
-      base: false
+      build: false
     }
   }
 }
