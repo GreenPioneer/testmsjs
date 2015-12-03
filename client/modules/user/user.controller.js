@@ -5,9 +5,9 @@
     .module('app.user', [])
     .controller('UserController', UserController)
 
-  UserController.$inject = ['$http', 'config']
+  UserController.$inject = ['$http', 'config','$location']
   /* @ngInject */
-  function UserController ($http, config) {
+  function UserController ($http, config,$location) {
     var vm = this
     vm.loginCred = {}
     vm.user = vm.editProfile = config.user || {}
@@ -19,7 +19,7 @@
         password: vm.loginCred.password
       })
         .success(function () {
-          window.location.href = '/'
+          $location.url('/')
           console.log(arguments)
           vm.loginCred = {}
         })
