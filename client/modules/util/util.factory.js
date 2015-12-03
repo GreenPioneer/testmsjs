@@ -5,9 +5,13 @@
     .module('app.util')
     .factory('logger', logger)
     .factory('exception', exception)
+    .factory('httpInterceptor', httpInterceptor)
+    .factory('noCacheInterceptor', noCacheInterceptor)
 
   logger.$inject = ['$log', 'toastr']
-
+  exception.$inject = []
+  httpInterceptor.$inject = ['$q', '$location']
+  noCacheInterceptor.$inject = []
   /* @ngInject */
   function logger ($log, toastr) {
     var service = {
@@ -66,9 +70,51 @@
       }
     }
   }
+
+
+/* @ngInject */
+ function httpInterceptor($q, $location) {
+            return {
+                'response': function(response) {
+                    if (response.status === 402) {
+                        $location.path('/login');
+                        return $q.reject(response);
+                    }
+                    return response || $q.when(response);
+                },
+
+                'responseError': function(rejection) {
+
+                    if (rejection.status === 402) {
+                        $location.url('/login');
+                        return $q.reject(rejection);
+                    }
+                    return $q.reject(rejection);
+                }
+
+            };
+        }
+/* @ngInject */
+function noCacheInterceptor() {
+        return {
+            request: function(config) {
+                //console.log(config.method);
+                var n = config.url.search(/template|modal|myModal|myCloseModal|myEmailModal/i);
+                //console.log("search", n + ":"+ config.url);
+                if (n == -1) {
+                    if (config.method == 'GET') {
+                        var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+                        config.url = config.url + separator + 'noCache=' + new Date().getTime();
+                    }
+                    //console.log(config.method);
+                    //console.log(config.url);
+                } else {
+                    //console.log("console noCache");
+                }
+
+                return config;
+            }
+        };
+    }
+
 }())
-;(function () {
-  'use strict'
-
-
-})()
