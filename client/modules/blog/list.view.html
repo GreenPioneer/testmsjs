@@ -9,9 +9,12 @@
           <h1 ng-show="!vm.blogs">No Blog Post <a href="/create">Create One Now</a></h1>
           <div class="blog-post" ng-repeat="(key, value) in vm.blogs">
             <h2 class="blog-post-title">{{value.name}}</h2>
-            <a href="/blog/edit/{{value._id}}"><i class="fa fa-pencil-square-o"></i></a>
-            <a href="/blog/view/{{value._id}}"><i class="fa fa-eye"></i></a>
-            <a ng-click="vm.delete(value._id)"><i class="fa fa-trash"></i></a>
+            <span ng-show="vm.UserFactory.user.authenticated">
+              <a href="/blog/edit/{{value._id}}"><i class="fa fa-pencil-square-o"></i></a>
+              <a href="/blog/view/{{value._id}}"><i class="fa fa-eye"></i></a>
+              <a ng-click="vm.delete(value._id)"><i class="fa fa-trash"></i></a>
+            </span>
+            
             <p class="blog-post-meta">{{value.created |date:'medium'}} by <a href="/user/search/{{value.author}}">{{value.author}}</a></p>
             <p>{{value.content}}</p>
           </div><!-- /.blog-post -->

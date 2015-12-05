@@ -15,12 +15,10 @@ var secrets = {
  * Login page.
  */
 exports.getLogin = function (req, res) {
-  console.log('get')
-  console.log(req.user)
   if (req.user) {
-    return res.send(req.user)
+    return res.status(200).send(req.user)
   }
-  res.send({authenticated: false})
+  res.status(200).send({authenticated: false,redirect: req.session.returnTo})
 }
 
 /**
@@ -152,7 +150,8 @@ exports.postUpdateProfile = function (req, res, next) {
         return next(err)
       }
       // req.flash('success', { msg: 'Profile information updated.' })
-      res.redirect('/account')
+      res.status(200).send(user)
+
     })
   })
 }

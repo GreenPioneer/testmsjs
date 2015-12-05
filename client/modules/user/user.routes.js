@@ -19,7 +19,12 @@
           url: '/login',
           templateUrl: 'modules/user/login.view.html',
           controller: 'UserController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loggedout: function (UserFactory) {
+              return UserFactory.checkLoggedOut()
+            }
+          }
         }
       },
       {
@@ -28,7 +33,12 @@
           url: '/signup',
           templateUrl: 'modules/user/signup.view.html',
           controller: 'UserController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loggedout: function (UserFactory) {
+              return UserFactory.checkLoggedOut()
+            }
+          }
         }
       },
       {
@@ -37,7 +47,12 @@
           url: '/account',
           templateUrl: 'modules/user/account.view.html',
           controller: 'UserController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loggedin: function (UserFactory) {
+              return UserFactory.checkLoggedin()
+            }
+          }
         }
       }
     ]

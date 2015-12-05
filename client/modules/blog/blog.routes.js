@@ -19,7 +19,12 @@
           url: '/blog/create',
           templateUrl: 'modules/blog/create.view.html',
           controller: 'BlogController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loggedin: function (UserFactory) {
+              return UserFactory.checkLoggedin()
+            }
+          }
         }
       },
       {
@@ -28,7 +33,12 @@
           url: '/blog/edit/:id',
           templateUrl: 'modules/blog/edit.view.html',
           controller: 'BlogController',
-          controllerAs: 'vm'
+          controllerAs: 'vm',
+          resolve: {
+            loggedin: function (UserFactory) {
+              return UserFactory.checkLoggedin()
+            }
+          }
         }
       },
       {

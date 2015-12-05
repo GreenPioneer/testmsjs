@@ -90,7 +90,14 @@ app.use(function (req, res, next) {
 })
 app.use(function (req, res, next) {
   if (/api/i.test(req.path)) {
-    req.session.returnTo = req.path
+    try {
+      if (req.body.redirect) {
+        console.log(req.body)
+        req.session.returnTo = req.body.redirect
+      }
+    } catch(err) {
+      console.log(err)
+    }
   }
   next()
 })

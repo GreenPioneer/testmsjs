@@ -9,11 +9,9 @@
   /* @ngInject */
   function LayoutController (config, logger) {
     var vm = this
-    vm.busyMessage = 'Please wait ...'
     activate()
 
     function activate () {
-      console.log(config)
     }
   }
 })()

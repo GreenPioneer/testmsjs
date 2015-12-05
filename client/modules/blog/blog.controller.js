@@ -12,20 +12,21 @@
     $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'
   }
 
-  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config', 'logger']
+  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config', 'logger', '$location', 'UserFactory']
   /* @ngInject */
-  function BlogController ($http, $stateParams, BlogFactory, config, logger) {
+  function BlogController ($http, $stateParams, BlogFactory, config, logger, $location, UserFactory) {
     var vm = this
     vm.title = 'System'
     vm.blog = {}
-    vm.user = config.user || {}
+    vm.UserFactory = UserFactory
     activate()
 
     vm.create = function () {
       var blog = new BlogFactory(vm.blog)
       blog.$save(function (response) {
         vm.blog = response.data.data
-        window.location.href = '/blog/list'
+        // window.location.href = 
+        $location.url('/blog/list')
       }, function (error) {
         console.log(arguments)
       })
@@ -53,7 +54,7 @@
           id: $stateParams.id
         }, vm.blog,
           function (success) {
-            window.location.href = '/blog/view/' + $stateParams.id
+            $location.url('/blog/view/' + $stateParams.id)
           },
           function (error) {
             console.log(arguments)
