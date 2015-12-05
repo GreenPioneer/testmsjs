@@ -18,10 +18,9 @@ exports.getLogin = function (req, res) {
   console.log('get')
   console.log(req.user)
   if (req.user) {
-    return res.redirect('/')
+    return res.send(req.user)
   }
-  res.redirect('/login')
-
+  res.send({authenticated: false})
 }
 
 /**
@@ -46,14 +45,17 @@ exports.postLogin = function (req, res, next) {
     console.log(err, user, info)
     if (!user) {
       // req.flash('errors', { msg: info.message })
-      return res.redirect('/login')
+      return res.status(400).send(info.message)
     }
     req.logIn(user, function (err) {
       if (err) {
         return next(err)
       }
       // req.flash('success', { msg: 'Success! You are logged in.' })
-      res.redirect(req.session.returnTo || '/')
+      // res.redirect(req.session.returnTo || '/')
+      // delete user.password
+      // delete user._id
+      return res.status(200).send(user)
     })
   })(req, res, next)
 }

@@ -10,7 +10,6 @@
         <a class="navbar-brand visible-xs" style="color:white" href="/">Mean Stack JS</a>
     </div>
     <nav class="hidden-xs">
-        
          <div class="left pull-left">
                 <ul class="navbar-nav nav">
                     <li>
@@ -34,11 +33,11 @@
             <div class="right pull-right">
 
                 <ul class="navbar-nav nav auth-link">
-                    <li ng-show="!vm.user.email"><a style="color:white"  href='/login'>Log In</a></li> <!-- ng-show="!vm.user.authenticated" -->
-                    <li ng-show="!vm.user.email"><a style="color:white" href='/signup'>Sign Up</a></li>
-                    <li uib-dropdown  ng-show="vm.user.profile.name">
-                      <a style="color:white" href id="simple-dropdown" uib-dropdown-toggle>
-                        {{vm.user.profile.name}}<span class="caret"></span>
+                    <li ng-show="!vm.UserFactory.user.email"><a style="color:white"  href='/login'>Log In</a></li> <!-- ng-show="!vm.user.authenticated" -->
+                    <li ng-show="!vm.UserFactory.user.email"><a style="color:white" href='/signup'>Sign Up</a></li>
+                    <li uib-dropdown  ng-show="vm.UserFactory.user.profile.name">
+                      <a style="color:white" id="simple-dropdown" uib-dropdown-toggle>
+                        {{vm.UserFactory.user.profile.name}}<span class="caret"></span>
                       </a>
                       <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
                         <li><a href='/account'>Account</a></li>

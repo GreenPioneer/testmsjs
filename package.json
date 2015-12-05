@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Custom Mean Stack",
   "main": "index.js",
+  "bin": {
+    "mean": "./commands/create"
+    },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

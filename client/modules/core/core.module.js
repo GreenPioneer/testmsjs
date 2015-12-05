@@ -6,6 +6,7 @@
       'ngAnimate',
       'ngSanitize',
       'ngResource',
+      'ngCookies',
       'ui.bootstrap',
       'app.util',
       'ui.router',

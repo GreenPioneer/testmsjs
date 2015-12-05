@@ -31,22 +31,22 @@
       })
     }
     vm.find = function () {
-      $http.get('/api/v1/Blog/' + $stateParams.id).then(function (response) {
-        vm.blog = response.data.data
+      $http.get('/api/v1/Blog/' + $stateParams.id).then(function (success) {
+        vm.blog = success.data.data
       }, function () {
         console.log(arguments)
       })
     }
     vm.list = function () {
-      $http.get('/api/v1/Blog').then(function (response) {
-        vm.blogs = response.data.data
+      $http.get('/api/v1/Blog').then(function (success) {
+        vm.blogs = success.data.data
       }, function () {
         console.log(arguments)
       })
     }
     vm.update = function () {
-      $http.put('/api/v1/Blog/' + $stateParams.id, vm.blog).then(function (response) {
-        vm.blog = response.data.data
+      $http.put('/api/v1/Blog/' + $stateParams.id, vm.blog).then(function (success) {
+        vm.blog = success.data.data
         window.location.href = '/blog/view/' + $stateParams.id
       }, function () {
         console.log(arguments)
@@ -55,10 +55,10 @@
     vm.delete = function (blogId) {
       var deleteConfirm = confirm('Are you sure you want to delete this blog?')
       if (deleteConfirm === true) {
-        $http.delete('/api/v1/Blog/' + blogId).then(function (response) {
-          console.log(response)
+        $http.delete('/api/v1/Blog/' + blogId).then(function (success) {
+          console.log(success)
           window.location.reload()
-        }, function () {
+        }, function (error) {
           console.log(arguments)
         })
       }

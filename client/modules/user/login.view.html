@@ -1,6 +1,8 @@
 <div class="container">
     <div class="page-header">
-        <h3>Sign in</h3></div>
+        <h3>Sign in</h3>
+    </div>
+    <div class="alert alert-danger" ng-show="vm.loginError.show" role="alert">Error: {{vm.loginError.message}}</div>
     <form  ng-submit="vm.login()">
         <input type="hidden" name="_csrf" value="{{vm.csrfToken}}">
         <div class="col-sm-8 col-sm-offset-2">

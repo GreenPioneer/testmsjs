@@ -18,6 +18,8 @@
         "jquery": "^2.1.4",
         "angular": "^1.4.5",
         "angular-sanitize": "^1.4.5",
+        "angular-cookies": "^1.4.5",
+        "angular-mocks": "^1.4.5",
         "bootstrap": "^3.3.5",
         "angular-bootstrap":"^0.14.3",
         "font-awesome": "^4.3.0",
