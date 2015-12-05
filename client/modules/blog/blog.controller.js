@@ -12,9 +12,9 @@
     $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'
   }
 
-  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config']
+  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config', 'logger']
   /* @ngInject */
-  function BlogController ($http, $stateParams, BlogFactory, config) {
+  function BlogController ($http, $stateParams, BlogFactory, config, logger) {
     var vm = this
     vm.title = 'System'
     vm.blog = {}
@@ -26,54 +26,70 @@
       blog.$save(function (response) {
         vm.blog = response.data.data
         window.location.href = '/blog/list'
-      }, function () {
+      }, function (error) {
         console.log(arguments)
       })
     }
+
     vm.find = function () {
-      $http.get('/api/v1/Blog/' + $stateParams.id).then(function (success) {
-        vm.blog = success.data.data
-      }, function () {
+      BlogFactory.get({
+        id: $stateParams.id
+      }, function (success) {
+        vm.blog = success.data
+      }, function (error) {
         console.log(arguments)
       })
     }
     vm.list = function () {
-      $http.get('/api/v1/Blog').then(function (success) {
-        vm.blogs = success.data.data
-      }, function () {
+      BlogFactory.get(function (success) {
+        vm.blogs = success.data
+      }, function (error) {
         console.log(arguments)
       })
     }
-    vm.update = function () {
-      $http.put('/api/v1/Blog/' + $stateParams.id, vm.blog).then(function (success) {
-        vm.blog = success.data.data
-        window.location.href = '/blog/view/' + $stateParams.id
-      }, function () {
-        console.log(arguments)
-      })
+    vm.update = function (isValid) {
+      if (isValid) {
+        BlogFactory.update({
+          id: $stateParams.id
+        }, vm.blog,
+          function (success) {
+            window.location.href = '/blog/view/' + $stateParams.id
+          },
+          function (error) {
+            console.log(arguments)
+          })
+      }
     }
     vm.delete = function (blogId) {
       var deleteConfirm = confirm('Are you sure you want to delete this blog?')
       if (deleteConfirm === true) {
-        $http.delete('/api/v1/Blog/' + blogId).then(function (success) {
-          console.log(success)
-          window.location.reload()
-        }, function (error) {
-          console.log(arguments)
-        })
+        BlogFactory.remove({
+          id: blogId
+        },
+          function (success) {
+            for (var i in vm.blogs) {
+              if (vm.blogs[i]._id === blogId) {
+                vm.blogs.splice(i, 1)
+              }
+            }
+          // window.location.reload()
+          },
+          function (error) {
+            console.log(arguments)
+          })
       }
     }
 
     function activate () {
-      console.log('Activated BlogController View')
+      logger.info('Activated Dashboard View')
     }
   }
 
   BlogFactory.$inject = ['$resource']
   /* @ngInject */
   function BlogFactory ($resource) {
-    return $resource('/api/v1/Blog/:blogId', {
-      blogId: '@_id'
+    return $resource('/api/v1/Blog/:id', {
+      id: '@id'
     }, {
       update: {
         method: 'PUT'

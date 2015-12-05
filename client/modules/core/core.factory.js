@@ -107,6 +107,7 @@
           $cookies.put('redirect', $location.path())
           $timeout(deferred.reject)
           $location.url('/auth/login')
+          vm.logger.error('Not Authenticated', success, 'Login')
         }
       }, function (error) {
         console.log(error)
@@ -126,12 +127,7 @@
           vm.loginCred = {}
         },
         function (error) {
-          vm.loginError.message = error.data
-          vm.loginError.show = true
-          $timeout(function () {
-            vm.loginError.message = {}
-            vm.loginError.show = false
-          }, 10000)
+          vm.logger.error(error.data, error, 'Login')
         })
         // $http.post('/api/login', {
         //   email: user.email,
@@ -145,16 +141,12 @@
       $http.post('/api/account/profile', vm.editProfile)
         .then(
           function (success) {
-            alert('change to use logger jpapa')
-            window.location.reload()
+            vm.logger.success(vm.editProfile.profile.name + ' your profile has be saved', vm.editProfile, 'Updated Profile')
+            // window.location.reload()
+
           },
           function (error) {
-            vm.loginError.message = error.data
-            vm.loginError.show = true
-            $timeout(function () {
-              vm.loginError.message = {}
-              vm.loginError.show = false
-            }, 10000)
+            vm.logger.error(error.data, error, 'Login')
           })
     }
     UserClass.prototype.signup = function (vm) {
@@ -166,12 +158,7 @@
               vm.loginCred = {}
             },
             function (error) {
-              vm.loginError.message = error.data
-              vm.loginError.show = true
-              $timeout(function () {
-                vm.loginError.message = {}
-                vm.loginError.show = false
-              }, 10000)
+              vm.logger.error(error.data, error, 'Login')
             })
       }
     // $http.post('/api/register', {

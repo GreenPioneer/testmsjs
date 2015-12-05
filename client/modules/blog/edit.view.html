@@ -1,8 +1,5 @@
 <div class="container" ng-init="vm.find()">
     <div class="row blog-main">
-        <a class="btn" data-ng-click="vm.delete(vm.blog._id);">
-          Delete<i class="fa fa-trash"></i>
-        </a>
         <div class="col-sm-12 blog-post">
             <form name="blogForm" class="blog-edit form-horizontal col-md-7 col-md-offset-1" role="form" data-ng-submit="vm.update(blogForm.$valid)" novalidate>
                 <div class="form-group" ng-class="{ 'has-error' : submitted && blogForm.title.$invalid }">

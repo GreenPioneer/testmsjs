@@ -90,6 +90,7 @@ module.exports = {
       '/bower_components/jquery/dist/jquery.min.js',
     ],
     css: [
+      'http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css',
       '/bower_components/bootstrap/dist/css/bootstrap.min.css',
       '/bower_components/font-awesome/css/font-awesome.min.css'
     ]

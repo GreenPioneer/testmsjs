@@ -16,8 +16,8 @@
   }
 
   var config = {
-    appErrorPrefix: '[helloWorld Error] ',
-    appTitle: 'helloWorld',
+    appErrorPrefix: 'MeanStackJS',
+    appTitle: 'MeanStackJS',
     user: window.user
   }
 
