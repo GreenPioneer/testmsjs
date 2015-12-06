@@ -1,4 +1,4 @@
-<header class="navbar navbar-default navbar-fixed-top navbar-inner"ng-controller="HeaderController as vm" style="background-color: #428bca;">
+<header class="navbar navbar-default navbar-fixed-top navbar-inner"ng-controller="HeaderController as vm">
 <div class="container">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-3" ng-click="isCollapsed = !isCollapsed">
@@ -28,6 +28,8 @@
                         </a>
                     </li>
                 </ul>
+                <!-- these links should be the same in both places in collapsed or not. Should this be dynamic where it is compiled from a single place that we can define what they should be and what types of users should see them?
+                -->
             </div>
 
             <div class="right pull-right">
@@ -55,6 +57,8 @@
                 Mean Stack JS
                 </a>
             </li>
+            <!-- these links should be the same in both places in collapsed or not. Should this be dynamic where it is compiled from a single place that we can define what they should be and what types of users should see them?
+            -->
         </ul>
     </nav>
 </div>
