@@ -22,7 +22,7 @@ Table of Contents
 
 Project Structure
 -----------------
-Sever
+
 | Name                                | Description                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
 | **client**/                         | Folder:all public frontend files                             |
@@ -39,6 +39,7 @@ Sever
 
 
 Client
+
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
 | **Client**/bower_components/       | Folder:all frontend dependencies                             |
@@ -56,6 +57,7 @@ Server
 | **server**/register.js             | File:This runs and registers all fo the modules and files    |
 
 commands
+
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
 | **commands**/create.js             | `Create` Command for scaffolding.  |
