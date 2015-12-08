@@ -42,14 +42,15 @@ Client
 
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
-| **Client**/bower_components/       | Folder:all frontend dependencies                             |
-| **Client**/images/                 | Folder:all Global images                                     |
-| **Client**/modules/                | Folder:all dynamic modules to run mean stack js              |
-| **Client**/styles/                 | Folder:all Global styles                                     |
-| **controllers**/uploads            | Folder:all Global uploads                                    |
+| **client**/bower_components/       | Folder:all frontend dependencies                             |
+| **client**/images/                 | Folder:all Global images                                     |
+| **client**/modules/                | Folder:all dynamic modules to run mean stack js              |
+| **client**/styles/                 | Folder:all Global styles                                     |
+| **client**/uploads/                | Folder:all Global uploads                                    |
 
 
 Server
+
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
 | **server**/layout/                 | Folder: Swig Layout before rendered to user                  |
