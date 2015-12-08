@@ -10,6 +10,7 @@
       'ui.bootstrap',
       'app.util',
       'ui.router',
-      'angularMoment'
+      'angularMoment',
+      'ngFileUpload'
     ])
 })()

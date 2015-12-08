@@ -118,6 +118,8 @@ function all (setup) {
       }
       else if (j.type === 'routes') {
         settings.app.use('/api/', require('./modules/' + r.name + '/' + j.orginal))
+      } else {
+        // console.log(j.type)
       }
     })
   })
@@ -162,6 +164,9 @@ function all (setup) {
         // MAYBE ADDED TO TEMPLATE CACHE
         // frontendFiles.view.push('/modules/' + r.name + '/' + j.orginal)
         // frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+      }
+      else if (j.type === 'json') {
+        // bower.json FILES DO NOT NEED TO BE LOADED
       }
       else if (j.type === 'config') {
         frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)

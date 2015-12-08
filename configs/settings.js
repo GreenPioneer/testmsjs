@@ -75,6 +75,7 @@ module.exports = {
   //     '/modules/blog/blog.routes.js'
   assets: {
     js: [
+      '/bower_components/ng-file-upload/ng-file-upload-all.js',
       '/bower_components/angular-mocks/angular-mocks.js',
       '/bower_components/angular-cookies/angular-cookies.js',
       '/bower_components/angular-sanitize/angular-sanitize.js',
@@ -87,7 +88,7 @@ module.exports = {
       '/bower_components/toastr/toastr.min.js',
       '/bower_components/bootstrap/dist/js/bootstrap.min.js',
       '/bower_components/angular/angular.js',
-      '/bower_components/jquery/dist/jquery.min.js',
+      '/bower_components/jquery/dist/jquery.min.js'
     ],
     css: [
       '/bower_components/toastr/toastr.css',

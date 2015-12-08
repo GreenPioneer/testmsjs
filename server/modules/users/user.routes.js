@@ -6,10 +6,31 @@ var user = require('./user.controller.js')
 
 var bodyParser = require('body-parser')
 var methodOverride = require('method-override')
+var fs = require('fs')
+var path = require('path')
+var multer = require('multer')
 
 var app = express()
 app.use(bodyParser.json())
 app.use(methodOverride())
+
+var upload = multer({ dest: 'client/uploads/' })
+app.post('/photos/upload', upload.single('file'), function (req, res, next) {
+  if (req.file) {
+    var filePath = path.resolve(__dirname, '../../../client/uploads/')
+    fs.readFile(req.file.path, function (err, data) {
+      var createDir = filePath + '/' + req.file.originalname
+      fs.writeFile(createDir, data, function (err) {
+        if (err) {
+          res.status(400).send(err)
+        } else {
+          res.status(201).send()
+        }
+      })
+    })
+  }
+})
+
 app.get('/login', user.getLogin)
 app.post('/login', user.postLogin)
 app.get('/logout', user.logout)

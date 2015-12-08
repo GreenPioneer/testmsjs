@@ -28,7 +28,8 @@
         "angular-ui-router": "^0.2.15",
         "toastr": "^2.1.1",
         "angular-animate": "^1.4.5",
-        "angular-resource":"^1.4.5"
+        "angular-resource":"^1.4.5",
+        "ng-file-upload ": "10.1.8"
     },
     "resolutions": {
         "angular": "1.4.5"

@@ -22,6 +22,13 @@ var passport = require('passport')
 var expressValidator = require('express-validator')
 var sass = require('node-sass-middleware')
 
+// var serveStatic = require('serve-static')
+// var helmet = require('helmet')
+// var compression = require('compression')
+// well-known web vulnerabilities
+//  apps[n].use(helmet())
+// Gzip compressing
+//  apps[n].use(compression())
 /**
  * Create Express server.
  */
@@ -35,6 +42,12 @@ var build = require('buildreq')(settings.buildreq)
 /**
  * Connect to MongoDB.
  */
+//  mongoose.connect('mongodb://localhost/mean-dev', {server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 }}})
+// var db = mongoose.connection
+// db.on('error', console.error.bind(console, 'connection error:'))
+// db.once('open', function callback () {
+//   // console.log("connection")
+// })
 mongoose.connect(settings.db)
 mongoose.connection.on('error', function () {
   console.log('MongoDB Connection Error. Please make sure that MongoDB is running.')
@@ -134,7 +147,6 @@ app.get('/*', function (req, res) {
   } else {
     req.user.authenticated = true
   }
-  console.log(req.user)
   res.render(path.resolve('server') + '/layout/index.html', {
     title: settings.title,
     assets: app.locals.frontendFilesFinal,
@@ -145,6 +157,21 @@ app.get('/*', function (req, res) {
  * Error Handler.
  */
 app.use(errorHandler())
+
+/**
+ * Socketio Realtime
+ */
+// var server = require('http').createServer(app)
+// var io = require('socket.io')(server)
+// io.on('connection', function(){ /* … */ })
+// server.listen(3000)
+/**
+ * Swagger
+ */
+// var swaggerpath = express()
+// app.use('/swagger', swaggerpath)
+// var swagger = require('swagger-node-express')
+// swagger.createNew(swaggerpath)
 
 /**
  * Start Express server.
