@@ -1,12 +1,9 @@
 Table of Contents
 -----------------
 
-- [Features](#features)
+- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Generator](#generator)
-- [Obtaining API Keys](#obtaining-api-keys)
-- [Project Structure](#project-structure)
 - [List of Packages](#list-of-packages)
 - [Useful Tools and Resources](#useful-tools-and-resources)
 - [Recommended Design Resources](#recommended-design-resources)
@@ -21,33 +18,49 @@ Table of Contents
 - [Contributing](#contributing)
 - [License](#license)
 
+
+
 Project Structure
 -----------------
+Sever
+| Name                                | Description                                                  |
+| ----------------------------------  | ------------------------------------------------------------ |
+| **client**/                         | Folder:all public frontend files                             |
+| **commands**/                       | Folder:all Meanstackjs CLI                                   |
+| **configs**/                        | Folder:all configuration files                               |
+| **node_modules**/                   | Folder:node js modules                                       |
+| **server**/                         | Folder:all private backend files                             |
+| **.bowerrc**                        | Bower configuration                                          |
+| **.gitignore**                      | Files and Folders to ignore with GIT                         |
+| **bower.json**                      | Frontend library dependencies                                |
+| **index.js**                        | Main server file that will run the system                    |
+| **package.json**                    | NodeJS configuration                                         |
+| **README.md**                       | Documentation                                                |
 
+
+Client
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
-| **config**/passport.js             | Passport Local and OAuth strategies, plus login middleware.  |
-| **config**/secrets.js              | Your API keys, tokens, passwords and database URL.           |
-| **controllers**/api.js             | Controller for /api route and all api examples.              |
-| **controllers**/contact.js         | Controller for contact form.                                 |
-| **controllers**/home.js            | Controller for home page (index).                            |
-| **controllers**/user.js            | Controller for user account management.                      |
-| **models**/User.js                 | Mongoose schema and model for User.                          |
-| **public**/                        | Static assets (fonts, css, js, img).                         |
-| **public**/**js**/application.js   | Specify client-side JavaScript dependencies.                 |
-| **public**/**js**/main.js          | Place your client-side JavaScript here.                      |
-| **public**/**css**/main.less       | Main stylesheet for your app.                                |
-| **public/css/themes**/default.less | Some Bootstrap overrides to make it look prettier.           |
-| **views/account**/                 | Templates for *login, password reset, signup, profile*.      |
-| **views/api**/                     | Templates for API Examples.                                  |
-| **views/partials**/flash.jade      | Error, info and success flash notifications.                 |
-| **views/partials**/header.jade     | Navbar partial template.                                     |
-| **views/partials**/footer.jade     | Footer partial template.                                     |
-| **views**/layout.jade              | Base template.                                               |
-| **views**/home.jade                | Home page template.                                          |
-| .travis.yml                        | [Travis CI](https://travis-ci.org/) integration.             |
-| app.js                             | Main application file.                                       |
-| setup.js                           | Tool for removing authentication providers and other things. |
+| **Client**/bower_components/       | Folder:all frontend dependencies                             |
+| **Client**/images/                 | Folder:all Global images                                     |
+| **Client**/modules/                | Folder:all dynamic modules to run mean stack js              |
+| **Client**/styles/                 | Folder:all Global styles                                     |
+| **controllers**/uploads            | Folder:all Global uploads                                    |
+
+
+Server
+| Name                               | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| **server**/layout/                 | Folder: Swig Layout before rendered to user                  |
+| **server**/modules/                | Folder:all dynamic modules to run server side logic          |
+| **server**/register.js             | File:This runs and registers all fo the modules and files    |
+
+commands
+| Name                               | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| **commands**/create.js             | `Create` Command for scaffolding.  |
+
+
 
 **Note:** There is no preference how you name or structure your views.
 You could place all your templates in a top-level `views` directory without
@@ -116,28 +129,6 @@ few minor exceptions.
 
 
 
-Features
---------
-
-- **Local Authentication** using Email and Password
-- **OAuth 1.0a Authentication** via Twitter
-- **OAuth 2.0 Authentication** via Facebook, Google, GitHub, LinkedIn, Instagram
-- Flash notifications
-- MVC Project Structure
-- Node.js clusters support
-- Sass stylesheets (auto-compiled via middleware)
-- Bootstrap 3 + Extra Themes
-- Contact Form (powered by Mailgun, Sendgrid or Mandrill)
-- **Account Management**
- - Gravatar
- - Profile Details
- - Change Password
- - Forgot Password
- - Reset Password
- - Link multiple OAuth strategies to one account
- - Delete Account
-- CSRF protection
-- **API Examples**: Facebook, Foursquare, Last.fm, Tumblr, Twitter, Stripe, LinkedIn and more.
 
 Prerequisites
 -------------
