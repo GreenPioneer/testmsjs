@@ -1,5 +1,10 @@
-/*this file would be compiled styles from scss of modules and custom/global styles*/
+/* global styling */
+/*@import 'C:/Users/a535365/Documents/testmsjs/client/styles/global-variables.styles.scss';
+@import 'global-variables.styles.scss';
+*/
+body {
+  padding-top: 50px; }
 
-body{
-	padding-top: 50px;
-}
+/*a {
+  color: $brand-danger;
+}*/

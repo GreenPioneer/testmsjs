@@ -4,8 +4,26 @@ var async = require('async')
 var _ = require('lodash')
 var fs = require('fs')
 var chalk = require('chalk')
+var sass = require('node-sass');
+var less = require('less');
 
-// backend
+var rmdirAsync = function(path, callback) {
+  
+    if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + "/" + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    //fs.rmdirSync(path);
+  }
+};
+/**
+ * BACKEND
+ */
 var lookDir = path.resolve(__dirname, './modules')
 var configs = []
 if (!fs.existsSync(lookDir)) {
@@ -15,9 +33,11 @@ var data = {}
 var exporting = {}
 var modules = fs.readdirSync(lookDir)
 
+//IF YOU NEED TO FILTER ANY FILES OUT
 modules = _.filter(modules, function (n) {
   return !_.startsWith(n, '.')
 })
+
 data.modules = modules
 _.forEach(data.modules, function (value, key) {
   var obj = {
@@ -43,7 +63,9 @@ _.forEach(data.modules, function (value, key) {
   configs.push(obj)
 })
 
-// frontend
+/**
+ * FRONTEND
+ */
 var frontEndDir = path.resolve(__dirname, '../client/modules')
 var frontEndConfigs = []
 if (!fs.existsSync(frontEndDir)) {
@@ -53,6 +75,7 @@ var frontEnddata = {}
 var frontEndexporting = {}
 var frontEndmodules = fs.readdirSync(frontEndDir)
 
+//IF YOU NEED TO FILTER ANY FILES OUT
 frontEndmodules = _.filter(frontEndmodules, function (n) {
   return !_.startsWith(n, '.')
 })
@@ -62,6 +85,7 @@ frontEndmodules = _.filter(frontEndmodules, function (n) {
   return path.extname(n) === ''
 })
 
+
 frontEnddata.modules = frontEndmodules
 _.forEach(frontEnddata.modules, function (value, key) {
   var obj = {
@@ -69,7 +93,6 @@ _.forEach(frontEnddata.modules, function (value, key) {
     'lookup': frontEndDir + '/' + value
   }
   var files = fs.readdirSync(frontEndDir + '/' + value)
-
   files = _.filter(files, function (n) {
     return !_.startsWith(n, '.')
   })
@@ -107,6 +130,9 @@ Register.prototype.all = function (meanSettings) {
 }
 function all (setup) {
   var settings = setup()
+  /**
+   * BACKEND
+   */
   _.forEach(settings.configs, function (r) {
     var files = {'models': [],'controllers': []}
     _.forEach(r.files, function (j) {
@@ -124,7 +150,9 @@ function all (setup) {
     })
   })
 
-  // frontend
+  /**
+   * FRONTEND
+   */
   var frontendFiles = {
     'controller': [],
     'module': [],
@@ -141,6 +169,25 @@ function all (setup) {
     css: [],
     js: []
   }
+  
+  //CHECK AND MAKE DIRECTORY
+  if (!fs.existsSync(__dirname+'/../client/styles/compiled/')) {
+        fs.mkdirSync(__dirname+'/../client/styles/compiled/');
+    }
+  //DELETE ALL PREVIOUSLY COMPILED 
+  rmdirAsync(__dirname+'/../client/styles/compiled/',function(){
+        console.log(arguments)
+      })
+
+  //RENDER THE GLOBAL STYLE
+  var globalContents = fs.readFileSync(__dirname+'/../client/styles/global.style.scss', 'utf8')
+     var result = sass.renderSync({
+      includePaths: ["../../client/styles","../client/styles/","../../../client/styles/","./client/styles/"],
+      data: globalContents
+    });
+   fs.writeFileSync(__dirname+'/../client/styles/global.style.css',result.css)
+
+  //PUSH ALL FRONTEND FILES
   _.forEach(settings.frontEndConfigs, function (r) {
     _.forEach(r.files, function (j) {
       if (j.type === 'controller') {
@@ -156,8 +203,29 @@ function all (setup) {
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'style') {
-        frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
+        
+        if(j.ext === 'css'){
+          frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
+        }else if(j.ext === 'scss' || j.ext === 'sass'){
+
+           var contents = fs.readFileSync(__dirname+'/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+           var result = sass.renderSync({
+              data: contents
+            });
+           fs.writeFileSync(__dirname+'/../client/styles/compiled/'+j.name+'.'+j.type+'.'+j.ext+'.css',result.css)
+           frontendFiles.style.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
+           frontendFilesFinal.css.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
+        }else if(j.ext === 'less'){
+          var contents = fs.readFileSync(__dirname+'/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          less.render(contents, function(err, result) {
+            fs.writeFileSync(__dirname+'/../client/styles/compiled/'+j.name+'.'+j.type+'.'+j.ext+'.css',result.css)
+           frontendFiles.style.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
+           frontendFilesFinal.css.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
+          });
+        }else{
+          console.log('Unknown Style', j)
+        }
       }
       else if (j.type === 'view') {
         // HTML FILES DO NOT NEED TO BE LOADED
