@@ -7,7 +7,8 @@
     "mean": "./commands/create"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall" : "bower install"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "method-override": "^2.3.5",
     "mongoose": "^4.2.7",
     "morgan": "^1.6.1",
+    "multer": "^1.1.0",
     "node-foursquare": "^0.3.0",
     "node-linkedin": "^0.5.1",
     "node-sass": "^3.4.2",
@@ -84,6 +86,7 @@
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
     "multiline": "^1.0.2",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "standard": "latest"
   }
 }

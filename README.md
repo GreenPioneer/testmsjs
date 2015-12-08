@@ -1,696 +1,519 @@
-[![Build Status](https://travis-ci.org/linnovate/mean.svg?branch=master)](https://travis-ci.org/linnovate/mean)
-[![Dependencies Status](https://david-dm.org/linnovate/mean.svg)](https://david-dm.org/linnovate/mean)
-[![Gitter](https://badges.gitter.im/JoinChat.svg)](https://gitter.im/linnovate/mean?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+Table of Contents
+-----------------
 
-# [![MEAN Logo](http://mean.io/system/assets/img/logos/meanlogo.png)](http://mean.io/) MEAN Stack
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Generator](#generator)
+- [Obtaining API Keys](#obtaining-api-keys)
+- [Project Structure](#project-structure)
+- [List of Packages](#list-of-packages)
+- [Useful Tools and Resources](#useful-tools-and-resources)
+- [Recommended Design Resources](#recommended-design-resources)
+- [Recommended Node.js Libraries](#recommended-nodejs-libraries)
+- [Recommended Client-side Libraries](#recommended-client-side-libraries)
+- [Pro Tips](#pro-tips)
+- [FAQ](#faq)
+- [How It Works](#how-it-works-mini-guides)
+- [Mongoose Cheatsheet](#mongoose-cheatsheet)
+- [Deployment](#deployment)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [License](#license)
 
-MEAN is a framework for an easy starting point with [MongoDB](http://www.mongodb.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](http://angularjs.org/) based applications. It is designed to give you a quick and organized way to start developing MEAN based web apps with useful modules like Mongoose and Passport pre-bundled and configured. We mainly try to take care of the connection points between existing popular frameworks and solve common integration problems.
+Project Structure
+-----------------
 
-## Prerequisite Technologies
-### Linux
-* *Node.js* - <a href="http://nodejs.org/download/">Download</a> and Install Node.js, nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started.
-* *MongoDB* - <a href="http://www.mongodb.org/downloads">Download</a> and Install mongodb - <a href="http://docs.mongodb.org/manual">Checkout their manual</a> if you're just starting.
+| Name                               | Description                                                  |
+| ---------------------------------- | ------------------------------------------------------------ |
+| **config**/passport.js             | Passport Local and OAuth strategies, plus login middleware.  |
+| **config**/secrets.js              | Your API keys, tokens, passwords and database URL.           |
+| **controllers**/api.js             | Controller for /api route and all api examples.              |
+| **controllers**/contact.js         | Controller for contact form.                                 |
+| **controllers**/home.js            | Controller for home page (index).                            |
+| **controllers**/user.js            | Controller for user account management.                      |
+| **models**/User.js                 | Mongoose schema and model for User.                          |
+| **public**/                        | Static assets (fonts, css, js, img).                         |
+| **public**/**js**/application.js   | Specify client-side JavaScript dependencies.                 |
+| **public**/**js**/main.js          | Place your client-side JavaScript here.                      |
+| **public**/**css**/main.less       | Main stylesheet for your app.                                |
+| **public/css/themes**/default.less | Some Bootstrap overrides to make it look prettier.           |
+| **views/account**/                 | Templates for *login, password reset, signup, profile*.      |
+| **views/api**/                     | Templates for API Examples.                                  |
+| **views/partials**/flash.jade      | Error, info and success flash notifications.                 |
+| **views/partials**/header.jade     | Navbar partial template.                                     |
+| **views/partials**/footer.jade     | Footer partial template.                                     |
+| **views**/layout.jade              | Base template.                                               |
+| **views**/home.jade                | Home page template.                                          |
+| .travis.yml                        | [Travis CI](https://travis-ci.org/) integration.             |
+| app.js                             | Main application file.                                       |
+| setup.js                           | Tool for removing authentication providers and other things. |
 
-If you're using ubuntu, this is the preferred repository to use...
-
-```bash
-$ curl -sL https://deb.nodesource.com/setup | sudo bash -
-$ sudo apt-get update
-$ sudo apt-get install nodejs
-```
-
-* *Git* - Get git using a package manager or <a href="http://git-scm.com/downloads">download</a> it.
-
-### Windows
-* *Node.js* - <a href="http://nodejs.org/download/">Download</a> and Install Node.js, nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started.
-* *MongoDB* - Follow the great tutorial from the mongodb site - <a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows">"Install Mongodb On Windows"</a>
-* *Git* - The easiest way to install git and then run the rest of the commands through the *git bash* application (via command prompt) is by downloading and installing <a href="http://git-scm.com/download/win">Git for Windows</a>
-
-### OSX
-* *Node.js* -  <a href="http://nodejs.org/download/">Download</a> and Install Node.js or use the packages within brew or macports.
-* *MongoDB* - Follow the tutorial here - <a href="http://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/">Install mongodb on OSX</a>
-* *git* - Get git <a href="http://git-scm.com/download/mac">from here</a>.
-
-## Prerequisite packages
-
-* Mean currently works with either grunt or gulp..
-```
-$ npm install -g gulp
-// and bower
-$ npm install -g bower 
-```
-
-## Installation
-To start with MEAN install the `mean-cli` package from NPM.
-This will add the *mean* command which lets you interact (install, manage, update ...) your Mean based application.
-
-### Install the MEAN CLI
-
-```bash
-$ npm install -g mean-cli
-$ mean init <myApp>
-$ cd <myApp> && npm install
-```
-
-### Invoke node with a task manager
-Mean supports the gulp task runner for various services which are applied on the code.
-To start your application run - 
-```bash
-$ gulp
-```
-
-Alternatively, when not using `gulp` (and for production environments) you can run:
-```bash
-$ node server
-```
-Then, open a browser and go to:
-```bash
-http://localhost:3000
-```
-
-### Troubleshooting
-During installation depending on your os and prerequisite versions you may encounter some issues.
-
-Most issues can be solved by one of the following tips, but if you are unable to find a solution feel free to contact us via the repository issue tracker or the links provided below.
-
-#### Update NPM, Bower or Grunt
-Sometimes you may find there is a weird error during install like npm's *Error: ENOENT*. Usually updating those tools to the latest version solves the issue.
-
-* Updating NPM:
-```bash
-$ npm update -g npm
-```
-
-* Updating Grunt:
-```bash
-$ npm update -g grunt-cli
-```
-
-* Updating Bower:
-```bash
-$ npm update -g bower
-```
-
-#### Cleaning NPM and Bower cache
-NPM and Bower has a caching system for holding packages that you already installed.
-We found that often cleaning the cache solves some troubles this system creates.
-
-* NPM Clean Cache:
-```bash
-$ npm cache clean
-```
-
-* Bower Clean Cache:
-```bash
-$ bower cache clean
-```
-
-#### Installation problems on Windows 8 / 8.1
-Some of Mean.io dependencies uses [node-gyp](https://github.com/TooTallNate/node-gyp) with supported Python version 2.7.x. So if you see an error related to node-gyp rebuild follow next steps:
-
-1. install [Python 2.7.x](https://www.python.org/downloads/)
-2. install [Microsoft Visual Studio C++ 2012 Express](http://www.microsoft.com/ru-ru/download/details.aspx?id=34673)
-3. Run NPM update
-
-```bash
-$ npm update -g
-```
-
-#### Git "not found" on Windows
-If you get this error when trying to `mean init`:
-
-```text
-Prerequisite not installed: git
-```
-
-And you definitely have Git for Windows installed, then it's not included in your path. Find the folder containing git.exe (likely `C:\Program Files (x86)\Git\cmd`) and add it to your PATH.
-
-## Technologies
-
-### The MEAN stack
-
-MEAN is an acronym for *M*ongo, *E*xpress.js , *A*ngular.js and *N*ode.js
-
-<dl class="dl-horizontal">
-<dt>MongoDB</dt>
-<dd>Go through MongoDB Official Website and proceed to its Great Manual, which should help you understand NoSQL and MongoDB better.</dd>
-<dt>Express</dt>
-<dd>The best way to understand express is through its Official Website, particularly The Express Guide; you can also go through this StackOverflow thread for more resources.</dd>
-<dt>AngularJS</dt>
-<dd>Angular's Official Website is a great starting point. CodeSchool and google created a <a href="https://www.codeschool.com/courses/shaping-up-with-angular-js">great tutorial</a> for beginners, and the angular videos by <a href="https://egghead.io/">Egghead</a>.</dd>
-<dt>Node.js</dt>
-<dd>Start by going through Node.js Official Website and this StackOverflow thread, which should get you going with the Node.js platform in no time.</dd>
-</dl>
-
-### Additional Tools
-* <a href="http://mongoosejs.com/">Mongoose</a> - The mongodb node.js driver in charge of providing elegant mongodb object modeling for node.js
-* <a href="http://passportjs.org/">Passport</a> - An authentication middleware for Node.js which supports authentication using a username and password, Facebook, Twitter, and more.
-* <a href="http://getbootstrap.com/">Twitter Bootstrap</a> - The most popular HTML, CSS, and JS framework for developing responsive, mobile first projects.
-* <a href="http://angular-ui.github.io/bootstrap/">UI Bootstrap</a> - Bootstrap components written in pure AngularJS
+**Note:** There is no preference how you name or structure your views.
+You could place all your templates in a top-level `views` directory without
+having a nested folder structure, if that makes things easier for you.
+Just don't forget to update `extends ../layout`  and corresponding
+`res.render()` paths in controllers.
 
 
-## CLI
-### Overview
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+JavaScript Standard Style
+-------------
+- **2 spaces** – for indentation
+- **Single quotes for strings** – except to avoid escaping
+- **No unused variables** – this one catches *tons* of bugs!
+- **No semicolons** – [It's][1] [fine.][2] [Really!][3]
+- **Never start a line with `(` or `[`**
+  - This is the **only** gotcha with omitting semicolons – *automatically checked for you!*
+  - [More details][4]
+- **Space after keywords** `if (condition) { ... }`
+- **Space after function name** `function name (arg) { ... }`
+- Always use `===` instead of `==` – but `obj == null` is allowed to check `null || undefined`.
+- Always handle the node.js `err` function parameter
+- Always prefix browser globals with `window` – except `document` and `navigator` are okay
+  - Prevents accidental use of poorly-named browser globals like `open`, `length`,
+    `event`, and `name`.
+- **And [more goodness][5]** – *give `standard` a try today!*
 
-The MEAN CLI is a simple Command Line Interface for installing and managing MEAN applications. As a core module of the Mean.io project, it provides a number of useful tools to make interaction with your MEAN application easier, with features such as: scaffolding, module creation and admin, status checks, and user management.
-```bash
-$ mean
-$ mean --help
-$ mean help
-```
-  <code>mean help</code> can also be used in conjunction with any command to get more information about that particular functionality. For example, try <code>mean help init</code> to see the options for init
-```bash
-$ mean help [command]
-```
-### Users
+[1]: http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding
+[2]: http://inimino.org/~inimino/blog/javascript_semicolons
+[3]: https://www.youtube.com/watch?v=gsfbh17Ax9I
+[4]: RULES.md#semicolons
+[5]: RULES.md#javascript-standard-style
 
- <p>Information can be display for a specific customer via <code>mean user email</code>. Email is required. User roles can be assigned or removed with the <code>--addRole (or -a)</code> and <code>--removeRole (or -r)</code> options, respectively.</p>
-  <p>For example, the <i>admin</i> role is required to edit tokens.</p>
+To get a better idea, take a look at
+[a sample file](https://github.com/feross/bittorrent-dht/blob/master/client.js) written
+in JavaScript Standard Style, or check out some of
+[the repositories](https://github.com/feross/standard-packages/blob/master/standard.json) that use
+`standard`.
+
+
+Contributing
+-------------
+Please open an issue before submitting a pull request. This project uses
+[JavaScript Standard Style](https://github.com/feross/standard) & [Angular Style Guide](https://github.com/johnpapa/angular-styleguide) with a
+few minor exceptions. 
+
+### Reporting an Issue
+1. Please make sure that there is not an issue already open
+2. If that's the case, then add your observations in that same issue
+3. If your issue is unique, add following details in the issue
+  - OS name and version
+  - NodeJS and NPM version : Output of `node -v` and `npm -v`
+  - MEAN Status : Output of `mean status` in project directory
+  - Tracelog : The error that got printed on the console
+  - Any other relevant details
+4. Add `[Feature]` in the title if its a suggestion rather than an issue that you would like to see in MEAN.
+
+
+### Creating a pull request
+1. There should be an issue for every pull request that is being created. If there is none, create it.
+2. If there are any lint warning, cleanup those as well
+3. In the comments for pull request mention the issues that you are solving by this pull request
+4. Create the pull request
+
+
+
+
+
+Features
+--------
+
+- **Local Authentication** using Email and Password
+- **OAuth 1.0a Authentication** via Twitter
+- **OAuth 2.0 Authentication** via Facebook, Google, GitHub, LinkedIn, Instagram
+- Flash notifications
+- MVC Project Structure
+- Node.js clusters support
+- Sass stylesheets (auto-compiled via middleware)
+- Bootstrap 3 + Extra Themes
+- Contact Form (powered by Mailgun, Sendgrid or Mandrill)
+- **Account Management**
+ - Gravatar
+ - Profile Details
+ - Change Password
+ - Forgot Password
+ - Reset Password
+ - Link multiple OAuth strategies to one account
+ - Delete Account
+- CSRF protection
+- **API Examples**: Facebook, Foursquare, Last.fm, Tumblr, Twitter, Stripe, LinkedIn and more.
+
+Prerequisites
+-------------
+
+- [MongoDB](https://www.mongodb.org/downloads)
+- [Node.js](http://nodejs.org)
+- Command Line Tools
+ - <img src="http://deluge-torrent.org/images/apple-logo.gif" height="17">&nbsp;**Mac OS X:** [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) (or **OS X 10.9 Mavericks**: `xcode-select --install`)
+ - <img src="http://dc942d419843af05523b-ff74ae13537a01be6cfec5927837dcfe.r14.cf1.rackcdn.com/wp-content/uploads/windows-8-50x50.jpg" height="17">&nbsp;**Windows:** [Visual Studio](http://www.visualstudio.com/downloads/download-visual-studio-vs#d-express-windows-8)
+ - <img src="https://lh5.googleusercontent.com/-2YS1ceHWyys/AAAAAAAAAAI/AAAAAAAAAAc/0LCb_tsTvmU/s46-c-k/photo.jpg" height="17">&nbsp;**Ubuntu** / <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Logo_Linux_Mint.png" height="17">&nbsp;**Linux Mint:** `sudo apt-get install build-essential`
+ - <img src="http://i1-news.softpedia-static.com/images/extra/LINUX/small/slw218news1.png" height="17">&nbsp;**Fedora**: `sudo dnf groupinstall "Development Tools"`
+ - <img src="https://en.opensuse.org/images/b/be/Logo-geeko_head.png" height="17">&nbsp;**OpenSUSE:** `sudo zypper install --type pattern devel_basis`
+
+**Note:** If you are new to Node or Express, I recommend to watch
+[Node.js and Express 101](https://www.youtube.com/watch?v=BN0JlMZCtNU)
+screencast by Alex Ford that teaches Node and Express from scratch. Alternatively,
+here is another great tutorial for complete beginners - [Getting Started With Node.js, Express, MongoDB](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/).
+
+Getting Started
+---------------
+
+The easiest way to get started is to clone the repository:
 
 ```bash
-$ mean user <email>
-$ mean user <email> --addRole <role>;
-$ mean user <email> --removeRole <role>;
+# Get the latest snapshot
+git clone --depth=1 https://github.com/sahat/hackathon-starter.git myproject
+
+# Change directory
+cd myproject
+
+# Install NPM dependencies
+npm install
+
+node index.js
 ```
 
-### Packages
-#### Management
- <p class="alert alert-warning">All of the remaining of the commands must be run from the root folder of your MEAN application.</p>
-  <p>Contributed MEAN packages can be installed or uninstalled via the CLI. Also, currently installed modules can be viewed with the <code>list</code> command.</p>
+**Note:** I highly recommend installing [Nodemon](https://github.com/remy/nodemon).
+It watches for any changes in your  node.js app and automatically restarts the
+server. Once installed, instead of `node app.js` use `nodemon app.js`. It will
+save you a lot of time in the long run, because you won't need to manually
+restart the server each time you make a small change in code. To install, run
+`sudo npm install -g nodemon`.
 
-```bash
-$ mean list
-$ mean install <module>
-$ mean uninstall <module>
+
+
+
+
+List of Packages
+----------------
+
+| Package                         | Description                                                           |
+| ------------------------------- | --------------------------------------------------------------------- |
+| async                           | Utility library that provides asynchronous control flow.              |
+| bcrypt-nodejs                   | Library for hashing and salting user passwords.                       |
+| bitgo                           | Multi-sig Bitcoin wallet API.                                         |
+| cheerio                         | Scrape web pages using jQuery-style syntax.                           |
+| clockwork                       | Clockwork SMS API library.                                            |
+| connect-mongo                   | MongoDB session store for Express.                                    |
+| express                         | Node.js web framework.                                                |
+| body-parser                     | Express 4 middleware.                                                 |
+| cookie-parser                   | Express 4 middleware.                                                 |
+| express-session                 | Express 4 middleware.                                                 |
+| morgan                          | Express 4 middleware.                                                 |
+| multer                          | Express 4 middleware.                                                 |
+| compression                     | Express 4 middleware.                                                 |
+| errorhandler                    | Express 4 middleware.                                                 |
+| method-override                 | Express 4 middleware.                                                 |
+| serve-favicon                   | Express 4 middleware offering favicon serving and caching.            |
+| express-flash                   | Provides flash messages for Express.                                  |
+| express-validator               | Easy form validation for Express.                                     |
+| fbgraph                         | Facebook Graph API library.                                           |
+| github-api                      | GitHub API library.                                                   |
+| jade                            | Template engine for Express.                                          |
+| lastfm                          | Last.fm API library.                                                  |
+| instagram-node                  | Instagram API library.                                                |
+| lob                             | Lob API library                                                       |
+| lusca                           | CSRF middleware.                                                      |
+| mongoose                        | MongoDB ODM.                                                          |
+| node-foursquare                 | Foursquare API library.                                               |
+| node-linkedin                   | LinkedIn API library.                                                 |
+| node-sass-middleware            | Sass middleware compiler.                                                 |
+| nodemailer                      | Node.js library for sending emails.                                   |
+| passport                        | Simple and elegant authentication library for node.js                 |
+| passport-facebook               | Sign-in with Facebook plugin.                                         |
+| passport-github                 | Sign-in with GitHub plugin.                                           |
+| passport-google-oauth           | Sign-in with Google plugin.                                           |
+| passport-twitter                | Sign-in with Twitter plugin.                                          |
+| passport-instagram              | Sign-in with Instagram plugin.                                        |
+| passport-local                  | Sign-in with Username and Password plugin.                            |
+| passport-linkedin-oauth2        | Sign-in with LinkedIn plugin.                                         |
+| passport-oauth                  | Allows you to set up your own OAuth 1.0a and OAuth 2.0 strategies.    |
+| paypal-rest-sdk                 | PayPal APIs library.                                                  |
+| request                         | Simplified HTTP request library.                                      |
+| stripe                          | Offical Stripe API library.                                           |
+| tumblr.js                       | Tumblr API library.                                                   |
+| twilio                          | Twilio API library.                                                   |
+| twit                            | Twitter API library.                                                  |
+| lodash                          | Handy JavaScript utlities library.                                    |
+| validator                       | Used in conjunction with express-validator in **controllers/api.js**. |
+| mocha                           | Test framework.                                                       |
+| chai                            | BDD/TDD assertion library.                                            |
+| supertest                       | HTTP assertion library.                                               |
+| multiline                       | Multi-line strings for the generator.                                 |
+| blessed                         | Interactive command line interface for the generator.                 |
+| yui                             | Used by the Yahoo API example.                                        |
+
+Useful Tools and Resources
+--------------------------
+- [JavaScripting](http://www.javascripting.com/) - The Database of JavaScript Libraries
+- [JS Recipes](http://sahatyalkabov.com/jsrecipes/) - JavaScript tutorials for backend and frontend development.
+- [Jade Syntax Documentation by Example](http://naltatis.github.io/jade-syntax-docs/#attributes) - Even better than official Jade docs.
+- [HTML to Jade converter](http://html2jade.aaron-powell.com) - Extremely valuable when you need to quickly copy and paste HTML snippets from the web.
+- [JavascriptOO](http://www.javascriptoo.com/) - A directory of JavaScript libraries with examples, CDN links, statistics, and videos.
+- [Favicon Generator](http://realfavicongenerator.net/) - Generate favicons for PC, Android, iOS, Windows 8.
+
+Recommended Design Resources
+----------------------------
+- [Code Guide](http://codeguide.co/) - Standards for developing flexible, durable, and sustainable HTML and CSS.
+- [Bootsnipp](http://bootsnipp.com/) - Code snippets for Bootstrap.
+- [UIBox](http://www.uibox.in) - Curated HTML, CSS, JS, UI components.
+- [Bootstrap Zero](https://www.bootstrapzero.com) - Free Bootstrap templates themes.
+- [Google Bootstrap](http://todc.github.io/todc-bootstrap/) - Google-styled theme for Bootstrap.
+- [Font Awesome Icons](http://fortawesome.github.io/Font-Awesome/icons/) - It's already part of the Hackathon Starter, so use this page as a reference.
+- [Colors](http://clrs.cc) - A nicer color palette for the web.
+- [Creative Button Styles](http://tympanus.net/Development/CreativeButtons/) - awesome button styles.
+- [Creative Link Effects](http://tympanus.net/Development/CreativeLinkEffects/) - Beautiful link effects in CSS.
+- [Medium Scroll Effect](http://codepen.io/andreasstorm/pen/pyjEh) - Fade in/out header background image as you scroll.
+- [GeoPattern](https://github.com/btmills/geopattern) - SVG background pattern generator.
+- [Trianglify](https://github.com/qrohlf/trianglify) - SVG low-poly background pattern generator.
+
+
+Recommended Node.js Libraries
+-----------------------------
+
+- [Nodemon](https://github.com/remy/nodemon) - Automatically restart Node.js server on code changes.
+- [geoip-lite](https://github.com/bluesmoon/node-geoip) - Geolocation coordinates from IP address.
+- [Filesize.js](http://filesizejs.com/) - Pretty file sizes, e.g. `filesize(265318); // "265.32 kB"`.
+- [Numeral.js](http://numeraljs.com) - Library for formatting and manipulating numbers.
+- [Node Inspector](https://github.com/node-inspector/node-inspector) - Node.js debugger based on Chrome Developer Tools.
+- [node-taglib](https://github.com/nikhilm/node-taglib) - Library for reading the meta-data of several popular audio formats.
+- [sharp](https://github.com/lovell/sharp) - Node.js module for resizing JPEG, PNG, WebP and TIFF images.
+
+Recommended Client-side Libraries
+---------------------------------
+
+- [Framework7](http://www.idangero.us/framework7/) - Full Featured HTML Framework For Building iOS7 Apps.
+- [InstantClick](http://instantclick.io) - Makes your pages load instantly by pre-loading them on mouse hover.
+- [NProgress.js](https://github.com/rstacruz/nprogress) - Slim progress bars like on YouTube and Medium.
+- [Hover](https://github.com/IanLunn/Hover) - Awesome CSS3 animations on mouse hover.
+- [Magnific Popup](http://dimsemenov.com/plugins/magnific-popup/) - Responsive jQuery Lightbox Plugin.
+- [jQuery Raty](http://wbotelhos.com/raty/) - Star Rating Plugin.
+- [Headroom.js](http://wicky.nillia.ms/headroom.js/) - Hide your header until you need it.
+- [X-editable](http://vitalets.github.io/x-editable/) - Edit form elements inline.
+- [Offline.js](http://github.hubspot.com/offline/docs/welcome/) - Detect when user's internet connection goes offline.
+- [Alertify.js](http://fabien-d.github.io/alertify.js/) - Sweet looking alerts and browser dialogs.
+- [selectize.js](http://brianreavis.github.io/selectize.js/) - Styleable select elements and input tags.
+- [drop.js](http://github.hubspot.com/drop/docs/welcome/) -  Powerful Javascript and CSS library for creating dropdowns and other floating displays.
+- [scrollReveal.js](https://github.com/jlmakes/scrollReveal.js) - Declarative on-scroll reveal animations.
+
+Pro Tips
+--------
+
+- When installing an NPM package, add a *--save* flag, and it will be automatically
+added to `package.json` as well. For example, `npm install --save moment`.
+- Use [async.parallel()](https://github.com/caolan/async#parallel) when you need to run multiple
+asynchronous tasks, and then render a page, but only when all tasks are completed. For example, you might
+want to scrape 3 different websites for some data and render the results in a template
+after all 3 websites have been scraped.
+- Need to find a specific object inside an Array? Use [_.find](http://lodash.com/docs#find)
+function from Lodash. For example, this is how you would retrieve a
+Twitter token from database: `var token = _.find(req.user.tokens, { kind: 'twitter' });`,
+where 1st parameter is an array, and a 2nd parameter is an object to search for.
+
+FAQ
+---
+
+### Why do I get `403 Error: Forbidden` when submitting a form?
+You need to add the following hidden input element to your form. This has been
+added in the [pull request #40](https://github.com/sahat/hackathon-starter/pull/40)
+as part of the CSRF protection.
+
+```
+input(type='hidden', name='_csrf', value=_csrf)
 ```
 
-  <p class="alert alert-info">Mean packages installed via the installer are found in <i>/node_modules</i></p>
-#### Search
-To find new packages run the *mean search* command
-```bash
-$ mean search [packagename]
-```
-`mean search` will return all of the available packages, `mean search [packagename]` will filter the search results.
+**Note:** It is now possible to whitelist certain URLs. In other words you can
+specify a list of routes that should bypass CSRF verification check.
 
-#### Scaffolding
-To create a new MEAN app, run <code>mean init</code>. Name for the application is optional. If no name is provided, "mean" is used. The MEAN project will be cloned from GitHub into a directory of the application name.
-```bash
-$ mean init [name]
-$ cd [name] && npm install
-```
-  <p class="alert alert-info">Note: <a href="http://git-scm.com/downloads">git</a> must be installed for this command to work properly.</p>
+**Note 2:** To whitelist dynamic URLs use regular expression tests inside the
+CSRF middleware to see if `req.originalUrl` matches your desired pattern.
 
-### Misc
-<h4>Status</h4>
-<p>Check the database connection for a particular environment (e.g. development (default), test, production) and make sure that the meanio command line version is up to date.</p>
-```bash
-$ mean status
-```
-<h4>Docs</h4>
-<p>A simple shortcut to open the mean documentation in your default browser.</p>
-```bash
-$ mean docs
-```
+### What is cluster_app.js?
 
-## Packages
+**Note**: It is now part of the generator as of **v2.1**.
 
-Everything in mean.io is a package and when extending mean with custom functionality make sure you create your own package and do not alter the core packages.
+From the [Node.js Documentation](http://nodejs.org/api/cluster.html#cluster_how_it_works):
+> A single instance of Node runs in a single thread. To take advantage of multi-core systems
+> the user will sometimes want to launch a cluster of Node processes to handle the load.
+> The cluster module allows you to easily create child processes that all share server ports.
 
-The mean.io package system allows developers to create modular code that provides useful tools that other mean developers can use. The packages, when published, are plug-and-play and are used in a way very similar to traditional npm packages.
+Running `cluster_app.js` allows you to take advantage of this feature by forking
+a process of `app.js` for each detected CPU. For the majority of applications
+serving HTTP requests, this is a nice benefit. However, the cluster module is
+still in experimental stage, therefore it should only be used after understanding
+its purpose and behavior. To use it, simply run `node cluster_app.js`.
+**Its use is entirely optional and `app.js` is not tied in any way to it**.
+As a reminder, if you plan to use `cluster_app.js` instead of `app.js`,
+be sure to indicate that in `package.json` when you are ready to deploy your app.
 
-The mean.io package system integrates all the packages into the mean project as if the code was part of mean itself and provides the developers with all the necessary tools required to integrate their package into the host project.
+### I am getting MongoDB Connection Error, how do I fix it?
+That's a custom error message defined in `app.js` to indicate that there was a
+problem connecting to MongoDB:
 
-There are two types of packages:
-
-**Custom Packages** are generated by the mean scaffolder and contain most of your application logic. Custom packages are found in */packages/custom* and can be published as a contrib package for use by other developers.
-
-**Contrib Packages** are installed by the mean installer and are found at */packages/contrib*. Contrib packages are "plug and play".
-
-### Core Packages
-
-All `Core` packages can be overridden by other packages allowing you to extend and adapt it to fit your specific needs. See `Overriding views` for detailed examples.
-
-
-#### System
-The "system" package creates the basic pages as well as defines the layout of the site and integrates the menu into the page. The system package also allows us to define things such as rendering engines, static files and routing on the client and server side.
-#### Users
-The "users" package creates the database model of the user, provides validation as well as various login and registration features.
-#### Access
-The "access" package manages permissions and middleware. It controls the various authentication methods and is dependent on the users package
-#### Theme
-The "theme" package adds some basic CSS and other assets such as images and backgrounds
-#### Articles
-The "articles" package is typically used as an example starting point for managing content that might be used in a blog or cms. The full CRUD is implemented on the server and client.
-### Files structure
-The file structure is similar to that of the mean project itself
-
-`Fundamental` Files at the `root` of the package
-
-**Server**
-
-Packages are registered in the **app.js** 
-Defines package name, version and `mean=true` in the **package.json**   
-
-All of the Server side code resides in the `/server` directory.
-
-    Server
-    --- config        # Configuration files
-    --- controllers   # Server side logic goes here
-    --- models        # Database Schema Models
-    --- routes        # Rest api endpoints for routing
-    --- views         # Swig based html rendering
-
-**Client**
-
-All of the Client side code resides in the `/public` directory.
-
-    public            
-    --- assets        # JavaScript/CSS/Images (not aggregated)
-    --- controllers   # Angular controllers
-    --- config        # Contains routing files
-    --- services      # Angular services (also directive and filter folders)
-    --- views         # Angular views
-
-All JavaScript within `public` is automatically aggregated with the exception of files in `public/assets`, which can be manually added using the `aggregateAsset()` function.
-
-Files within the `public` directory of the package can be accessed externally at `/[package-name]/path-to-file-relative-to-public`. For example, to access the `Tokens` Angular controller, `tokens/controllers/tokens.js`.
-
-###Registering a Package
-
-In order for a Package to work it needs to be registered. By doing this you make the package system aware that you are ready and that other packages are able to depend on you. The packages are registered from within `app.js`.
-
-When registering you are required to declare all your dependencies in order for the package system to make them available to your package.
-
-```javascript
-// Example of registering the MyPackage
-MyPackage.register(function(app, auth, database) {
-  // ...
-
+```js
+mongoose.connection.on('error', function() {
+  console.error('�? MongoDB Connection Error. Please make sure MongoDB is running.');
 });
 ```
+You need to have a MongoDB server running before launching `app.js`. You can
+download MongoDB [here](mongodb.org/downloads), or install it via a package manager.
+<img src="http://dc942d419843af05523b-ff74ae13537a01be6cfec5927837dcfe.r14.cf1.rackcdn.com/wp-content/uploads/windows-8-50x50.jpg" height="17">
+Windows users, read [Install MongoDB on Windows](https://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/).
 
-MEAN has 3 pre registered dependencies:
-  - `app` Makes the express app available .
-  - `auth` Includes some basic authentication functions
-  - `database` Contains the Mongoose database connection
+**Tip:** If you are always connected to the internet, you could just use
+[MongoLab](https://mongolab.com/) or [Compose](https://www.compose.io/) instead
+of downloading and installing MongoDB locally. You will only need to update the
+`db` property in `config/secrets.js`.
 
-> All dependencies specified must be registered in order to use them
+### I get an error when I deploy my app, why?
+Chances are you haven't changed the *Database URI* in `secrets.js`. If `db` is
+set to `localhost`, it will only work on your machine as long as MongoDB is
+running. When you deploy to Heroku, OpenShift or some other provider, you will not have MongoDB
+running on `localhost`. You need to create an account with [MongoLab](https://mongolab.com/)
+or [Compose](https://www.compose.io/), then create a free tier database.
+See [Deployment](#deployment) for more information on how to setup an account
+and a new database step-by-step with MongoLab.
 
-###Dependency Injection
-
-> An injection is the passing of a dependency (a service) to a dependent
-> object (a client). The service is made part of the client's state.
-> Passing the service to the client, rather than allowing a client to
-> build or find the service, is the fundamental requirement of the
-> pattern. [Wikipedia](http://en.wikipedia.org/wiki/Dependency_injection)
+### Why Jade instead of Handlebars?
 
 
-Dependency injection allows you to declare what dependencies you require and rely on the package system to resolve all dependencies for you. Any package registered is automatically made available to anyone who would like to depend on them.
-
-Looking again at the registration example we can see that `MyPackage` depends on the `Tokens` package and can make use of its full functionality, including overriding it.
- 
-```javascript
-// Example of registering the tokens package
-MyPackage.register(function(app, auth, database, Tokens) {
-
-  // I can make use of the tokens within my module
-  MyPackage.someExampleFunction('some parameter');
-
-  // I can override functions
-  MyPackage.someExampleFunction = function(param) {
-    //my custom logic goes here
-  };
-});
+**Step 1.** Start by defining a route.
+```js
+app.get('/books', bookController.getBooks);
 ```
 
-> Packages when in code are used in a capitalized form
+---
 
-###Angular Modules and Dependencies
+**Note:** As of Express 4.x you can define you routes like so:
 
-Every package registration automatically creates a corresponding angular module of the form `mean.[package-name]`
-
-The package system injects this information into the mean init functions and allows developers to base their controllers, services, filters, directives etc on either an existing module or on their own one.
-
-In addition you are able to declare which angular dependencies you want your angular module to use.
-
-Below is an example of adding an angular dependency to our angular module.
-
-```javascript
-// Example of adding an angular dependency of the ngDragDrop to the
-MyPackage.angularDependencies(['ngDragDrop']);
+```js
+app.route('/books')
+  .get(bookController.getBooks)
+  .post(bookController.createBooks)
+  .put(bookController.updateBooks)
+  .delete(bookController.deleteBooks)
 ```
 
-> See the assets section for an example how to add external libraries to
-> the client such as the `gDragDrop `javascript library
+And here is how a route would look if it required an *authentication* and an *authorization* middleware:
 
-###Assets and Aggregation
-
-All assets such as images, javascript libraries and CSS stylesheets should be within `public/assets` of the package file structure.
-
-Javascript and CSS from `assets` can be aggregated to the global aggregation files. By default all javascript is automatically wrapped within an anonymous function unless given the option `{global:true}` to not enclose the javascript within a contained scope
-
-
-```javascript
-
-//Adding jquery to the mean project
-MyPackage.aggregateAsset('js','jquery.min.js');
-
-//Adding another library - global by default is false
-MyPackage.aggregateAsset('js','jquery.min.js', {global:true});
-
-//Adding some css to the mean project
-MyPackage.aggregateAsset('css','default.css');
+```js
+app.route('/api/twitter')
+  .all(passportConf.isAuthenticated)
+  .all(passportConf.isAuthorized)
+  .get(apiController.getTwitter);
+  .post(apiController.postTwitter)
 ```
 
-> Javascript files outside of assets are automatically aggregated and
-> injected into the mean project. As a result libraries that you do not
-> want aggregated should be placed within `public/assets/js`
+Use whichever style that makes sense to you. Either one is acceptable. I really think that chaining HTTP verbs on
+`app.route` is very clean and elegant approach, but on the other hand I can no longer see all my routes at a glance
+when you have one route per line.
 
-The aggregation supports the ability to control the location of where to inject the aggregated code and if you add a weight and a group to your aggregateAsset method you can make sure it's included in the correct region.
-
-```javascript
-MyPackage.aggregateAsset('js','first.js',{global:true,  weight: -4, group: 'header'});
-```
-
->The line that gets loaded in your head.html calls the header group and injects the js you want to include first-
-> in packages/system/server/views/includes/head.html 
-> <script type="text/javascript" src="/modules/aggregated.js?group=header"></script>
-
-###Settings Object
-The settings object is a persistence object that is stored in the packages collection and allows for saving persistent information per package such as configuration options or admin settings for the package.
-
-  Receives two arguments the first being the settings object the second is a callback function
-  
-```javascript
-MyPackage.settings({'someSetting':'some value'}, function (err, settings) {
-    // You will receive the settings object on success
+**Step 2.** Create a new schema and a model `Book.js` inside the *models* directory.
+```js
+var bookSchema = new mongoose.Schema({
+  name: String
 });
 
-// Another save settings example this time with no callback
-// This writes over the last settings.
-MyPackage.settings({'anotherSettings':'some value'});
-
-// Get settings. Retrieves latest saved settings
-MyPackage.settings(function (err, settings) {
-  // You now have the settings object
-});
+var Book = mongoose.model('Book', bookSchema);
+module.exports = Book;
 ```
 
-> Each time you save settings you overwrite your previous value.
-> Settings are designed to be used to store basic configuration options
-> and should not be used as a large data store
+**Step 3.** Create a new controller file called `book.js` inside the *controllers* directory.
+```js
+/**
+ * GET /books
+ * List all books.
+ */
+var Book = require('../models/Book.js');
 
-
-###Express Routes
-All routing to server side controllers is handled by express routes. The package system uses the typical express approach. The package system has a route function that passes along the package object to the main routing file typically `server/routes/myPackage.js`
-
-  By default the Package Object is passed to the routes along with the other arguments
-  `MyPackage.routes(app, auth, database);`
-
-
-Example from the `server/routes/myPackage.js`
-
-```javascript
-// The Package is past automatically as first parameter
-module.exports = function(MyPackage, app, auth, database) {
-
-  // example route
-  app.get('/myPackage/example/anyone', function (req,res,next) {
-    res.send('Anyone can access this');
+exports.getBooks = function(req, res) {
+  Book.find(function(err, docs) {
+    res.render('books', { books: docs });
   });
 };
 ```
 
-###Angular Routes
-The angular routes are defined in `public/routes/myPackage.js`. Just like the latest version of mean, the packages  use the `$stateProvider`
-
-```javascript
-$stateProvider
-  .state('myPackage example page', {
-    url: '/myPackage/example',
-    templateUrl: 'myPackage/views/index.html'
-  });
+**Step 4.** Import that controller in `app.js`.
+```js
+var bookController = require('./controllers/book');
 ```
 
-> The angular views are publically accessible via templateUrl when
-> prefixed with the package name
+**Step 5.** Create `books.jade` template.
+```jade
+extends layout
 
-###Menu System
+block content
+  .page-header
+    h3 All Books
 
-Packages are able to hook into an existing menu system and add links to various menus integrated within Mean.
-
-Each link specifies its `title`, `template`, `menu` and `role` that is allowed to see the link. If the menu specified does not exist, a new menu will be created. The menu object is made accessible within the client by means of a *menu angular service* that queries the menu controller for information about links.
-
-Below is an example how to add a link to the main menu from `app.js`
-
-```javascript
-//We are adding a link to the main menu for all authenticated users
-MyPackage.menus.add({
-  title: "myPackage example page",
-  link: "myPackage example page",
-  roles: ["authenticated"],
-  menu: "main"
-});
+  ul
+    for book in books
+      li= book.name
 ```
 
+That's it! I will say that you could have combined Step 1, 2, 3 as following:
 
-> You can look at the angular header controller in the mean project for
-> more info. You can find it `public/system/controllers/header.js` and
-> see how the menu service is implemented
-
-###Html View Rendering
-The packages come built in with a rendering function allowing packages to render static html. The default templating engine is *swig*. The views are found in `server/views` of the package and should end with the `.html` suffix
-
-Below is an example rendering some simple html
-
-```javascript
-app.get('/myPackage/example/render', function (req,res,next) {
-  MyPackage.render('index', {packageName:'myPackage'}, function (err, html) {
-    //Rendering a view from the Package server/views
-    res.send(html);
+```js
+app.get('/books', function(req, res) {
+  Book.find(function(err, docs) {
+    res.render('books', { books: docs });
   });
 });
 ```
 
-###Overriding the default layouts
-One is able to override the default layout of the application through a custom package.
+Sure, it's simpler, but as soon as you pass 1000 lines of code in `app.js` it becomes a little difficult to navigate the file.
+I mean, the whole point of this boilerplate project was to separate concerns, so you could
+work with your teammates without running into *MERGE CONFLICTS*. Imagine you have 4 developers
+working on a single `app.js`, I promise you it won't be fun resolving merge conflicts all the time.
+If you are the only developer then it's fine. But as I said, once it gets up to a certain LoC size, it becomes
+difficult to maintain everything in a single file.
 
-Below is an example overriding the default layout of system and instead using the layourts found locally within the package
+That's all there is to it. Express.js is super simple to use.
+Most of the time you will be dealing with other APIs to do the real work:
+[Mongoose](http://mongoosejs.com/docs/guide.html) for querying database, socket.io for sending and receiving messages over websockets,
+sending emails via [Nodemailer](http://nodemailer.com/), form validation using [express-validator](https://github.com/ctavan/express-validator) library,
+parsing websites using [Cheerio](https://github.com/cheeriojs/cheerio), and etc.
 
-```javascript
-MyPackage.register(function(system, app) {
-  app.set('views', __dirname + '/server/views');
-  // ...
+<hr>
+
+Mongoose Cheatsheet
+-------------------
+
+#### Find all users:
+```js
+User.find(function(err, users) {
+  console.log(users);
+});
 ```
 
-> Please note that the package must depend on `System` to ensure it is
-> evaluated after `System` and can thus override the views folder
-
-### Overriding views
-You may override public views used by certain core packages.  To create a custom home page, you would create a custom package and modify the script in it's public folder like so:
-
-```javascript
-angular.module('mean.mycustompackage', ['mean.system'])
-.config(['$viewPathProvider', function($viewPathProvider) {
-  $viewPathProvider.override('system/views/index.html', 'mycustompackage/views/myhomepage.html');
-}]);
+#### Find a user by email:
+```js
+var userEmail = 'example@gmail.com';
+User.findOne({ email: userEmail }, function(err, user) {
+  console.log(user);
+});
 ```
 
-This will render *mycustompackage/views/myhomepage.html* as the home page.
-
-### Creating your own package
-To create your own package and scaffold its initial code, run the following command:
-
-```bash
-$ mean package <packageName>
+#### Find 5 most recent user accounts:
+```js
+User
+  .find()
+  .sort({ _id: -1 })
+  .limit(5)
+  .exec(function(err, users) {
+    console.log(users);
+  });
 ```
 
-This will create a package under */packages/custom/pkgName*
+#### Get total count of a field from all documents:
+Let's suppose that each user has a `votes` field and you would like to count
+the total number of votes in your database across all users. One very
+inefficient way would be to loop through each document and manually accumulate
+the count. Or you could use [MongoDB Aggregation Framework](https://docs.mongodb.org/manual/core/aggregation-introduction/) instead:
 
-### Deleting a package
-To delete your package, and remove its files:
-
-```bash
-$ mean uninstall myPackage
+```js
+User.aggregate({ $group: { _id: null, total: { $sum: '$votes' } } }, function(err, votesCount) {
+  console.log(votesCount.total);
+});
 ```
-Where "myPackage" is the name of your package.
-
-
-### Contributing your package
-Once your package is in good shape and you want to share it with the world you can start the process of contributing it and submiting it so it can be included in the package repository.
-To contribute your package register to the network (see the section below) and run
-
-```bash 
-$ mean register # register to the mean network (see below)
-$ cd <packages/custom/pkgName>
-$ mean publish
-```
-
-## MEAN Network
-Mean is a stand-alone instance that you can install locally or host on your server.
-We want to provide value to developers and are assembling a set of services which will be called the mean network.
-We're building all of this as we speak but we allready have some elements in place.
-
-### Network User Management
-
-#### Registration
-```bash
-$ mean register
-```
-#### Identity
-```bash
-$ mean whoami
-```
-### Deploy
-Coming soon!
-
-## Config
-All the configuration is specified in the [config](/config/) folder,
-through the [env](config/env/) files, and is orchestrated through the [meanio](https://github.com/linnovate/meanio) NPM module.
-Here you will need to specify your application name, database name, and hook up any social app keys if you want integration with Twitter, Facebook, GitHub, or Google.
-
-### Environmental Settings
-
-There is a shared environment config: __all__
-
-* __root__ - This the default root path for the application.
-* __port__ - DEPRECATED to __http.port__ or __https.port__.
-* __http.port__ - This sets the default application port.
-* __https__ - These settings are for running HTTPS / SSL for a secure application.
-* __port__ - This sets the default application port for HTTPS / SSL. If HTTPS is not used then is value is to be set to __false__ which is the default setting. If HTTPS is to be used the standard HTTPS port is __443__.
-* __ssl.key__ - The path to public key.
-* __ssl.cert__ - The path to certificate.
-
-There are three environments provided by default: __development__, __test__, and __production__.
-Each of these environments has the following configuration options:
-
-* __db__ - This is where you specify the MongoDB / Mongoose settings
-* __url__ - This is the url/name of the MongoDB database to use, and is set by default to __mean-dev__ for the development environment.
-* __debug__ - Setting this option to __true__ will log the output all Mongoose executed collection methods to your console.  The default is set to __true__ for the development environment.
-* __options__ - These are the database options that will be passed directly to mongoose.connect in the __production__ environment: [server, replset, user, pass, auth, mongos] (http://mongoosejs.com/docs/connections.html#options) or read [this] (http://mongodb.github.io/node-mongodb-native/driver-articles/mongoclient.html#mongoclient-connect-options) for more information.
-* __app.name__ - This is the name of your app or website, and can be different for each environment. You can tell which environment you are running by looking at the TITLE attribute that your app generates.
-* __Social OAuth Keys__ - Facebook, GitHub, Google, Twitter. You can specify your own social application keys here for each platform:
-  * __clientID__
-  * __clientSecret__
-  * __callbackURL__
-* __emailFrom__ - This is the from email address displayed when sending an email.
-* __mailer__ - This is where you enter your email service provider, username and password.
-
-To run with a different environment, just specify NODE_ENV as you call grunt:
-```bash
-$ NODE_ENV=test grunt
-```
-If you are using node instead of grunt, it is very similar:
-```bash
-$ NODE_ENV=test node server
-```
-To simply run tests
-```bash
-$ npm test
-```
-> NOTE: Running Node.js applications in the __production__ environment enables caching, which is disabled by default in all other environments.
-
-### Logging
-
-As from mean-0.4.4 control over the logging format has been delgated to the env configuration files.
-The formats and implementation are done using the morgan node module and it's [predefined format](https://github.com/expressjs/morgan#predefined-formats)
-Within each configuration file (config/env/development.js) for instance you state the format in the 'logging' object.
-```
-'use strict';
-
-module.exports = {
-  db: 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/mean-dev',
-  debug: true,
-  logging: {
-    format: 'tiny'
-  },
-```
-
-The default for the development environment uses [tiny format](https://github.com/expressjs/morgan#tiny)
-```
-GET /system/views/index.html 304 2.379 ms - -
-GET /admin/menu/main 304 8.687 ms - -
-GET /system/assets/img/logos/meanlogo.png 304 2.803 ms - -
-GET /system/assets/img/backgrounds/footer-bg.png 304 4.481 ms - -
-GET /system/assets/img/ninja/footer-ninja.png 304 3.309 ms - -
-GET /system/assets/img/logos/linnovate.png 304 3.001 ms - -
-```
-
-The production uses the widely used [combined format](https://github.com/expressjs/morgan#combined).
-```
-:1 - - [22/Mar/2015:13:13:42 +0000] "GET /modules/aggregated.js HTTP/1.1" 200 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36"
-::1 - - [22/Mar/2015:13:13:42 +0000] "GET /modules/aggregated.js?group=header HTTP/1.1" 200 0 "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36"
-::1 - - [22/Mar/2015:13:13:42 +0000] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36"
-::1 - - [22/Mar/2015:13:13:42 +0000] "GET /modules/aggregated.css HTTP/1.1" 200 - "http://localhost:3000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36"
-```
-
-## Staying up to date
-After initializing a project, you'll see that the root directory of your project is already a git repository. MEAN uses git to download and update its own code. To handle its own operations, MEAN creates a remote called `upstream`. This way you can use git as you would in any other project. 
-
-To update your MEAN app to the latest version of MEAN
-
-```bash
-$ git pull upstream master
-$ npm install
-```
-
-To maintain your own public or private repository, add your repository as remote. See here for information on [adding an existing project to GitHub](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line).
-
-```bash
-$ git remote add origin <remote repository URL>
-$ git push -u origin master
-```
-
-
-## Hosting MEAN
-Since version 0.4.2 MEAN provides a command to easily upload your app to the *mean cloud*.
-To do so all you need to do is the following steps.
-
-1. make sure you have a unique name for your app (not the default mean) and that the name is in the package.json
-1. Run `mean deploy`
-1. It will create the meanio remote which can be used to update your remote app by `git push meanio master`
-1. You can add remote command using the --remote flag for instance to add a role to a user on the remote cloud instance run `mean user -a RoleName emailAddress --remote`
-1. To get an idea of whats happening on the mean log (node.js based logging) run `mean logs -n 100` to get the last 100 lines...
-
-### Heroku
-Before you start make sure you have the [Heroku toolbelt](https://toolbelt.heroku.com/)
-installed and an accessible MongoDB instance - you can try [MongoHQ](http://www.mongohq.com/)
-which has an easy setup).
-
-Add the db string to the production env in *server/config/env/production.js*.
-
-```bash
-$ git init
-$ git add .
-$ git commit -m "initial version"
-$ heroku apps:create
-$ heroku config:add NODE_ENV=production
-$ heroku config:add BUILDPACK_URL=https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git
-$ git push heroku master
-$ heroku config:set NODE_ENV=production
-```
-
-### OpenShift
-
-1. Register for an account on Openshift (http://www.openshift.com).
-1. Create an app on Openshift by choosing a 'Node' type site to create. Create the site by making Openshift use Linnovate's Openshift git repo as its source code (https://github.com/linnovate/mean-on-openshift.git).
-1. On the second screen after the new application has been created, add a Mongo database.
-1. When the site has been built, you can visit it on your newly created domain, which will look like my-domain.openshift.com. You may need to restart the instance on Openshift before you can see it. It will look like Mean.io boilerplate.
-1. On your new app's console page on Openshift, make a note of the git repo where the code lives. Clone that repo to your local computer where your mean.io app codebase is.
-1. Merge your completed local app into this new repo. You will have some conflicts, so merge carefully, line by line.
-1. Commit and push the repo with the Openshift code back up to Openshift. Restart your instance on Openshift, you should see your site!
-
-
-## More Information
-  * Visit us at [Linnovate.net](http://www.linnovate.net/).
-  * Visit our [Ninja's Zone](http://www.meanleanstartupmachine.com/) for extended support.
-
-## Credits
-  * To our awesome <a href="https://github.com/orgs/linnovate/teams/mean">core team</a> with help of our <a href="https://github.com/linnovate/mean/graphs/contributors">contributors</a> which have made this project a success.
-  * <a href="https://github.com/vkarpov15">Valeri Karpov</a> for coining the term *mean* and triggering the mean stack movement.
-  * <a href="https://github.com/amoshaviv">Amos Haviv</a>  for the creation of the initial version of Mean.io while working for us @linnovate.
-  * <a href="https://github.com/madhums/">Madhusudhan Srinivasa</a> which inspired us with his great work.
-
-## License
-We believe that mean should be free and easy to integrate within your existing projects so we chose [The MIT License](http://opensource.org/licenses/MIT)
-
