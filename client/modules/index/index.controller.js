@@ -5,16 +5,16 @@
     .module('app.index', [])
     .controller('IndexController', IndexController)
 
-  IndexController.$inject = []
+  IndexController.$inject = ['logger']
   /* @ngInject */
-  function IndexController () {
+  function IndexController (logger) {
     var vm = this
     vm.title = 'System'
 
     activate()
 
     function activate () {
-      console.log('Activated IndexController View')
+      logger.info('Activated Index View')
     }
   }
 })()

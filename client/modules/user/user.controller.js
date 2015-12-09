@@ -11,7 +11,6 @@
     var vm = this
     vm.editProfile = vm.loginCred = vm.loginError = {}
     vm.editProfile = UserFactory.editProfile(vm)
-    vm.logger = logger
     vm.login = function () {
       UserFactory.login(vm)
     }
@@ -22,7 +21,6 @@
     vm.update = function () {
       UserFactory.update(vm)
     }
-
     vm.upload = function (file) {
       Upload.upload({
         url: '/api/photos/upload',

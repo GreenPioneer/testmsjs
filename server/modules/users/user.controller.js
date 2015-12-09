@@ -26,15 +26,14 @@ exports.getLogin = function (req, res) {
  * Sign in using email and password.
  */
 exports.postLogin = function (req, res, next) {
-  // req.assert('email', 'Email is not valid').isEmail()
-  // req.assert('password', 'Password cannot be blank').notEmpty()
+  req.assert('email', 'Email is not valid').isEmail()
+  req.assert('password', 'Password cannot be blank').notEmpty()
 
-  // var errors = req.validationErrors()
-  // console.log(errors, 'errors')
-  // if (errors) {
-  //   req.flash('errors', errors)
-  //   return res.redirect('/login')
-  // }
+  var errors = req.validationErrors()
+  console.log(errors, 'errors')
+  if (errors) {
+    return res.redirect('/login')
+  }
 
   passport.authenticate('local', function (err, user, info) {
     if (err) {
@@ -42,7 +41,6 @@ exports.postLogin = function (req, res, next) {
     }
     console.log(err, user, info)
     if (!user) {
-      // req.flash('errors', { msg: info.message })
       return res.status(400).send(info.message)
     }
     req.logIn(user, function (err) {
@@ -84,16 +82,16 @@ exports.getSignup = function (req, res) {
  * Create a new local account.
  */
 exports.postSignup = function (req, res, next) {
-  // req.assert('email', 'Email is not valid').isEmail()
-  // req.assert('password', 'Password must be at least 4 characters long').len(4)
-  // req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password)
+  req.assert('email', 'Email is not valid').isEmail()
+  req.assert('password', 'Password must be at least 4 characters long').len(4)
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password)
 
-  // var errors = req.validationErrors()
+  var errors = req.validationErrors()
 
-  // if (errors) {
-  //   req.flash('errors', errors)
-  //   return res.redirect('/signup')
-  // }
+  if (errors) {
+    // req.flash('errors', errors)
+    return res.redirect('/signup')
+  }
 
   var user = new User({
     email: req.body.email,
@@ -167,7 +165,7 @@ exports.postUpdatePassword = function (req, res, next) {
   var errors = req.validationErrors()
 
   if (errors) {
-    req.flash('errors', errors)
+    console.log(errors)
     return res.redirect('/account')
   }
 
@@ -196,28 +194,7 @@ exports.postDeleteAccount = function (req, res, next) {
       return next(err)
     }
     req.logout()
-    req.flash('info', { msg: 'Your account has been deleted.' })
     res.redirect('/')
-  })
-}
-
-/**
- * GET /account/unlink/:provider
- * Unlink OAuth provider.
- */
-exports.getOauthUnlink = function (req, res, next) {
-  var provider = req.params.provider
-  User.findById(req.user.id, function (err, user) {
-    if (err) {
-      return next(err)
-    }
-    user[provider] = undefined
-    user.tokens = _.reject(user.tokens, function (token) { return token.kind === provider; })
-    user.save(function (err) {
-      if (err) return next(err)
-      req.flash('info', { msg: provider + ' account has been unlinked.' })
-      res.redirect('/account')
-    })
   })
 }
 
@@ -269,7 +246,6 @@ exports.postReset = function (req, res, next) {
             return next(err)
           }
           if (!user) {
-            req.flash('errors', { msg: 'Password reset token is invalid or has expired.' })
             return res.redirect('back')
           }
           user.password = req.body.password
@@ -301,7 +277,7 @@ exports.postReset = function (req, res, next) {
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       }
       transporter.sendMail(mailOptions, function (err) {
-        req.flash('success', { msg: 'Success! Your password has been changed.' })
+        console.log('success', { msg: 'Success! Your password has been changed.' })
         done(err)
       })
     }
@@ -334,7 +310,6 @@ exports.postForgot = function (req, res, next) {
   var errors = req.validationErrors()
 
   if (errors) {
-    req.flash('errors', errors)
     return res.redirect('/forgot')
   }
 
@@ -348,7 +323,6 @@ exports.postForgot = function (req, res, next) {
     function (token, done) {
       User.findOne({ email: req.body.email.toLowerCase() }, function (err, user) {
         if (!user) {
-          req.flash('errors', { msg: 'No account with that email address exists.' })
           return res.redirect('/forgot')
         }
         user.resetPasswordToken = token
@@ -376,7 +350,6 @@ exports.postForgot = function (req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       }
       transporter.sendMail(mailOptions, function (err) {
-        req.flash('info', { msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.' })
         done(err, 'done')
       })
     }

@@ -3,7 +3,7 @@ var express = require('express')
 var chalk = require('chalk')
 var passportConf = require('./passport.controller.js')
 var user = require('./user.controller.js')
-
+var expressValidator = require('express-validator')
 var bodyParser = require('body-parser')
 var methodOverride = require('method-override')
 var fs = require('fs')
@@ -13,6 +13,7 @@ var multer = require('multer')
 var app = express()
 app.use(bodyParser.json())
 app.use(methodOverride())
+app.use(expressValidator())
 
 var upload = multer({ dest: 'client/uploads/' })
 app.post('/photos/upload', upload.single('file'), function (req, res, next) {
@@ -44,6 +45,5 @@ app.get('/account', passportConf.isAuthenticated, user.getAccount)
 app.post('/account/profile', passportConf.isAuthenticated, user.postUpdateProfile)
 app.post('/account/password', passportConf.isAuthenticated, user.postUpdatePassword)
 app.post('/account/delete', passportConf.isAuthenticated, user.postDeleteAccount)
-app.get('/account/unlink/:provider', passportConf.isAuthenticated, user.getOauthUnlink)
 
 module.exports = app
