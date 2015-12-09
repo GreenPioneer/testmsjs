@@ -67,12 +67,12 @@ app.set('views', __dirname + '/client')
  */
 app.set('port', process.env.PORT || 3000)
 app.use(compress())
-app.use(sass({
-  src: path.join(__dirname, 'client'),
-  dest: path.join(__dirname, 'client'),
-  debug: true,
-  outputStyle: 'expanded'
-}))
+// app.use(sass({
+//   src: path.join(__dirname, 'client'),
+//   dest: path.join(__dirname, 'client'),
+//   debug: true,
+//   outputStyle: 'expanded'
+// }))
 app.use(logger('dev'))
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 app.use(bodyParser.json())

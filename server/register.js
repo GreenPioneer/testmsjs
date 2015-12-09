@@ -4,23 +4,22 @@ var async = require('async')
 var _ = require('lodash')
 var fs = require('fs')
 var chalk = require('chalk')
-var sass = require('node-sass');
-var less = require('less');
+var sass = require('node-sass')
+var less = require('less')
 
-var rmdirAsync = function(path, callback) {
-  
-    if( fs.existsSync(path) ) {
-    fs.readdirSync(path).forEach(function(file,index){
-      var curPath = path + "/" + file;
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
+var rmdirAsync = function (path, callback) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function (file, index) {
+      var curPath = path + '/' + file
+      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath)
       } else { // delete file
-        fs.unlinkSync(curPath);
+        fs.unlinkSync(curPath)
       }
-    });
-    //fs.rmdirSync(path);
+    })
+  // fs.rmdirSync(path)
   }
-};
+}
 /**
  * BACKEND
  */
@@ -33,7 +32,7 @@ var data = {}
 var exporting = {}
 var modules = fs.readdirSync(lookDir)
 
-//IF YOU NEED TO FILTER ANY FILES OUT
+// IF YOU NEED TO FILTER ANY FILES OUT
 modules = _.filter(modules, function (n) {
   return !_.startsWith(n, '.')
 })
@@ -75,7 +74,7 @@ var frontEnddata = {}
 var frontEndexporting = {}
 var frontEndmodules = fs.readdirSync(frontEndDir)
 
-//IF YOU NEED TO FILTER ANY FILES OUT
+// IF YOU NEED TO FILTER ANY FILES OUT
 frontEndmodules = _.filter(frontEndmodules, function (n) {
   return !_.startsWith(n, '.')
 })
@@ -84,7 +83,6 @@ frontEndmodules = _.filter(frontEndmodules, function (n) {
   if (path.extname(n) !== '')mainFrontendFile = n
   return path.extname(n) === ''
 })
-
 
 frontEnddata.modules = frontEndmodules
 _.forEach(frontEnddata.modules, function (value, key) {
@@ -169,25 +167,25 @@ function all (setup) {
     css: [],
     js: []
   }
-  
-  //CHECK AND MAKE DIRECTORY
-  if (!fs.existsSync(__dirname+'/../client/styles/compiled/')) {
-        fs.mkdirSync(__dirname+'/../client/styles/compiled/');
-    }
-  //DELETE ALL PREVIOUSLY COMPILED 
-  rmdirAsync(__dirname+'/../client/styles/compiled/',function(){
-        console.log(arguments)
-      })
 
-  //RENDER THE GLOBAL STYLE
-  var globalContents = fs.readFileSync(__dirname+'/../client/styles/global.style.scss', 'utf8')
-     var result = sass.renderSync({
-      includePaths: ["../../client/styles","../client/styles/","../../../client/styles/","./client/styles/"],
-      data: globalContents
-    });
-   fs.writeFileSync(__dirname+'/../client/styles/global.style.css',result.css)
+  // CHECK AND MAKE DIRECTORY
+  if (!fs.existsSync(__dirname + '/../client/styles/compiled/')) {
+    fs.mkdirSync(__dirname + '/../client/styles/compiled/')
+  }
+  // DELETE ALL PREVIOUSLY COMPILED 
+  rmdirAsync(__dirname + '/../client/styles/compiled/', function () {
+    console.log(arguments)
+  })
 
-  //PUSH ALL FRONTEND FILES
+  // RENDER THE GLOBAL STYLE
+  var globalContents = fs.readFileSync(__dirname + '/../client/styles/global.style.scss', 'utf8')
+  var result = sass.renderSync({
+    includePaths: [path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
+    data: globalContents
+  })
+  fs.writeFileSync(__dirname + '/../client/styles/global.style.css', result.css)
+
+  // PUSH ALL FRONTEND FILES
   _.forEach(settings.frontEndConfigs, function (r) {
     _.forEach(r.files, function (j) {
       if (j.type === 'controller') {
@@ -203,27 +201,25 @@ function all (setup) {
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
       }
       else if (j.type === 'style') {
-        
-        if(j.ext === 'css'){
+        if (j.ext === 'css') {
           frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
           frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
-        }else if(j.ext === 'scss' || j.ext === 'sass'){
-
-           var contents = fs.readFileSync(__dirname+'/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-           var result = sass.renderSync({
-              data: contents
-            });
-           fs.writeFileSync(__dirname+'/../client/styles/compiled/'+j.name+'.'+j.type+'.'+j.ext+'.css',result.css)
-           frontendFiles.style.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
-           frontendFilesFinal.css.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
-        }else if(j.ext === 'less'){
-          var contents = fs.readFileSync(__dirname+'/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-          less.render(contents, function(err, result) {
-            fs.writeFileSync(__dirname+'/../client/styles/compiled/'+j.name+'.'+j.type+'.'+j.ext+'.css',result.css)
-           frontendFiles.style.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
-           frontendFilesFinal.css.push('/styles/compiled/' +j.name+'.'+j.type+'.'+j.ext+'.css')
-          });
-        }else{
+        }else if (j.ext === 'scss' || j.ext === 'sass') {
+          var contents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          var result = sass.renderSync({
+            data: contents
+          })
+          fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
+          frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+          frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+        }else if (j.ext === 'less') {
+          var contents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          less.render(contents, function (err, result) {
+            fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
+            frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+            frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+          })
+        } else {
           console.log('Unknown Style', j)
         }
       }

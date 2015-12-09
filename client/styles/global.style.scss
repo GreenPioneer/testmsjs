@@ -1,12 +1,12 @@
 /* global styling */
-/*@import 'C:/Users/a535365/Documents/testmsjs/client/styles/global-variables.styles.scss';
 @import 'global-variables.styles.scss';
-*/
+@import 'bootstrap';
+/*@import 'materialize';*/
 
 body{
 	padding-top:50px;
 }
 
-/*a {
+a {
   color: $brand-danger;
-}*/
+}

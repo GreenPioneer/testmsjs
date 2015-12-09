@@ -73,6 +73,8 @@ module.exports = {
   //     '/modules/user/user.routes.js',
   //     '/modules/blog/blog.controller.js',
   //     '/modules/blog/blog.routes.js'
+
+  // /'/bower_components/bootstrap/dist/css/bootstrap.min.css',
   assets: {
     js: [
       '/bower_components/ng-file-upload/ng-file-upload-all.js',
@@ -93,7 +95,6 @@ module.exports = {
     css: [
       '/styles/global.style.css',
       '/bower_components/toastr/toastr.css',
-      '/bower_components/bootstrap/dist/css/bootstrap.min.css',
       '/bower_components/font-awesome/css/font-awesome.min.css'
     ]
   },

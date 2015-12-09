@@ -71,3 +71,5 @@ client/uploads
 # Files
 # --------------------
 files/
+
+client/styles/global.style.css
