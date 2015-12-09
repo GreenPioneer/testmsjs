@@ -180,7 +180,7 @@ function all (setup) {
   // RENDER THE GLOBAL STYLE
   var globalContents = fs.readFileSync(__dirname + '/../client/styles/global.style.scss', 'utf8')
   var result = sass.renderSync({
-    includePaths: [path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
+    includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
     data: globalContents
   })
   fs.writeFileSync(__dirname + '/../client/styles/global.style.css', result.css)
@@ -205,16 +205,18 @@ function all (setup) {
           frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
           frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
         }else if (j.ext === 'scss' || j.ext === 'sass') {
-          var contents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
           var result = sass.renderSync({
-            data: contents
+            includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
+            data: scssContents
           })
           fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
           frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
           frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
         }else if (j.ext === 'less') {
-          var contents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-          less.render(contents, function (err, result) {
+          var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+          less.render(lessContents, function (err, result) {
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
             frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
