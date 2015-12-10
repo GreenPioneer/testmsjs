@@ -73,3 +73,13 @@ client/uploads
 files/
 
 client/styles/global.style.css
+
+client/scripts/concat.js
+
+client/scripts/concat.min.css
+
+client/scripts/concat.min.js
+
+client/styles/concat.css
+
+client/styles/concat.min.css

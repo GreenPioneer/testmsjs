@@ -6,13 +6,16 @@ var fs = require('fs')
 var chalk = require('chalk')
 var sass = require('node-sass')
 var less = require('less')
+var uglify = require('uglify-js')
+var concat = require('concat')
+var uglifycss = require('uglifycss')
 
 var rmdirAsync = function (path, callback) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function (file, index) {
       var curPath = path + '/' + file
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath)
+        //
       } else { // delete file
         fs.unlinkSync(curPath)
       }
@@ -167,10 +170,20 @@ function all (setup) {
     css: [],
     js: []
   }
+  var frontendFilesAggregate = {
+    css: [],
+    js: []
+  }
 
   // CHECK AND MAKE DIRECTORY
   if (!fs.existsSync(__dirname + '/../client/styles/compiled/')) {
     fs.mkdirSync(__dirname + '/../client/styles/compiled/')
+  }
+  if (!fs.existsSync(__dirname + '/../client/scripts/')) {
+    fs.mkdirSync(__dirname + '/../client/scripts/')
+  }
+  if (!fs.existsSync(__dirname + '/../client/uploads/')) {
+    fs.mkdirSync(__dirname + '/../client/uploads/')
   }
   // DELETE ALL PREVIOUSLY COMPILED 
   rmdirAsync(__dirname + '/../client/styles/compiled/', function () {
@@ -191,19 +204,23 @@ function all (setup) {
       if (j.type === 'controller') {
         frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'module') {
         frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'routes') {
         frontendFiles.routes.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'style') {
         if (j.ext === 'css') {
           frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
           frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
         }else if (j.ext === 'scss' || j.ext === 'sass') {
           var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
           // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
@@ -214,12 +231,14 @@ function all (setup) {
           fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
           frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
           frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+          frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
         }else if (j.ext === 'less') {
           var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
           less.render(lessContents, function (err, result) {
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
             frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+            frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
           })
         } else {
           console.log('Unknown Style', j)
@@ -237,32 +256,87 @@ function all (setup) {
       else if (j.type === 'config') {
         frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'factory') {
         frontendFiles.factory.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'service') {
         frontendFiles.service.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       }
       else if (j.type === 'provider') {
         frontendFiles.provider.push('/modules/' + r.name + '/' + j.orginal)
         frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
       } else {
-        frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+        if (j.ext === 'js') {
+          frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+        }else if (j.ext === 'css') {
+          // not added yet
+        } else {
+          console.log('Unknown', j)
+        }
       }
     })
   })
   frontendFilesFinal.js.unshift(/modules/ + mainFrontendFile)
+  frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + mainFrontendFile))
   _.forEach(settings.meanSettings.assets.css, function (ms) {
     frontendFilesFinal.css.unshift(ms)
+    frontendFilesAggregate.css.unshift(path.join(__dirname, '../client/' + ms))
   })
   _.forEach(settings.meanSettings.assets.js, function (ms) {
     frontendFilesFinal.js.unshift(ms)
+    frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/' + ms))
   })
-  settings.app.locals.frontendFilesFinal = frontendFilesFinal
+
+  // SET FILES TO BE RENDERED BASED OF THE ENV
+  if (process.env.NODE_ENV === 'test') {
+    concat(frontendFilesAggregate.css, path.join(__dirname, '../client/styles/concat.css'), function (error) {
+      if (error)console.log(error, 'concat')
+    })
+    concat(frontendFilesAggregate.js, path.join(__dirname, '../client/scripts/concat.js'), function (error) {
+      if (error)console.log(error, 'concat')
+    })
+    settings.app.locals.frontendFilesFinal = {
+      js: ['scripts/concat.js'],
+      css: ['styles/concat.css']
+    }
+  } else if (process.env.NODE_ENV === 'production') {
+    var uglified = uglifycss.processFiles(
+      frontendFilesAggregate.css,
+      { maxLineLen: 500 }
+    )
+    fs.writeFile(path.join(__dirname, '../client/scripts/concat.min.css'), uglified.code, function (err) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Script generated and saved:', 'concat.min.css')
+      }
+    })
+
+    var uglified = uglify.minify(frontendFilesAggregate.js)
+    fs.writeFile(path.join(__dirname, '../client/scripts/concat.min.js'), uglified.code, function (err) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log('Script generated and saved:', 'concat.min.js')
+      }
+    })
+    settings.app.locals.frontendFilesFinal = {
+      js: ['scripts/concat.min.js'],
+      css: ['styles/concat.min.css']
+    }
+  } else {
+    settings.app.locals.frontendFilesFinal = frontendFilesFinal
+  }
+
 }
 function register (options) {
   if (options === undefined) {
@@ -277,6 +351,7 @@ function register (options) {
 // throw new TypeError(chalk.red('Expected object for argument options but got ' + chalk.red.underline.bold(options)))
 }
 module.exports = register
+
 // async.waterfall([
 //   function (callback) {
 //     fs.readdir(lookDir, function (err, modules) {

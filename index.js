@@ -20,15 +20,11 @@ var path = require('path')
 var mongoose = require('mongoose')
 var passport = require('passport')
 var expressValidator = require('express-validator')
-var sass = require('node-sass-middleware')
 
 // var serveStatic = require('serve-static')
 // var helmet = require('helmet')
-// var compression = require('compression')
 // well-known web vulnerabilities
 //  apps[n].use(helmet())
-// Gzip compressing
-//  apps[n].use(compression())
 /**
  * Create Express server.
  */
@@ -48,7 +44,7 @@ var build = require('buildreq')(settings.buildreq)
 // db.once('open', function callback () {
 //   // console.log("connection")
 // })
-mongoose.connect(settings.db)
+mongoose.connect(settings.db, settings.dbOptions)
 mongoose.connection.on('error', function () {
   console.log('MongoDB Connection Error. Please make sure that MongoDB is running.')
   process.exit(1)
@@ -57,6 +53,13 @@ mongoose.connection.on('error', function () {
 /**
  * Swig configuration.
  */
+// // assign the template engine to .html files
+//  app.engine('html', consolidate[config.templateEngine])
+
+//  // set .html as the default extension
+//  app.set('view engine', 'html')
+// cache=memory or swig dies in NODE_ENV=production
+app.locals.cache = 'memory'
 var swig = require('swig')
 app.engine('html', swig.renderFile)
 app.set('view engine', 'html')
@@ -65,7 +68,7 @@ app.set('views', __dirname + '/client')
 /**
  * Express configuration.
  */
-app.set('port', process.env.PORT || 3000)
+app.set('port', settings.http.port)
 app.use(compress())
 app.use(logger('dev'))
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))

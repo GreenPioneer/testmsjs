@@ -7,6 +7,7 @@
     .factory('BlogFactory', BlogFactory)
     .config(config)
 
+  config.$inject = ['$httpProvider']
   function config ($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = '_csrf'
     $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'

@@ -1,14 +1,11 @@
 'use strict'
 
-var path = require('path'),
-  rootPath = path.normalize(__dirname + '/../..')
-module.exports = {
+var path = require('path')
+var rootPath = path.normalize(__dirname + '/../..')
+var _ = require('lodash')
+var baseLine = {
   root: rootPath,
-  http: {
-    port: process.env.PORT || 3000
-  },
   hostname: process.env.HOST || process.env.HOSTNAME,
-  db: process.env.MONGODB || process.env.MONGOLAB_URI || 'mongodb://localhost:27017/blog',
   templateEngine: 'swig',
 
   // The secret should be set to a non-guessable string that
@@ -87,10 +84,10 @@ module.exports = {
       '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       '/bower_components/angular-moment/angular-moment.js',
       '/bower_components/moment/moment.js',
-      '/bower_components/toastr/toastr.min.js',
-      '/bower_components/bootstrap/dist/js/bootstrap.min.js',
+      '/bower_components/toastr/toastr.js',
+      '/bower_components/bootstrap/dist/js/bootstrap.js',
       '/bower_components/angular/angular.js',
-      '/bower_components/jquery/dist/jquery.min.js'
+      '/bower_components/jquery/dist/jquery.js'
     ],
     css: [
       '/styles/global.style.css',
@@ -108,7 +105,8 @@ module.exports = {
       type: '',
       actions: {
         prev: false,
-        next: false
+        next: false,
+        reload: false
       },
       delete: ['error']
     },
@@ -135,3 +133,15 @@ module.exports = {
     }
   }
 }
+var settings
+if (process.env.NODE_ENV === 'test') {
+  settings = _.merge(baseLine, require('./environments/test.js'))
+} else if (process.env.NODE_ENV === 'production') {
+  settings = _.merge(baseLine, require('./environments/production.js'))
+} else {
+  settings = _.merge(baseLine, require('./environments/development.js'))
+
+// var settings = require('./configs/settings.js')
+}
+
+module.exports = settings
