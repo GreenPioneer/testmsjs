@@ -48,7 +48,7 @@ node_modules/
 # SASS Files
 # --------------------
 .sass-cache/
-client/styles/compiled
+
 
 # --------------------
 # Bower Files
@@ -71,6 +71,12 @@ client/uploads
 # Files
 # --------------------
 files/
+
+# --------------------
+# Global Compiled files
+# --------------------
+
+client/styles/compiled
 
 client/styles/global.style.css
 

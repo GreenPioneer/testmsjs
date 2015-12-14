@@ -8,7 +8,8 @@
     'app.header',
     'app.footer',
     'app.user',
-    'app.blog'
+    'app.blog',
+    'app.time'
   ])
 
 })()

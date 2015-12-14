@@ -129,7 +129,7 @@ var baseLine = {
     routing: {
       schema: true,
       url: '/api/v1/',
-      build: false
+      build: true
     }
   }
 }

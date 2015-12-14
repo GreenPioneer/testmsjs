@@ -124,9 +124,18 @@ Register.all(settings)
  * Dynamic Routes / Manully enabling them . You can change it back to automatic in the settings
  * build.routing(app, mongoose) - if reverting back to automatic
  */
-_.forEach(build.routing(app, mongoose), function (m) {
-  app.use(m.route, m.app)
+
+build.routing({mongoose: mongoose}, function (error, data) {
+  if (error) console.log(error)
+  _.forEach(data, function (m) {
+    app.use(m.route, m.app)
+  })
 })
+// build.routing(app, mongoose, function (error, data) {
+//   console.log('success')
+//   console.log(error)
+//   console.log(data)
+// })
 
 /**
  * Make Client Folder Public
@@ -134,9 +143,29 @@ _.forEach(build.routing(app, mongoose), function (m) {
 app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
 
 /**
+ * Primary Failover routes.
+ */
+app.get('/api/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in api'})
+})
+app.get('/bower_components/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in bower_components'})
+})
+app.get('/images/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in images'})
+})
+app.get('/scripts/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in scripts'})
+})
+app.get('/styles/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in styles'})
+})
+app.get('/uploads/*', function (req, res) {
+  res.status(400).send({error: 'nothing found in uploads'})
+})
+/**
  * Primary app routes.
  */
-
 app.get('/*', function (req, res) {
   if (_.isUndefined(req.user)) {
     req.user = {}
