@@ -128,6 +128,7 @@ Register.all(settings)
 build.routing({mongoose: mongoose}, function (error, data) {
   if (error) console.log(error)
   _.forEach(data, function (m) {
+    //console.log(m.route)
     app.use(m.route, m.app)
   })
 })
@@ -141,6 +142,8 @@ build.routing({mongoose: mongoose}, function (error, data) {
  * Make Client Folder Public
  */
 app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
+//app.use(express.static(path.join(__dirname, 'client/uploads'), { maxAge: 31557600000 }))
+
 
 /**
  * Primary Failover routes.

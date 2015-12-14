@@ -4,7 +4,7 @@
   "description": "Custom Mean Stack",
   "main": "index.js",
   "bin": {
-    "mean": "./commands/create"
+    "meanstackjs": "./commands/create.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -33,6 +33,7 @@
     "chalk": "^1.1.1",
     "cheerio": "^0.19.0",
     "clockwork": "^0.1.0",
+    "commander": "^2.9.0",
     "compression": "^1.6.0",
     "concat": "^1.0.0",
     "connect-assets": "^5.0.1",
@@ -52,6 +53,8 @@
     "morgan": "^1.6.1",
     "multer": "^1.1.0",
     "node-sass": "^3.4.2",
+    "node-uuid": "^1.4.7",
+    "node-xlsx": "^0.6.0",
     "nodemailer": "^1.10.0",
     "nunjucks": "^2.2.0",
     "passport": "0.3.2",

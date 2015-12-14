@@ -15,10 +15,19 @@
     return [
 
       {
-        state: 'time',
+        state: 'time create',
         config: {
           url: '/time/create',
           templateUrl: 'modules/time/create.view.html',
+          controller: 'TimeController',
+          controllerAs: 'vm'
+        }
+      },
+      {
+        state: 'time list',
+        config: {
+          url: '/time/list',
+          templateUrl: 'modules/time/list.view.html',
           controller: 'TimeController',
           controllerAs: 'vm'
         }

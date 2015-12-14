@@ -12,17 +12,34 @@
   function TimeController ($http, $stateParams, TimeFactory, TimeFactoryTasks, config, logger, $location, UserFactory) {
     var vm = this
     vm.title = 'System'
+    vm.prj = vm.sdt = vm.edt = '';
     vm.time = {}
     vm.UserFactory = UserFactory
     activate()
     // http://localhost:3000/api/v1/time?where=date&gte=2015-11-17&lte=2015-12-25
+    vm.build = function () {
+      var template =[['Date','Hours Worked','Project','Group','User']]
+      var totalHours = 0
+      angular.forEach(vm.times,function(n,k){
+        template.push([n.date,n.hours,n.project,n.group,n.user])
+        totalHours += parseInt(n.hours)
+      })
+      template.push(['Total Hours',totalHours,'','',''])
+      $http.post('api/time/build/',{build:template}).then(function(success){
+        window.open(success.data.url);
+      },function(error){
+        console.log(error)
+      })
+    }
     vm.create = function () {
       var time = new TimeFactory(vm.time)
+      time.user = vm.UserFactory.user
       time.$save(function (response) {
         vm.time = {}
         vm.list()
       }, function (error) {
-        console.log(arguments)
+        console.log(error)
+        logger.error(error.message)
       })
     }
 
@@ -36,7 +53,17 @@
       })
     }
     vm.list = function () {
-      TimeFactory.get(function (success) {
+      var query = {}
+      if(vm.sdt || vm.edt || vm.prj){
+        query = {
+          where:'date'
+        }
+        if(vm.sdt)query.gte = vm.sdt
+        if(vm.edt)query.lte = vm.edt
+          if(vm.prj)query.project = vm.prj
+      }
+      console.log(query)
+      TimeFactory.get(query,function (success) {
         vm.times = success.data
       }, function (error) {
         console.log(arguments)
