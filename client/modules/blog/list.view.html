@@ -1,10 +1,13 @@
 <div class="container" ng-init="vm.list()">
-        <div class="blog-header">
-        <h1 class="blog-title">The MeanStackJS Blog</h1>
+  <div class="row">
+      <div class="blog-header">
+        <h1 class="blog-title">MeanStackJS Blog</h1>
         <p class="lead blog-description">Using the official example template of creating a blog with Bootstrap.</p>
       </div>
+  </div>
+      
       <div class="row">
-
+        <!-- left side  -->
         <div class="col-sm-8 blog-main">
           <h1 ng-show="!vm.blogs">No Blog Post <a href="/create">Create One Now</a></h1>
           <div class="blog-post" ng-repeat="(key, value) in vm.blogs">
@@ -29,11 +32,11 @@
           </nav>
 
         </div><!-- /.blog-main -->
-
+        <!-- right side -->
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
           <div class="sidebar-module sidebar-module-inset">
-            <h4>About</h4>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+            <h4>About Us</h4>
+            <p>Just a couple of guys that want to make the interwebs fun and easy to use</p>
           </div>
           <div class="sidebar-module">
             <h4>Archives</h4>
