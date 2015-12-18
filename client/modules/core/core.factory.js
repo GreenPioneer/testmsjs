@@ -137,9 +137,12 @@
       }).then(
         this.onIdentity.bind(this),
         this.onIdFail.bind(this)
-      ).then(function () {
+      ).then(function (error) {
         console.log(arguments, 'arguments')
-        logger.success(vm.loginCred.email, vm.loginCred, ' successfully logged in')
+        if (!error) {
+          logger.success(vm.loginCred.email, vm.loginCred, ' successfully logged in')
+        }
+
       })
       // $http.post('/api/login', {
       //   email: user.email,
@@ -169,17 +172,11 @@
           .then(
             this.onIdentity.bind(this),
             this.onIdFail.bind(this)
-        // function (success) {
-        //   $location.url('/')
-        //   
-        //   
-        // },
-        // function (error) {
-        //   logger.error(error.data, error, 'Login')
-        // }
-        ).then(function () {
-          logger.success(vm.loginCred.name, vm.loginCred, ' successfully signed up')
-          vm.loginCred = {}
+        ).then(function (error) {
+          if (!error) {
+            logger.success(vm.loginCred.name, vm.loginCred, ' successfully signed up')
+            vm.loginCred = {}
+          }
         })
       } else {
         logger.error(' passwords dont match', 'passwords dont match', 'Error')
