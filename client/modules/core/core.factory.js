@@ -75,7 +75,7 @@
       //   encodedUser = decodeURI(b64_to_utf8(response.user.token.split('.')[1]))
       //   user = JSON.parse(encodedUser)
       // }
-      destination = angular.isDefined(this.redirect) ? this.redirect : '/'
+      destination = angular.isDefined(response.redirect || response.data) ? response.redirect || response.data.redirect : false
       console.log(response)
       this.user = user || response.user || response.data.user
       this.loggedin = true
@@ -84,7 +84,7 @@
       // this.isAdmin = this.user.roles.indexOf('admin') > -1
       var self = this
       $rootScope.$emit('loggedin')
-      if (this.redirect) {
+      if (destination) {
         $location.path(destination)
       }
       return ({
@@ -97,13 +97,11 @@
       return ({
         error: true
       })
-    // $location.path(response.redirect)
-    // this.loginError = 'Authentication failed.'
-    // this.registerError = response
-    // this.validationError = response.msg
-    // this.resetpassworderror = response.msg
-    // $rootScope.$emit('loginfailed')
-    // $rootScope.$emit('registerfailed')
+      // $location.path(response.redirect)
+      this.loginError = 'Authentication failed.'
+      this.registerError = response
+      $rootScope.$emit('loginfailed')
+      $rootScope.$emit('registerfailed')
     }
     UserClass.prototype.editProfile = function (vm) {
       var deferred = $q.defer()
@@ -128,29 +126,18 @@
       return deferred.promise
     }
     UserClass.prototype.login = function (vm) {
-      // this is an ugly hack due to mean-admin needs
-      // redirect: destination
-      this.redirect = '/time/list'
       $http.post('/api/login', {
         email: vm.loginCred.email,
-        password: vm.loginCred.password
+        password: vm.loginCred.password,
+        redirect: '/'
       }).then(
         this.onIdentity.bind(this),
         this.onIdFail.bind(this)
-      ).then(function (error) {
-        console.log(arguments, 'arguments')
-        if (!error) {
+      ).then(function (response) {
+        if (!response.error) {
           logger.success(vm.loginCred.email, vm.loginCred, ' successfully logged in')
         }
-
       })
-      // $http.post('/api/login', {
-      //   email: user.email,
-      //   password: user.password,
-
-    // })
-    //   .success(this.onIdentity.bind(this))
-    //   .error(this.onIdFail.bind(this))
     }
     UserClass.prototype.updateProfile = function (response) {
       logger.success(response.data.profile.name + ' your profile has be saved', response.data, 'Updated Profile')
@@ -169,27 +156,16 @@
       if (vm.loginCred.password === vm.loginCred.confirmPassword) {
         this.redirect = '/time/list'
         $http.post('/api/signup', vm.loginCred)
-          .then(
-            this.onIdentity.bind(this),
-            this.onIdFail.bind(this)
-        ).then(function (error) {
-          if (!error) {
-            logger.success(vm.loginCred.name, vm.loginCred, ' successfully signed up')
-            vm.loginCred = {}
-          }
-        })
+          .then(this.onIdentity.bind(this), this.onIdFail.bind(this))
+          .then(function (response) {
+            if (!response.error) {
+              logger.success(vm.loginCred.name, vm.loginCred, ' successfully signed up')
+              vm.loginCred = {}
+            }
+          })
       } else {
         logger.error(' passwords dont match', 'passwords dont match', 'Error')
       }
-    // $http.post('/api/register', {
-    //   email: user.email,
-    //   password: user.password,
-    //   confirmPassword: user.confirmPassword,
-    //   username: user.username,
-    //   name: user.name
-    // })
-    //   .success(this.onIdentity.bind(this))
-    //   .error(this.onIdFail.bind(this))
     }
 
     UserClass.prototype.resetpassword = function (data) {
@@ -213,7 +189,7 @@
 
     UserClass.prototype.logout = function (vm) {
       $http.get('/api/logout').success(function (data) {
-        localStorage.removeItem('JWT')
+        // localStorage.removeItem('JWT')
         $rootScope.$emit('logout')
         $location.url('/')
       // this.user = {}

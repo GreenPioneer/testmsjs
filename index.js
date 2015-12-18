@@ -20,6 +20,12 @@ var path = require('path')
 var mongoose = require('mongoose')
 var passport = require('passport')
 var expressValidator = require('express-validator')
+var environment = 'development'
+if (process.env.NODE_ENV === 'test') {
+  environment = 'test'
+} else if (process.env.NODE_ENV === 'production') {
+  environment = 'production'
+}
 
 // var serveStatic = require('serve-static')
 // var helmet = require('helmet')
@@ -128,7 +134,7 @@ Register.all(settings)
 build.routing({mongoose: mongoose}, function (error, data) {
   if (error) console.log(error)
   _.forEach(data, function (m) {
-    //console.log(m.route)
+    // console.log(m.route)
     app.use(m.route, m.app)
   })
 })
@@ -142,8 +148,7 @@ build.routing({mongoose: mongoose}, function (error, data) {
  * Make Client Folder Public
  */
 app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
-//app.use(express.static(path.join(__dirname, 'client/uploads'), { maxAge: 31557600000 }))
-
+// app.use(express.static(path.join(__dirname, 'client/uploads'), { maxAge: 31557600000 }))
 
 /**
  * Primary Failover routes.
@@ -179,6 +184,7 @@ app.get('/*', function (req, res) {
   res.render(path.resolve('server') + '/layout/index.html', {
     title: settings.title,
     assets: app.locals.frontendFilesFinal,
+    environment: environment,
     user: req.user
   })
 })
@@ -186,6 +192,13 @@ app.get('/*', function (req, res) {
  * Error Handler.
  */
 app.use(errorHandler())
+
+// Livereload
+if (environment === 'development') {
+  var livereload = require('livereload')
+  var server = livereload.createServer()
+  server.watch(__dirname + '/client')
+}
 
 /**
  * Socketio Realtime
