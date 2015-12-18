@@ -16,9 +16,13 @@ var secrets = {
  */
 exports.getLogin = function (req, res) {
   if (req.user) {
-    return res.status(200).send(req.user)
+    return res.status(200).send({user: req.user})
   }
-  res.status(200).send({authenticated: false,redirect: req.session.returnTo})
+  res.status(200).send({
+    user: {},
+    authenticated: false,
+    redirect: req.session.returnTo
+  })
 }
 
 /**
@@ -30,7 +34,8 @@ exports.postLogin = function (req, res, next) {
   req.assert('password', 'Password cannot be blank').notEmpty()
 
   var errors = req.validationErrors()
-  console.log(errors, 'errors')
+  var redirect = req.body.redirect || false
+  console.log(redirect, 'redirect')
   if (errors) {
     return res.redirect('/login')
   }
@@ -48,10 +53,13 @@ exports.postLogin = function (req, res, next) {
         return next(err)
       }
       // req.flash('success', { msg: 'Success! You are logged in.' })
-      // res.redirect(req.session.returnTo || '/')
+      // res.redirect(req.session.returnTo || false)
       // delete user.password
       // delete user._id
-      return res.status(200).send(user)
+      return res.status(200).send({
+        user: user,
+        redirect: redirect
+      })
     })
   })(req, res, next)
 }
@@ -82,15 +90,16 @@ exports.getSignup = function (req, res) {
  * Create a new local account.
  */
 exports.postSignup = function (req, res, next) {
+  req.assert('name', 'Name must not be empty').notEmpty()
   req.assert('email', 'Email is not valid').isEmail()
   req.assert('password', 'Password must be at least 4 characters long').len(4)
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password)
 
   var errors = req.validationErrors()
-
+  var redirect = req.body.redirect || false
   if (errors) {
     // req.flash('errors', errors)
-    return res.redirect('/signup')
+    return res.status(400).send(errors)
   }
 
   var user = new User({
@@ -104,7 +113,8 @@ exports.postSignup = function (req, res, next) {
   User.findOne({ email: req.body.email }, function (err, existingUser) {
     if (existingUser) {
       // req.flash('errors', { msg: 'Account with that email address already exists.' })
-      return res.redirect('/signup')
+      return res.status(400).send({ msg: 'Account with that email address already exists.' })
+
     }
     user.save(function (err) {
       if (err) {
@@ -114,7 +124,10 @@ exports.postSignup = function (req, res, next) {
         if (err) {
           return next(err)
         }
-        res.redirect('/')
+        res.status(200).send({
+          user: user,
+          redirect: redirect
+        })
       })
     })
   })
@@ -133,6 +146,7 @@ exports.getAccount = function (req, res) {
  * Update profile information.
  */
 exports.postUpdateProfile = function (req, res, next) {
+  var redirect = req.body.redirect || false
   User.findById(req.user.id, function (err, user) {
     if (err) {
       return next(err)
@@ -148,8 +162,10 @@ exports.postUpdateProfile = function (req, res, next) {
         return next(err)
       }
       // req.flash('success', { msg: 'Profile information updated.' })
-      res.status(200).send(user)
-
+      res.status(200).send({
+        user: user,
+        redirect: redirect
+      })
     })
   })
 }
@@ -271,8 +287,8 @@ exports.postReset = function (req, res, next) {
       })
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Your Hackathon Starter password has been changed',
+        from: 'MEANSTACKJS@meanstackjs.com',
+        subject: 'Your Mean Stack JS password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       }
