@@ -176,17 +176,23 @@ function all (setup) {
   }
 
   // CHECK AND MAKE DIRECTORY
+  if (!fs.existsSync(__dirname + '/../client/scripts/')) {
+    fs.mkdirSync(__dirname + '/../client/scripts/')
+  }
   if (!fs.existsSync(__dirname + '/../client/styles/compiled/')) {
     fs.mkdirSync(__dirname + '/../client/styles/compiled/')
   }
-  if (!fs.existsSync(__dirname + '/../client/scripts/')) {
-    fs.mkdirSync(__dirname + '/../client/scripts/')
+  if (!fs.existsSync(__dirname + '/../client/scripts/compiled/')) {
+    fs.mkdirSync(__dirname + '/../client/scripts/compiled/')
   }
   if (!fs.existsSync(__dirname + '/../client/uploads/')) {
     fs.mkdirSync(__dirname + '/../client/uploads/')
   }
   // DELETE ALL PREVIOUSLY COMPILED 
   rmdirAsync(__dirname + '/../client/styles/compiled/', function () {
+    console.log(arguments)
+  })
+  rmdirAsync(__dirname + '/../client/scripts/compiled/', function () {
     console.log(arguments)
   })
 
@@ -196,7 +202,7 @@ function all (setup) {
     includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
     data: globalContents
   })
-  fs.writeFileSync(__dirname + '/../client/styles/global.style.css', result.css)
+  fs.writeFileSync(__dirname + '/../client/styles/compiled/global.style.css', result.css)
 
   // PUSH ALL FRONTEND FILES
   _.forEach(settings.frontEndConfigs, function (r) {
@@ -298,22 +304,22 @@ function all (setup) {
 
   // SET FILES TO BE RENDERED BASED OF THE ENV
   if (process.env.NODE_ENV === 'test') {
-    concat(frontendFilesAggregate.css, path.join(__dirname, '../client/styles/concat.css'), function (error) {
+    concat(frontendFilesAggregate.css, path.join(__dirname, '../client/styles/compiled/concat.css'), function (error) {
       if (error)console.log(error, 'concat')
     })
-    concat(frontendFilesAggregate.js, path.join(__dirname, '../client/scripts/concat.js'), function (error) {
+    concat(frontendFilesAggregate.js, path.join(__dirname, '../client/scripts/compiled/concat.js'), function (error) {
       if (error)console.log(error, 'concat')
     })
     settings.app.locals.frontendFilesFinal = {
-      js: ['scripts/concat.js'],
-      css: ['styles/concat.css']
+      js: ['scripts/compiled/concat.js'],
+      css: ['styles/compiled/concat.css']
     }
   } else if (process.env.NODE_ENV === 'production') {
     var uglified = uglifycss.processFiles(
       frontendFilesAggregate.css,
       { maxLineLen: 500 }
     )
-    fs.writeFile(path.join(__dirname, '../client/scripts/concat.min.css'), uglified.code, function (err) {
+    fs.writeFile(path.join(__dirname, '../client/styles/compiled/concat.min.css'), uglified.code, function (err) {
       if (err) {
         console.log(err)
       } else {
@@ -322,7 +328,7 @@ function all (setup) {
     })
 
     var uglified = uglify.minify(frontendFilesAggregate.js)
-    fs.writeFile(path.join(__dirname, '../client/scripts/concat.min.js'), uglified.code, function (err) {
+    fs.writeFile(path.join(__dirname, '../client/scripts/compiled/concat.min.js'), uglified.code, function (err) {
       if (err) {
         console.log(err)
       } else {
@@ -330,8 +336,8 @@ function all (setup) {
       }
     })
     settings.app.locals.frontendFilesFinal = {
-      js: ['scripts/concat.min.js'],
-      css: ['styles/concat.min.css']
+      js: ['scripts/compiled/concat.min.js'],
+      css: ['styles/compiled/concat.min.css']
     }
   } else {
     settings.app.locals.frontendFilesFinal = frontendFilesFinal
