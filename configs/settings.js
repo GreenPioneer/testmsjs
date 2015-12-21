@@ -87,7 +87,7 @@ var baseLine = {
       '/bower_components/jquery/dist/jquery.js'
     ],
     css: [
-      '/styles/global.style.css',
+      '/styles/compiled/global.style.css',
       '/bower_components/toastr/toastr.css',
       '/bower_components/font-awesome/css/font-awesome.min.css'
     ]

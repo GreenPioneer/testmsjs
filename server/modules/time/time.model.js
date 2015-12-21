@@ -23,7 +23,7 @@ var time = mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'user'
   }
-}) 
+})
 
 var Time = mongoose.model('Time', time)
 

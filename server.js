@@ -1,6 +1,7 @@
 /**
  * Module dependencies.
  */
+
 var settings = require('./configs/settings.js')
 var express = require('express')
 var cookieParser = require('cookie-parser')
@@ -10,9 +11,11 @@ var session = require('express-session')
 var bodyParser = require('body-parser')
 var logger = require('morgan')
 var errorHandler = require('errorhandler')
-var lusca = require('lusca')
 var methodOverride = require('method-override')
-
+var sass = require('node-sass')
+var less = require('less')
+var chalk = require('chalk')
+var fs = require('fs')
 var _ = require('lodash')
 var MongoStore = require('connect-mongo')(session)
 var flash = require('express-flash')
@@ -127,7 +130,7 @@ app.use(build.query())
  */
 Register.all(settings)
 /**
- * Dynamic Routes / Manully enabling them . You can change it back to automatic in the settings
+ * Dynamic Routes / Manually enabling them . You can change it back to automatic in the settings
  * build.routing(app, mongoose) - if reverting back to automatic
  */
 
@@ -192,12 +195,53 @@ app.get('/*', function (req, res) {
  * Error Handler.
  */
 app.use(errorHandler())
-
-// Livereload
+/**
+ * Livereload
+ */
 if (environment === 'development') {
   var livereload = require('livereload')
   var server = livereload.createServer()
   server.watch(__dirname + '/client')
+
+  var chokidar = require('chokidar')
+
+  // One-liner for current directory, ignores .dotfiles
+  // chokidar.watch('./client', {ignored: /[\/\\]\./}).on('all', function (event, path) {
+  //   console.log(event, path)
+  //   console.log('chokidar')
+  // })
+
+  var scss_lessWatcher = chokidar.watch('file, dir, glob, or array', {
+    ignored: /[\/\\]\./,
+    persistent: true
+  })
+  scss_lessWatcher.on('add', function (url) {
+    console.log(url)
+  })
+  scss_lessWatcher.on('change', function (url) {
+    // console.log(process)
+    // ../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'
+    var fileData = _.words(url, /[^./ ]+/g)
+    if (fileData[fileData.length - 1] === 'less') {
+      var lessContents = fs.readFileSync(path.resolve(url), 'utf8')
+      less.render(lessContents, function (err, result) {
+        fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
+      })
+      console.log(chalk.green('Recompiled LESS'))
+    } else {
+      var scssContents = fs.readFileSync(path.resolve(url), 'utf8')
+      var result = sass.renderSync({
+        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+        data: scssContents
+      })
+      fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
+      console.log(chalk.green('Recompiled SCSS'))
+    }
+  })
+  scss_lessWatcher.add('./client/modules/*/*.less')
+  scss_lessWatcher.add('./client/*/*.less')
+  scss_lessWatcher.add('./client/modules/*/*.scss')
+  scss_lessWatcher.add('./client/*/*.scss')
 }
 
 /**
@@ -221,4 +265,5 @@ if (environment === 'development') {
 app.listen(app.get('port'), function () {
   console.log('Express server listening on port %d in %s mode', app.get('port'), app.get('env'))
 })
+
 module.exports = app
