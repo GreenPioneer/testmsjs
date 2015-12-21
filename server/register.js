@@ -10,17 +10,18 @@ var uglify = require('uglify-js')
 var concat = require('concat')
 var uglifycss = require('uglifycss')
 
-var rmdirAsync = function (path, callback) {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file, index) {
-      var curPath = path + '/' + file
+var rmdirAsync = function (url, callback) {
+  if (fs.existsSync(url)) {
+    fs.readdirSync(url).forEach(function (file, index) {
+      var curPath = path.resolve(url + '/' + file)
+      console.log(curPath)
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         //
       } else { // delete file
         fs.unlinkSync(curPath)
       }
     })
-  // fs.rmdirSync(path)
+  // fs.rmdirSync(url)
   }
 }
 /**
