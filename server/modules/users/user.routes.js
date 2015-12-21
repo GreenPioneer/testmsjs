@@ -1,6 +1,4 @@
-var _ = require('lodash')
 var express = require('express')
-var chalk = require('chalk')
 var passportConf = require('./passport.controller.js')
 var user = require('./user.controller.js')
 var expressValidator = require('express-validator')
@@ -20,12 +18,15 @@ app.post('/photos/upload', upload.single('file'), function (req, res, next) {
   if (req.file) {
     var filePath = path.resolve(__dirname, '../../../client/uploads/')
     fs.readFile(req.file.path, function (err, data) {
+      if (err) {
+        return res.status(400).send(err)
+      }
       var createDir = filePath + '/' + req.file.originalname
       fs.writeFile(createDir, data, function (err) {
         if (err) {
-          res.status(400).send(err)
+          return res.status(400).send(err)
         } else {
-          res.status(201).send()
+          return res.status(201).send()
         }
       })
     })

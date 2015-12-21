@@ -6,7 +6,6 @@ var settings = require('./configs/settings.js')
 var express = require('express')
 var cookieParser = require('cookie-parser')
 var compress = require('compression')
-var favicon = require('serve-favicon')
 var session = require('express-session')
 var bodyParser = require('body-parser')
 var logger = require('morgan')
@@ -79,8 +78,7 @@ app.set('views', __dirname + '/client')
  */
 app.set('port', settings.http.port)
 app.use(compress())
-app.use(logger('dev'))
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
+app.use(logger(settings.logger))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressValidator())
@@ -89,20 +87,12 @@ app.use(cookieParser())
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: 'meanstackjs',
+  secret: settings.sessionSecret,
   store: new MongoStore({ url: settings.db, autoReconnect: true })
 }))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
-// app.use(lusca({
-//   csrf: {key: 'x-xsrf-token', header: '_csrf'},
-//   xframe: 'SAMEORIGIN',
-//   csp: false,
-//   p3p: false,
-//   hsts: false,
-//   xssProtection: true
-// }))
 app.use(function (req, res, next) {
   res.locals.user = req.user
   next()
@@ -114,7 +104,7 @@ app.use(function (req, res, next) {
         console.log(req.body)
         req.session.returnTo = req.body.redirect
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
   }
@@ -137,15 +127,9 @@ Register.all(settings)
 build.routing({mongoose: mongoose}, function (error, data) {
   if (error) console.log(error)
   _.forEach(data, function (m) {
-    // console.log(m.route)
     app.use(m.route, m.app)
   })
 })
-// build.routing(app, mongoose, function (error, data) {
-//   console.log('success')
-//   console.log(error)
-//   console.log(data)
-// })
 
 /**
  * Make Client Folder Public
@@ -185,7 +169,7 @@ app.get('/*', function (req, res) {
     req.user.authenticated = true
   }
   res.render(path.resolve('server') + '/layout/index.html', {
-    title: settings.title,
+    html: settings.html,
     assets: app.locals.frontendFilesFinal,
     environment: environment,
     user: req.user
@@ -201,16 +185,8 @@ app.use(errorHandler())
 if (environment === 'development') {
   var livereload = require('livereload')
   var server = livereload.createServer()
-  server.watch(__dirname + '/client')
-
   var chokidar = require('chokidar')
-
-  // One-liner for current directory, ignores .dotfiles
-  // chokidar.watch('./client', {ignored: /[\/\\]\./}).on('all', function (event, path) {
-  //   console.log(event, path)
-  //   console.log('chokidar')
-  // })
-
+  server.watch(__dirname + '/client')
   var scss_lessWatcher = chokidar.watch('file, dir, glob, or array', {
     ignored: /[\/\\]\./,
     persistent: true
@@ -219,12 +195,13 @@ if (environment === 'development') {
     console.log(url)
   })
   scss_lessWatcher.on('change', function (url) {
-    // console.log(process)
-    // ../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'
     var fileData = _.words(url, /[^./ ]+/g)
     if (fileData[fileData.length - 1] === 'less') {
       var lessContents = fs.readFileSync(path.resolve(url), 'utf8')
       less.render(lessContents, function (err, result) {
+        if (err) {
+          console.log(chalk.red(err))
+        }
         fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
       })
       console.log(chalk.green('Recompiled LESS'))

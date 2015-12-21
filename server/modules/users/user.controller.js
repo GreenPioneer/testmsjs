@@ -112,10 +112,11 @@ exports.postSignup = function (req, res, next) {
   })
 
   User.findOne({ email: req.body.email }, function (err, existingUser) {
+    if (err) {
+      return res.status(400).send(err)
+    }
     if (existingUser) {
-      // req.flash('errors', { msg: 'Account with that email address already exists.' })
       return res.status(400).send({ msg: 'Account with that email address already exists.' })
-
     }
     user.save(function (err) {
       if (err) {
@@ -228,7 +229,7 @@ exports.getReset = function (req, res) {
     .where('resetPasswordExpires').gt(Date.now())
     .exec(function (err, user) {
       if (err) {
-        return next(err)
+        return res.status(400).send(err)
       }
       if (!user) {
         req.flash('errors', { msg: 'Password reset token is invalid or has expired.' })
@@ -339,6 +340,9 @@ exports.postForgot = function (req, res, next) {
     },
     function (token, done) {
       User.findOne({ email: req.body.email.toLowerCase() }, function (err, user) {
+        if (err) {
+          return res.status(400).send(err)
+        }
         if (!user) {
           return res.redirect('/forgot')
         }
@@ -359,8 +363,8 @@ exports.postForgot = function (req, res, next) {
       })
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Reset your password on Hackathon Starter',
+        from: 'MEANSTACKJS@MEANSTACKJS.com',
+        subject: 'Reset your password on MEANSTACKJS Starter',
         text: 'You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' + req.headers.host + '/reset/' + token + '\n\n' +

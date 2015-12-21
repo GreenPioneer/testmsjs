@@ -25,6 +25,11 @@ var baseLine = {
     // at all. The cookie will expunge when the browser is closed.
     maxAge: null
   },
+  html: {
+    googleAnalytics: 'UA-71654331-1',
+    keywords: 'MEAN, MEANSTACKJS, mongodb, expressjs, angularjs,nodejs, javascript',
+    description: 'The Meanstack js is a opensource framework that is made for and by developers'
+  },
 
   // The session cookie name
   sessionName: 'connect.meanstackjs',

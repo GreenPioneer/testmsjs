@@ -30,9 +30,3 @@ var Time = mongoose.model('Time', time)
 module.exports = {
   Time: Time
 }
-
-/*,
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User'
-  }*/
