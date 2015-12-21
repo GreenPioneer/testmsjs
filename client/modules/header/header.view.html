@@ -37,12 +37,12 @@
                 </ul>
 
                 <ul class="navbar-nav nav auth-link navbar-right">
-                    <li ng-show="!vm.UserFactory.user.email">
+                    <li ng-show="!vm.UserFactory.loggedin">
                         <a href='/login'>
                             Log In
                         </a>
-                    </li> <!-- ng-show="!vm.user.authenticated" -->
-                    <li ng-show="!vm.UserFactory.user.email">
+                    </li>
+                    <li ng-show="!vm.UserFactory.loggedin">
                         <a href='/signup'>
                             Sign Up
                         </a>

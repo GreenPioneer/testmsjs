@@ -16,7 +16,10 @@ var secrets = {
  */
 exports.getLogin = function (req, res) {
   if (req.user) {
-    return res.status(200).send({user: req.user})
+    return res.status(200).send({
+      user: req.user,
+      authenticated: true
+    })
   }
   res.status(200).send({
     user: {},

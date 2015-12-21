@@ -78,7 +78,7 @@
       destination = angular.isDefined(response.redirect || response.data) ? response.redirect || response.data.redirect : false
       console.log(response)
       this.user = user || response.user || response.data.user
-      this.loggedin = true
+      this.loggedin = response.authenticated || response.data.authenticated
       this.loginError = 0
       this.registerError = 0
       // this.isAdmin = this.user.roles.indexOf('admin') > -1
