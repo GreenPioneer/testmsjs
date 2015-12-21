@@ -5,41 +5,24 @@
     .module('app.core')
     .factory('UserFactory', UserFactory)
 
-  UserFactory.$inject = [ '$rootScope', '$http', '$location', '$stateParams', '$cookies', '$q', '$timeout', 'logger']
+  UserFactory.$inject = ['$rootScope', '$http', '$location', '$stateParams', '$cookies', '$q', '$timeout', 'logger']
 
   /* @ngInject */
   function UserFactory ($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, logger) {
     var self
     var UserFactory = new UserClass()
-    function escape (html) {
-      return String(html)
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-    }
 
-    function b64_to_utf8 (str) {
-      return decodeURIComponent(escape(window.atob(str)))
-    }
-
-    /*function url_base64_decode(str) {
-      var output = str.replace('-', '+').replace('_', '/')
-      switch (output.length % 4) {
-      case 0:
-      break
-      case 2:
-      output += '=='
-      break
-      case 3:
-      output += '='
-      break
-      default:
-      throw 'Illegal base64url string!'
-      }
-      return window.atob(output); //polifyll https://github.com/davidchambers/Base64.js
-    }*/
+    // function escape (html) {
+    //   return String(html)
+    //     .replace(/&/g, '&amp;')
+    //     .replace(/"/g, '&quot;')
+    //     .replace(/'/g, '&#39;')
+    //     .replace(/</g, '&lt;')
+    //     .replace(/>/g, '&gt;')
+    // }
+    // function b64_to_utf8 (str) {
+    //   return decodeURIComponent(escape(window.atob(str)))
+    // }
 
     function UserClass () {
       this.name = 'users'
@@ -69,20 +52,21 @@
 
     UserClass.prototype.onIdentity = function (response) {
       if (!response) return ({error: true})
-      var encodedUser, user, destination
+
+      var destination, data
+      // var encodedUser, user
       // if (angular.isDefined(response.user.token)) {
       //   localStorage.setItem('JWT', response.user.token)
       //   encodedUser = decodeURI(b64_to_utf8(response.user.token.split('.')[1]))
       //   user = JSON.parse(encodedUser)
       // }
       destination = angular.isDefined(response.redirect || response.data) ? response.redirect || response.data.redirect : false
-      console.log(response)
-      this.user = user || response.user || response.data.user
-      this.loggedin = response.authenticated || response.data.authenticated
+      data = response.data || response
+      this.loggedin = data.authenticated
+      this.user = data.user
       this.loginError = 0
       this.registerError = 0
       // this.isAdmin = this.user.roles.indexOf('admin') > -1
-      var self = this
       $rootScope.$emit('loggedin')
       if (destination) {
         $location.path(destination)
@@ -94,14 +78,14 @@
 
     UserClass.prototype.onIdFail = function (error) {
       logger.error(error.data, error, 'Login')
+      // $location.path(response.redirect)
+      this.loginError = 'Authentication failed.'
+      this.registerError = error
+      $rootScope.$emit('loginfailed')
+      $rootScope.$emit('registerfailed')
       return ({
         error: true
       })
-      // $location.path(response.redirect)
-      this.loginError = 'Authentication failed.'
-      this.registerError = response
-      $rootScope.$emit('loginfailed')
-      $rootScope.$emit('registerfailed')
     }
     UserClass.prototype.editProfile = function (vm) {
       var deferred = $q.defer()
@@ -211,14 +195,11 @@
         // Authenticated
         if (data.authenticated !== false) {
           $timeout(deferred.resolve)
-
-        }
-        // Not Authenticated
-        else {
+        } else { // Not Authenticated
           $cookies.put('redirect', $location.path())
           $timeout(deferred.reject)
           $location.url('/login')
-          logger.error('please sign in', user, 'Unauthenticated')
+          logger.error('please sign in', {user: 'No User'}, 'Unauthenticated')
         }
       })
 
@@ -235,7 +216,7 @@
         // Authenticated
         if (data.authenticated !== false) {
           $timeout(deferred.reject)
-          logger.error(data.user.profile.name + ' You are already signed in', user, 'Authenticated Already')
+          logger.error(data.user.profile.name + ' You are already signed in', this.user, 'Authenticated Already')
           $location.url('/')
         }
         // Not Authenticated
@@ -262,8 +243,6 @@
 
       return deferred.promise
     }
-
     return UserFactory
-
   }
 }())

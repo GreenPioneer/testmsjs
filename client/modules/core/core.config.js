@@ -15,7 +15,7 @@
     toastr.options.positionClass = 'toast-bottom-right'
   }
 
-/*$window change out*/
+  /*  $window change out*/
   var config = {
     appErrorPrefix: 'MeanStackJS',
     appTitle: 'MeanStackJS',
@@ -35,5 +35,4 @@
     exceptionHandlerProvider.configure(config.appErrorPrefix)
     routerHelperProvider.configure({docTitle: config.appTitle + ': '})
   }
-
 })()

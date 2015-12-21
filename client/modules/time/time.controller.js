@@ -22,7 +22,7 @@
       var totalHours = 0
       angular.forEach(vm.times, function (n, k) {
         template.push([n.date, n.hours, n.project, n.group, n.user])
-        totalHours += parseInt(n.hours)
+        totalHours += parseInt(n.hours) // eslint-disable-line
       })
       template.push(['Total Hours', totalHours, '', '', ''])
       $http.post('api/time/build/', {build: template}).then(function (success) {
@@ -38,8 +38,7 @@
         vm.time = {}
         vm.list()
       }, function (error) {
-        console.log(error)
-        logger.error(error.message)
+        logger.error(error)
       })
     }
 
@@ -49,7 +48,7 @@
       }, function (success) {
         vm.time = success.data
       }, function (error) {
-        console.log(arguments)
+        logger.error(error)
       })
     }
     vm.list = function () {
@@ -66,7 +65,7 @@
       TimeFactory.get(query, function (success) {
         vm.times = success.data
       }, function (error) {
-        console.log(arguments)
+        logger.error(error)
       })
     }
     vm.update = function (isValid) {
@@ -78,12 +77,12 @@
             $location.url('/time/view/' + $stateParams.id)
           },
           function (error) {
-            console.log(arguments)
+            logger.error(error)
           })
       }
     }
     vm.delete = function (timeId) {
-      var deleteConfirm = confirm('Are you sure you want to delete this time?')
+      var deleteConfirm = confirm('Are you sure you want to delete this time?') // eslint-disable-line
       if (deleteConfirm === true) {
         TimeFactory.remove({
           id: timeId
@@ -97,7 +96,7 @@
           // window.location.reload()
           },
           function (error) {
-            console.log(arguments)
+            logger.error(error)
           })
       }
     }
@@ -107,9 +106,10 @@
       TimeFactoryTasks.get({task: 'fields'}, function (success) {
         vm.fields = success.data
       }, function (error) {
-        console.log(arguments)
+        if (error) {
+          console.log(error)
+        }
       })
-
     }
   }
 
@@ -135,5 +135,4 @@
       }
     })
   }
-
 })()

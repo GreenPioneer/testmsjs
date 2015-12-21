@@ -101,7 +101,6 @@ app.use(function (req, res, next) {
   if (/api/i.test(req.path)) {
     try {
       if (req.body.redirect) {
-        console.log(req.body)
         req.session.returnTo = req.body.redirect
       }
     } catch (err) {
@@ -192,7 +191,7 @@ if (environment === 'development') {
     persistent: true
   })
   scss_lessWatcher.on('add', function (url) {
-    console.log(url)
+    // console.log(url)
   })
   scss_lessWatcher.on('change', function (url) {
     var fileData = _.words(url, /[^./ ]+/g)

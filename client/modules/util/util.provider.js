@@ -1,4 +1,3 @@
-/* Help configure the state-base ui.router */
 ;(function () {
   'use strict'
 
@@ -86,7 +85,9 @@
         updateDocTitle()
       }
 
-      function getStates () { return $state.get(); }
+      function getStates () {
+        return $state.get()
+      }
 
       function updateDocTitle () {
         $rootScope.$on('$stateChangeSuccess',
@@ -94,7 +95,7 @@
             stateCounts.changes++
             handlingStateChangeError = false
             var title = config.docTitle + ' ' + (toState.title || '')
-            $rootScope.title = title; // data bind to <title>
+            $rootScope.title = title // data bind to <title>
           }
         )
       }

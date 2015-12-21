@@ -208,91 +208,155 @@ function all (setup) {
   // PUSH ALL FRONTEND FILES
   _.forEach(settings.frontEndConfigs, function (r) {
     _.forEach(r.files, function (j) {
-      if (j.type === 'controller') {
-        frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'module') {
-        frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'routes') {
-        frontendFiles.routes.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'style') {
-        if (j.ext === 'css') {
-          frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
-          frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
-          frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-        } else if (j.ext === 'scss' || j.ext === 'sass') {
-          var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-          // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
-          var result = sass.renderSync({
-            includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
-            data: scssContents
-          })
-          fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-          frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-          frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-          frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
-        } else if (j.ext === 'less') {
-          var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-          less.render(lessContents, function (err, result) {
-            if (err) {
-              console.log(chalk.red(err))
-            }
+      switch (j.type) {
+        case 'module':
+          frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+          break
+        case 'controller':
+        case 'routes':
+        case 'config':
+        case 'service':
+        case 'provider':
+        case 'directive':
+          frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+          frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+          break
+        case 'style':
+          if (j.ext === 'css') {
+            frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
+            frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
+            frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+          } else if (j.ext === 'scss' || j.ext === 'sass') {
+            var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+            // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
+            var result = sass.renderSync({
+              includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
+              data: scssContents
+            })
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
             frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
-          })
-        } else {
-          console.log('Unknown Style', j)
-        }
+          } else if (j.ext === 'less') {
+            var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+            less.render(lessContents, function (err, result) {
+              if (err) {
+                console.log(chalk.red(err))
+              }
+              fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
+              frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+              frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+              frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
+            })
+          } else {
+            console.log('Unknown Style', j)
+          }
+          break
+        case 'json':
+        case 'view':
+          // console.log(j.type)
+          break
+        default:
+          if (j.ext === 'js') {
+            frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
+            frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+            frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+          } else if (j.ext === 'css') {
+            console.log('Did you name css wrong?', j)
+          } else {
+            console.log('Unknown', j)
+          }
+          break
+      //
       }
-      else if (j.type === 'view') {
-        // HTML FILES DO NOT NEED TO BE LOADED
-        // MAYBE ADDED TO TEMPLATE CACHE
-        // frontendFiles.view.push('/modules/' + r.name + '/' + j.orginal)
-        // frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-      }
-      else if (j.type === 'json') {
-        // bower.json FILES DO NOT NEED TO BE LOADED
-      }
-      else if (j.type === 'config') {
-        frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'factory') {
-        frontendFiles.factory.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'service') {
-        frontendFiles.service.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      }
-      else if (j.type === 'provider') {
-        frontendFiles.provider.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-        frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-      } else {
-        if (j.ext === 'js') {
-          frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
-          frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-          frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-        }else if (j.ext === 'css') {
-          // not added yet
-        } else {
-          console.log('Unknown', j)
-        }
-      }
+    // if (j.type === 'controller') {
+    //   frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'module') {
+    //   frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'routes') {
+    //   frontendFiles.routes.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'style') {
+    //   if (j.ext === 'css') {
+    //     frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
+    //     frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
+    //     frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    //   } else if (j.ext === 'scss' || j.ext === 'sass') {
+    //     var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+    //     // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
+    //     var result = sass.renderSync({
+    //       includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
+    //       data: scssContents
+    //     })
+    //     fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
+    //     frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+    //     frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+    //     frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
+    //   } else if (j.ext === 'less') {
+    //     var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
+    //     less.render(lessContents, function (err, result) {
+    //       if (err) {
+    //         console.log(chalk.red(err))
+    //       }
+    //       fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
+    //       frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+    //       frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+    //       frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
+    //     })
+    //   } else {
+    //     console.log('Unknown Style', j)
+    //   }
+    // }
+    // else if (j.type === 'view') {
+    //   // HTML FILES DO NOT NEED TO BE LOADED
+    //   // MAYBE ADDED TO TEMPLATE CACHE
+    //   // frontendFiles.view.push('/modules/' + r.name + '/' + j.orginal)
+    //   // frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    // }
+    // else if (j.type === 'json') {
+    //   // bower.json FILES DO NOT NEED TO BE LOADED
+    // }
+    // else if (j.type === 'config') {
+    //   frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'factory') {
+    //   frontendFiles.factory.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'service') {
+    //   frontendFiles.service.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // }
+    // else if (j.type === 'provider') {
+    //   frontendFiles.provider.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    // } else {
+    //   if (j.ext === 'js') {
+    //     frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
+    //     frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
+    //     frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
+    //   }else if (j.ext === 'css') {
+    //     console.log('Did you name css wrong?', j)
+    //   } else {
+    //     console.log('Unknown', j)
+    //   }
+    // }
     })
   })
   frontendFilesFinal.js.unshift(/modules/ + mainFrontendFile)

@@ -9,6 +9,7 @@
   /* @ngInject */
   function LayoutController (config, logger) {
     var vm = this
+    vm.message = 'layout'
     activate()
 
     function activate () {

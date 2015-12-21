@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "description": "Custom Mean Stack",
   "main": "index.js",
+  "standard": {
+    "globals": [ "angular", "toastr","moment","self" ]
+  },
   "bin": {
     "meanstackjs": "./commands/create.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "standard",
     "postinstall": "bower install"
   },
   "repository": {

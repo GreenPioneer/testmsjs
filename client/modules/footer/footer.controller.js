@@ -9,6 +9,7 @@
   /* @ngInject */
   function FooterController (config, logger) {
     var vm = this
+    vm.message = 'footer'
     activate()
 
     function activate () {

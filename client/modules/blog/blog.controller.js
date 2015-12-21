@@ -26,27 +26,26 @@
       var blog = new BlogFactory(vm.blog)
       blog.$save(function (response) {
         vm.blog = response.data.data
-        // window.location.href = 
+        //  window.location.href
         $location.url('/blog/list')
       }, function (error) {
-        console.log(arguments)
+        logger.error(error)
       })
     }
-
     vm.find = function () {
       BlogFactory.get({
         id: $stateParams.id
       }, function (success) {
         vm.blog = success.data
       }, function (error) {
-        console.log(arguments)
+        logger.error(error)
       })
     }
     vm.list = function () {
       BlogFactory.get(function (success) {
         vm.blogs = success.data
       }, function (error) {
-        console.log(arguments)
+        logger.error(error)
       })
     }
     vm.update = function (isValid) {
@@ -58,12 +57,12 @@
             $location.url('/blog/view/' + $stateParams.id)
           },
           function (error) {
-            console.log(arguments)
+            logger.error(error)
           })
       }
     }
     vm.delete = function (blogId) {
-      var deleteConfirm = confirm('Are you sure you want to delete this blog?')
+      var deleteConfirm = confirm('Are you sure you want to delete this blog?') // eslint-disable-line
       if (deleteConfirm === true) {
         BlogFactory.remove({
           id: blogId
@@ -74,14 +73,12 @@
                 vm.blogs.splice(i, 1)
               }
             }
-          // window.location.reload()
           },
           function (error) {
-            console.log(arguments)
+            logger.error(error)
           })
       }
     }
-
     function activate () {
       logger.info('Activated Blog View')
     }

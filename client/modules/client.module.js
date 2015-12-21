@@ -1,3 +1,4 @@
+/*  global angular:false */
 ;(function () {
   'use strict'
 
@@ -11,5 +12,4 @@
     'app.blog',
     'app.time'
   ])
-
 })()
