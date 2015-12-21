@@ -14,10 +14,10 @@
   function getStates () {
     return [
       {
-        state: 'login',
+        state: 'signin',
         config: {
-          url: '/login',
-          templateUrl: 'modules/user/login.view.html',
+          url: '/signin',
+          templateUrl: 'modules/user/signin.view.html',
           controller: 'UserController',
           controllerAs: 'vm',
           resolve: {

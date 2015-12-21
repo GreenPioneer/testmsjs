@@ -38,8 +38,8 @@
 
                 <ul class="navbar-nav nav auth-link navbar-right">
                     <li ng-show="!vm.UserFactory.loggedin">
-                        <a href='/login'>
-                            Log In
+                        <a href='/signin'>
+                            Sign In
                         </a>
                     </li>
                     <li ng-show="!vm.UserFactory.loggedin">
@@ -54,12 +54,12 @@
                         <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
                             <li>
                                 <a href='/account'>
-                                    Account
+                                    Your Account
                                 </a>
                             </li>
                             <li>
                                 <a href='#' ng-click='vm.logout()'>
-                                    Logout
+                                    Sign Out
                                 </a>
                             </li>
                         </ul>
