@@ -1,6 +1,7 @@
 // NEED TO REFACTOR AND REFINE
+// want to add async down the road
+// var async = require('async')
 var path = require('path')
-var async = require('async')
 var _ = require('lodash')
 var fs = require('fs')
 var chalk = require('chalk')
@@ -14,7 +15,6 @@ var rmdirAsync = function (url, callback) {
   if (fs.existsSync(url)) {
     fs.readdirSync(url).forEach(function (file, index) {
       var curPath = path.resolve(url + '/' + file)
-      console.log(curPath)
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         //
       } else { // delete file
@@ -30,10 +30,9 @@ var rmdirAsync = function (url, callback) {
 var lookDir = path.resolve(__dirname, './modules')
 var configs = []
 if (!fs.existsSync(lookDir)) {
-  console.log('does not existsSync')
+  throw new Error(chalk.red('Critical Folder Missing:' + chalk.red.underline.bold('Expected Server Modules Directory ./server/modules/')))
 }
 var data = {}
-var exporting = {}
 var modules = fs.readdirSync(lookDir)
 
 // IF YOU NEED TO FILTER ANY FILES OUT
@@ -72,10 +71,9 @@ _.forEach(data.modules, function (value, key) {
 var frontEndDir = path.resolve(__dirname, '../client/modules')
 var frontEndConfigs = []
 if (!fs.existsSync(frontEndDir)) {
-  console.log('does not existsSync')
+  throw new Error(chalk.red('Critical Folder Missing:' + chalk.red.underline.bold('Expected Client Modules Directory ./client/modules/')))
 }
 var frontEnddata = {}
-var frontEndexporting = {}
 var frontEndmodules = fs.readdirSync(frontEndDir)
 
 // IF YOU NEED TO FILTER ANY FILES OUT
@@ -128,7 +126,6 @@ Register.prototype.all = function (meanSettings) {
   }
   // return functions.query(setup.bind(this))
   return all(setup.bind(this))
-
 }
 function all (setup) {
   var settings = setup()
@@ -136,7 +133,10 @@ function all (setup) {
    * BACKEND
    */
   _.forEach(settings.configs, function (r) {
-    var files = {'models': [],'controllers': []}
+    var files = {
+      'models': [],
+      'controllers': []
+    }
     _.forEach(r.files, function (j) {
       if (j.type === 'controller') {
         // files.controllers.push(require('./modules/' + r.name + '/' + j.orginal))
@@ -189,12 +189,12 @@ function all (setup) {
   if (!fs.existsSync(__dirname + '/../client/uploads/')) {
     fs.mkdirSync(__dirname + '/../client/uploads/')
   }
-  // DELETE ALL PREVIOUSLY COMPILED 
+  // DELETE ALL PREVIOUSLY COMPILED
   rmdirAsync(__dirname + '/../client/styles/compiled/', function () {
-    console.log(arguments)
+    // console.log(arguments)
   })
   rmdirAsync(__dirname + '/../client/scripts/compiled/', function () {
-    console.log(arguments)
+    // console.log(arguments)
   })
 
   // RENDER THE GLOBAL STYLE
@@ -228,7 +228,7 @@ function all (setup) {
           frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
           frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
           frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-        }else if (j.ext === 'scss' || j.ext === 'sass') {
+        } else if (j.ext === 'scss' || j.ext === 'sass') {
           var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
           // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
           var result = sass.renderSync({
@@ -239,9 +239,12 @@ function all (setup) {
           frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
           frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
           frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
-        }else if (j.ext === 'less') {
+        } else if (j.ext === 'less') {
           var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
           less.render(lessContents, function (err, result) {
+            if (err) {
+              console.log(chalk.red(err))
+            }
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
             frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
@@ -316,11 +319,11 @@ function all (setup) {
       css: ['styles/compiled/concat.css']
     }
   } else if (process.env.NODE_ENV === 'production') {
-    var uglified = uglifycss.processFiles(
+    var uglifiedcss = uglifycss.processFiles(
       frontendFilesAggregate.css,
       { maxLineLen: 500 }
     )
-    fs.writeFile(path.join(__dirname, '../client/styles/compiled/concat.min.css'), uglified.code, function (err) {
+    fs.writeFile(path.join(__dirname, '../client/styles/compiled/concat.min.css'), uglifiedcss.code, function (err) {
       if (err) {
         console.log(err)
       } else {
@@ -328,8 +331,8 @@ function all (setup) {
       }
     })
 
-    var uglified = uglify.minify(frontendFilesAggregate.js)
-    fs.writeFile(path.join(__dirname, '../client/scripts/compiled/concat.min.js'), uglified.code, function (err) {
+    var uglifiedjs = uglify.minify(frontendFilesAggregate.js)
+    fs.writeFile(path.join(__dirname, '../client/scripts/compiled/concat.min.js'), uglifiedjs.code, function (err) {
       if (err) {
         console.log(err)
       } else {
@@ -343,7 +346,6 @@ function all (setup) {
   } else {
     settings.app.locals.frontendFilesFinal = frontendFilesFinal
   }
-
 }
 function register (options) {
   if (options === undefined) {
@@ -358,63 +360,3 @@ function register (options) {
 // throw new TypeError(chalk.red('Expected object for argument options but got ' + chalk.red.underline.bold(options)))
 }
 module.exports = register
-
-// async.waterfall([
-//   function (callback) {
-//     fs.readdir(lookDir, function (err, modules) {
-//       if (err) {
-//         console.log(err)
-//       } else {
-//         modules = _.filter(modules, function (n) {
-//           return !_.startsWith(n, '.')
-//         })
-//         callback(null, modules)
-//       }
-//     })
-//   },
-//   function (modules, callback) {
-//     async.forEachOf(modules, function (value, key, callbackForEach) {
-//       var obj = {
-//         'name': value,
-//         'lookup': lookDir + '/' + value
-//       }
-//       fs.readdir(lookDir + '/' + value, function (err, files) {
-//         files = _.filter(files, function (n) {
-//           return !_.startsWith(n, '.')
-//         })
-//         obj.files = []
-//         _.forEach(files, function (f) {
-//           var fileData = _.words(f, /[^. ]+/g)
-//           obj.files.push({
-//             'type': fileData[1],
-//             'ext': fileData[2],
-//             'name': fileData[0],
-//             'orginal': f
-//           })
-//         // configs[value].push(f)
-//         })
-//         configs.push(obj)
-//         if (err) return callbackForEach(err)
-//         callbackForEach()
-//       })
-//     }, function (err) {
-//       if (err) console.error(err.message)
-//       callback(null, configs)
-//     })
-//   }
-// ], function (err, result) {
-//   // module.exports = settings
-//   var obj = {}
-//   _.forEach(result, function (r) {
-//     // console.log('./modules/' + r.name + '/' + r.files[0].orginal)
-//     var req = require('./modules/' + r.name + '/' + r.files[0].orginal)
-//     // console.log(req)
-//     _.forEach(req, function (f, key) {
-//       // console.log(f, key)
-//       obj[key] = f
-//     })
-//   // module.exports[r.name] = require(req)
-//   })
-//   console.log(obj)
-
-// })

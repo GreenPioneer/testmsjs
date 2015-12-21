@@ -38,7 +38,6 @@ exports.postLogin = function (req, res, next) {
 
   var errors = req.validationErrors()
   var redirect = req.body.redirect || false
-  console.log(redirect, 'redirect')
   if (errors) {
     return res.redirect('/login')
   }
@@ -47,7 +46,6 @@ exports.postLogin = function (req, res, next) {
     if (err) {
       return next(err)
     }
-    console.log(err, user, info)
     if (!user) {
       return res.status(400).send(info.message)
     }
@@ -57,9 +55,10 @@ exports.postLogin = function (req, res, next) {
       }
       // req.flash('success', { msg: 'Success! You are logged in.' })
       // res.redirect(req.session.returnTo || false)
-      // delete user.password
-      // delete user._id
+      delete user.password
+      delete user._id
       return res.status(200).send({
+        authenticated: true,
         user: user,
         redirect: redirect
       })
@@ -72,7 +71,6 @@ exports.postLogin = function (req, res, next) {
  * Log out.
  */
 exports.logout = function (req, res) {
-  console.log('logggggo out')
   req.logout()
   res.redirect('/')
 }
