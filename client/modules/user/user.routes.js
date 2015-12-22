@@ -54,6 +54,34 @@
             }
           }
         }
+      },
+      {
+        state: 'forgot',
+        config: {
+          url: '/forgot',
+          templateUrl: 'modules/user/forgot.view.html',
+          controller: 'UserController',
+          controllerAs: 'vm',
+          resolve: {
+            loggedin: function (UserFactory) {
+              return UserFactory.checkLoggedOut()
+            }
+          }
+        }
+      },
+      {
+        state: 'reset',
+        config: {
+          url: '/reset/:token',
+          templateUrl: 'modules/user/reset.view.html',
+          controller: 'UserController',
+          controllerAs: 'vm',
+          resolve: {
+            loggedin: function (UserFactory) {
+              return UserFactory.checkLoggedOut()
+            }
+          }
+        }
       }
     ]
   }

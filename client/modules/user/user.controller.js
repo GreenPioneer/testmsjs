@@ -5,11 +5,11 @@
     .module('app.user', [])
     .controller('UserController', UserController)
 
-  UserController.$inject = ['$http', 'config', '$location', '$timeout', 'UserFactory', 'logger', 'Upload']
+  UserController.$inject = ['$http', 'config', '$location', '$timeout', 'UserFactory', 'logger', 'Upload', '$stateParams']
   /* @ngInject */
-  function UserController ($http, config, $location, $timeout, UserFactory, logger, Upload) {
+  function UserController ($http, config, $location, $timeout, UserFactory, logger, Upload, $stateParams) {
     var vm = this
-    vm.editProfile = vm.loginCred = vm.loginError = {}
+    vm.resetCred = vm.editProfile = vm.loginCred = vm.loginError = {}
     vm.editProfile = UserFactory.editProfile(vm)
     vm.login = function () {
       UserFactory.login(vm)
@@ -17,7 +17,16 @@
     vm.signup = function () {
       UserFactory.signup(vm)
     }
-
+    vm.forgot = function () {
+      UserFactory.forgot(vm)
+    }
+    vm.resetTokenCheck = function () {
+      UserFactory.resetTokenCheck(vm)
+    }
+    vm.reset = function () {
+      UserFactory.resetpassword(vm)
+    }
+    vm.resetToken = $stateParams.token
     vm.update = function () {
       UserFactory.update(vm)
     }

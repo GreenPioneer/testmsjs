@@ -151,24 +151,41 @@
         logger.error(' passwords dont match', 'passwords dont match', 'Error')
       }
     }
-
-    UserClass.prototype.resetpassword = function (data) {
-      $http.post('/api/reset/' + $stateParams.tokenId, {
-        password: data.user.password,
-        confirmPassword: data.user.confirmPassword
-      })
-        .success(this.onIdentity.bind(this))
-        .error(this.onIdFail.bind(this))
+    UserClass.prototype.resetTokenCheck = function (vm) {
+      $http.get('/api/reset/' + vm.resetToken)
+        .then(
+          function (response) {
+            if (response.data.valid) {
+              // console do nothing cause its valid
+              vm.tokenCheck = false
+            }
+          }, function (response) {
+            logger.error(response.data.msg)
+            vm.tokenCheck = true
+          }
+      )
+    }
+    UserClass.prototype.resetpassword = function (vm) {
+      $http.post('/api/reset/' + vm.resetToken, {
+        password: vm.resetCred.password,
+        confirmPassword: vm.resetCred.confirmPassword
+      }).then(this.onIdentity.bind(this), this.onIdFail.bind(this))
+        .then(function (response) {
+          if (!response.error) {
+            logger.success('Password successfully Reset', response)
+          }
+        })
     }
 
-    UserClass.prototype.forgotpassword = function (data) {
-      $http.post('/api/forgot-password', {
-        text: data.user.email
-      })
-        .success(function (response) {
-          $rootScope.$emit('forgotmailsent', response)
-        })
-        .error(this.onIdFail.bind(this))
+    UserClass.prototype.forgot = function (vm) {
+      $http.post('/api/forgot', {
+        email: vm.forgot.email
+      }).then(function (response) {
+        $rootScope.$emit('forgotmailsent', response)
+        logger.success(vm.forgot.email, vm.forgot.email, ' Reset Token has been sent to your email')
+        vm.clicked = true
+        vm.forgot.email = ''
+      }, this.onIdFail.bind(this))
     }
 
     UserClass.prototype.logout = function (vm) {
@@ -216,7 +233,7 @@
         // Authenticated
         if (data.authenticated !== false) {
           $timeout(deferred.reject)
-          logger.error(data.user.profile.name + ' You are already signed in', this.user, 'Authenticated Already')
+          logger.error(data.user.profile.name + ' You are already signed in', data.user, 'Authenticated Already')
           $location.url('/')
         }
         // Not Authenticated

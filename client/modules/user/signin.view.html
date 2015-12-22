@@ -8,8 +8,8 @@
     </div>
 
     <div class="row">
-        <form  ng-submit="vm.login()">
-            <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-sm-6 col-sm-offset-3">
+            <form  ng-submit="vm.login()">
                 <div class="form-group">
                    <label for="email" class="control-label">Email</label>
                     <input type="email" name="email" id="email" placeholder="Email@email.com" autofocus="" ng-model="vm.loginCred.email" class="form-control">
@@ -20,7 +20,8 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Login</button><a href="/forgot" class="btn btn-link">Forgot your password?</a></div>
-    		</div>
-        </form>
+    		
+            </form>
+        </div>
     </div>
 </div>
