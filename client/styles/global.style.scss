@@ -1,7 +1,8 @@
 /* global styling */
 /* import css framework first - bootstrap example*/
 @import 'global-variables.styles.scss';/* copy of bootstrap variables for custom theme*/
-@import 'bootstrap';/* importing bootstrap scss files */
+@import 'bootstrap'; /*importing bootstrap scss files */
+/*@import 'foundation';*/
 /*@import 'materialize';*/
 
 body{

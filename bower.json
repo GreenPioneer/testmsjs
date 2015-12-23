@@ -20,7 +20,6 @@
     "angular-sanitize": "^1.4.7",
     "angular-cookies": "^1.4.7",
     "angular-mocks": "^1.4.7",
-    "bootstrap": "^3.3.5",
     "angular-bootstrap": "^0.14.3",
     "font-awesome": "^4.3.0",
     "moment": "^2.10.3",
@@ -33,7 +32,8 @@
     "bootstrap-sass": "~3.3.6",
     "Materialize": "materialize#~0.97.3",
     "lodash": "~3.10.1",
-    "angular-material": "~1.0.1"
+    "angular-material": "~1.0.1",
+    "foundation": "~5.5.3"
   },
   "resolutions": {
     "angular": "1.4.7"

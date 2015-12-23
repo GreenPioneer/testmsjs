@@ -233,7 +233,7 @@ if (environment === 'development') {
       console.log(url)
       var scssContents = fs.readFileSync(path.resolve(url), 'utf8')
       var result = sass.renderSync({
-        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass'), path.join(__dirname, './client/bower_components/foundation/scss')],
         data: scssContents
       })
       fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
@@ -264,7 +264,7 @@ if (environment === 'development') {
       // RENDER THE GLOBAL STYLE
       var globalContents = fs.readFileSync(__dirname + '/client/styles/global.style.scss', 'utf8')
       var result = sass.renderSync({
-        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass'), path.join(__dirname, './client/bower_components/foundation/scss')],
         data: globalContents
       })
       fs.writeFileSync(__dirname + '/client/styles/compiled/global.style.css', result.css)
@@ -272,7 +272,7 @@ if (environment === 'development') {
         var scssContents = fs.readFileSync(path.join(__dirname, s.orginal), 'utf8')
         // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
         var result = sass.renderSync({
-          includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+          includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass'), path.join(__dirname, './client/bower_components/foundation/scss')],
           data: scssContents
         })
         fs.writeFileSync(path.join(__dirname, s.compiled), result.css)
