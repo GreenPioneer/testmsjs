@@ -1,16 +1,48 @@
-Table of Contents
------------------
-- WHY
-- HOW
-- WHAT
+
+
 [![dependencies](https://david-dm.org/greenpioneer/meanstackjs.svg)](https://david-dm.org/greenpioneer/meanstackjs)
 [![npm-issues](https://img.shields.io/github/issues/GreenPioneer/meanstackjs.svg)](https://github.com/GreenPioneer/meanstackjs/issues)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 # [![meanstackjs Logo](http://meanstackjs.com/images/logo/header3x.png)](http://meanstackjs.com/) Mean Stack JS
+-----------------
+Everything we are building in this framework is to make your life as a designer or developer easier. We believe in making this framework usable to designers , User Experience , Quality Assurance , Software Engineers , Frontend & Backend Developers & Full Stack Engineers ... etc. How were doing this in by having key features in the framework like we have listed below
 
-Mean Stack JS is a framework for an easy starting point with [MongoDB](https://www.mongodb.org/), [Node.js](http://www.nodejs.org/), [Express](http://expressjs.com/), and [AngularJS](https://angularjs.org/) based applications. It is designed to give you a quick and organized way to start developing MEAN based web apps with useful modules like Mongoose and Passport pre-bundled and configured. We mainly try to take care of the connection points between existing popular frameworks and solve common integration problems.
+- LiveReload & Recompile in Development Env
+- Not Dependent on Grunt or Gulp 
+- Can Build Dynamic Api's based off Schema
+- Can Open Dynamic Query with routes
+- Use Boostrap , Materialize or Foundation
+- Supports CSS, LESS, SASS & SCSS
+- Simple Project Structure
+- No Magic Wand
+- Customizable scaffolding of modules(Still in Development)
+- Uses JS Standard & John Papa Angular Style
+- Supports Clustering
+- Supports Environments: Development , Test & Production
 
+Those are just some of the reasons why we believe using mean stack js will help you in your development. What were going to do moving forward with this project is to layout a road map so that you can give your thougts and let us know what we can add to make your life easier with this framework. We welcome all of those who wish to contribute and be apart of this. Join us in building and using the newest style in mean stacks
+
+
+What is Mean Stack JS
+-----------------
+
+- [MongoDB](https://www.mongodb.org/) - MongoDB is the leading NoSQL database, empowering businesses to be more agile and scalable.
+- [Express](http://expressjs.com/) - Express is a minimal and flexible node.js web application framework, providing a robust set of features for building single and multi-page, and hybrid web applications.
+- [AngularJS](https://angularjs.org/) - based framework. -AngularJS lets you extend HTML vocabulary for your application. The resulting environment is extraordinarily expressive, readable, and quick to develop.
+- [Node.js](http://www.nodejs.org/) - Node.js is a platform built on Chrome's JavaScript runtime for easily building fast, scalable network applications.
+
+
+Rules
+	naming
+	js standard
+	john papa style
+	Camel casing
+
+RoadMap
+
+Table of Contents
+-----------------
 
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
