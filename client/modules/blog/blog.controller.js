@@ -4,7 +4,6 @@
   angular
     .module('app.blog', [])
     .controller('BlogController', BlogController)
-    .factory('BlogFactory', BlogFactory)
     .config(config)
 
   config.$inject = ['$httpProvider']
@@ -24,6 +23,7 @@
 
     vm.create = function () {
       var blog = new BlogFactory(vm.blog)
+      blog.user = vm.UserFactory.user
       blog.$save(function (response) {
         vm.blog = response.data.data
         //  window.location.href
@@ -84,15 +84,4 @@
     }
   }
 
-  BlogFactory.$inject = ['$resource']
-  /* @ngInject */
-  function BlogFactory ($resource) {
-    return $resource('/api/v1/Blog/:id', {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      }
-    })
-  }
 })()

@@ -115,9 +115,9 @@ app.use(function (req, res, next) {
  */
 app.use(build.query())
 /**
- * Manual Routes
+ * Manual Routes - returns file structure for the front end
  */
-Register.all(settings)
+var fileStructure = Register.all(settings)
 /**
  * Dynamic Routes / Manually enabling them . You can change it back to automatic in the settings
  * build.routing(app, mongoose) - if reverting back to automatic
@@ -185,8 +185,12 @@ if (environment === 'development') {
   var livereload = require('livereload')
   var server = livereload.createServer()
   var chokidar = require('chokidar')
-  server.watch(__dirname + '/client')
+  server.watch(path.resolve(__dirname + '/client'))
   var scss_lessWatcher = chokidar.watch('file, dir, glob, or array', {
+    ignored: /[\/\\]\./,
+    persistent: true
+  })
+  var scss_lessGlobalWatcher = chokidar.watch('file, dir, glob, or array', {
     ignored: /[\/\\]\./,
     persistent: true
   })
@@ -205,6 +209,7 @@ if (environment === 'development') {
       })
       console.log(chalk.green('Recompiled LESS'))
     } else {
+      console.log(url)
       var scssContents = fs.readFileSync(path.resolve(url), 'utf8')
       var result = sass.renderSync({
         includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
@@ -214,10 +219,51 @@ if (environment === 'development') {
       console.log(chalk.green('Recompiled SCSS'))
     }
   })
+  scss_lessGlobalWatcher.on('change', function (url) {
+    var fileData = _.words(url, /[^./ ]+/g)
+    if (fileData[fileData.length - 1] === 'less') {
+      var lessContents = fs.readFileSync(path.resolve(url), 'utf8')
+      less.render(lessContents, function (err, result) {
+        if (err) {
+          console.log(chalk.red(err))
+        }
+        fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
+      })
+      _.forEach(fileStructure.style.less, function (l, k) {
+        var lessContents = fs.readFileSync(path.join(__dirname , l.orginal), 'utf8')
+        less.render(lessContents, function (err, result) {
+          if (err) {
+            console.log(chalk.red(err))
+          }
+          fs.writeFileSync(path.join(__dirname, l.compiled), result.css)
+        })
+      })
+      console.log(chalk.green('Recompiled LESS'))
+    } else {
+      // RENDER THE GLOBAL STYLE
+      var globalContents = fs.readFileSync(__dirname + '/client/styles/global.style.scss', 'utf8')
+      var result = sass.renderSync({
+        includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+        data: globalContents
+      })
+      fs.writeFileSync(__dirname + '/client/styles/compiled/global.style.css', result.css)
+      _.forEach(fileStructure.style.scss, function (s, k) {
+        var scssContents = fs.readFileSync(path.join(__dirname, s.orginal), 'utf8')
+        // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
+        var result = sass.renderSync({
+          includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
+          data: scssContents
+        })
+        fs.writeFileSync(path.join(__dirname , s.compiled), result.css)
+
+      })
+      console.log(chalk.green('Recompiled Global SCSS'))
+    }
+  })
   scss_lessWatcher.add('./client/modules/*/*.less')
-  scss_lessWatcher.add('./client/*/*.less')
   scss_lessWatcher.add('./client/modules/*/*.scss')
-  scss_lessWatcher.add('./client/*/*.scss')
+  scss_lessGlobalWatcher.add('./client/*/*.less')
+  scss_lessGlobalWatcher.add('./client/*/*.scss')
 }
 
 /**

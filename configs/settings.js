@@ -86,6 +86,7 @@ var baseLine = {
       '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       '/bower_components/angular-moment/angular-moment.js',
       '/bower_components/moment/moment.js',
+      '/bower_components/lodash/lodash.js',
       '/bower_components/toastr/toastr.js',
       '/bower_components/bootstrap/dist/js/bootstrap.js',
       '/bower_components/angular/angular.js',
@@ -98,6 +99,7 @@ var baseLine = {
     ]
   },
   buildreq: {
+    console: true,
     response: {
       method: 'get',
       data: {},

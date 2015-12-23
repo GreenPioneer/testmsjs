@@ -10,7 +10,9 @@
   function UserController ($http, config, $location, $timeout, UserFactory, logger, Upload, $stateParams) {
     var vm = this
     vm.resetCred = vm.editProfile = vm.loginCred = vm.loginError = {}
-    vm.editProfile = UserFactory.editProfile(vm)
+    vm.find = function () {
+      vm.editProfile = angular.copy(UserFactory.user)
+    }
     vm.login = function () {
       UserFactory.login(vm)
     }

@@ -6,10 +6,13 @@ var passport = require('passport')
 var mongoose = require('mongoose')
 var User = mongoose.model('User')
 var secrets = {
-  user: process.env.SENDGRID_USER || 'hslogin',
-  password: process.env.SENDGRID_PASSWORD || 'hspassword00'
+  host: 'smtp.mandrillapp.com', // Gmail, SMTP
+  port: '587',
+  auth: {
+    user: 'hackathonstarterdemo',
+    pass: 'E1K950_ydLR4mHw12a0ldA'
+  }
 }
-
 /**
  * GET /login
  * Login page.
@@ -55,7 +58,6 @@ exports.postLogin = function (req, res, next) {
       // req.flash('success', { msg: 'Success! You are logged in.' })
       // res.status(200).send(req.session.returnTo || false)
       delete user.password
-      delete user._id
       return res.status(200).send({
         authenticated: true,
         user: user,
@@ -182,8 +184,7 @@ exports.postUpdatePassword = function (req, res, next) {
   var errors = req.validationErrors()
 
   if (errors) {
-    console.log(errors)
-    return res.status(200).send('/account')
+    return res.status(200).send(errors)
   }
 
   User.findById(req.user.id, function (err, user) {
@@ -240,7 +241,6 @@ exports.getReset = function (req, res) {
             valid: false
           })
         }
-        console.log(user)
         res.status(200).send({
           msg: 'token is valid',
           valid: true
@@ -256,8 +256,6 @@ exports.getReset = function (req, res) {
 exports.postReset = function (req, res, next) {
   req.assert('password', 'Password must be at least 4 characters long.').len(4)
   req.assert('confirmPassword', 'Passwords must match.').equals(req.body.password)
-  console.log(req.params)
-  console.log(req.body)
   var errors = req.validationErrors()
 
   if (errors) {
@@ -291,11 +289,11 @@ exports.postReset = function (req, res, next) {
       },
       function (user, done) {
         var transporter = nodemailer.createTransport({
-          host: 'smtp.mandrillapp.com', // Gmail, SMTP
-          port: '587',
+          host: secrets.host, // Gmail, SMTP
+          port: secrets.port,
           auth: {
-            user: 'hackathonstarterdemo',
-            pass: 'E1K950_ydLR4mHw12a0ldA'
+            user: secrets.auth.user,
+            pass: secrets.auth.pass
           }
         })
 
@@ -373,11 +371,11 @@ exports.postForgot = function (req, res, next) {
     },
     function (token, user, done) {
       var transporter = nodemailer.createTransport({
-        host: 'smtp.mandrillapp.com', // Gmail, SMTP
-        port: '587',
+        host: secrets.host, // Gmail, SMTP
+        port: secrets.port,
         auth: {
-          user: 'hackathonstarterdemo',
-          pass: 'E1K950_ydLR4mHw12a0ldA'
+          user: secrets.auth.user,
+          pass: secrets.auth.pass
         }
       })
       var mailOptions = {
@@ -389,7 +387,6 @@ exports.postForgot = function (req, res, next) {
           'http://' + req.headers.host + '/reset/' + token + '\n\n' +
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       }
-      console.log(mailOptions.text)
       transporter.sendMail(mailOptions, function (err) {
         done(err, 'done')
       })

@@ -9,7 +9,6 @@
     'app.header',
     'app.footer',
     'app.user',
-    'app.blog',
-    'app.time'
+    'app.blog'
   ])
 })()

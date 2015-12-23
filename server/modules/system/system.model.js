@@ -13,9 +13,9 @@ var blogSchema = mongoose.Schema({
     type: String,
     trim: true
   },
-  author: {
-    type: String,
-    trim: true
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'user'
   }
 })
 

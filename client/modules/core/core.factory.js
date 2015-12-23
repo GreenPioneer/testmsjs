@@ -124,8 +124,9 @@
       })
     }
     UserClass.prototype.updateProfile = function (response) {
-      logger.success(response.data.profile.name + ' your profile has be saved', response.data, 'Updated Profile')
-      this.user = response.data
+      var data = response.data || response
+      logger.success(data.user.profile.name + ' your profile has be saved', data, 'Updated Profile')
+      this.user = response.data.user
       $rootScope.$emit('profileUpdated')
     }
     UserClass.prototype.error = function (error) {

@@ -159,7 +159,12 @@ function all (setup) {
     'controller': [],
     'module': [],
     'routes': [],
-    'style': [],
+    'style': {
+      'css': [],
+      'scss': [],
+      'sass': [],
+      'less': []
+    },
     'view': [],
     'config': [],
     'factory': [],
@@ -226,7 +231,7 @@ function all (setup) {
           break
         case 'style':
           if (j.ext === 'css') {
-            frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
+            frontendFiles.style.css.push('/modules/' + r.name + '/' + j.orginal)
             frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
             frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
           } else if (j.ext === 'scss' || j.ext === 'sass') {
@@ -237,7 +242,11 @@ function all (setup) {
               data: scssContents
             })
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-            frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+            if (j.ext === 'scss') {
+              frontendFiles.style.scss.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
+            } else {
+              frontendFiles.style.sass.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
+            }
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
           } else if (j.ext === 'less') {
@@ -247,7 +256,7 @@ function all (setup) {
                 console.log(chalk.red(err))
               }
               fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-              frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
+              frontendFiles.style.less.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
               frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
               frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
             })
@@ -410,6 +419,7 @@ function all (setup) {
   } else {
     settings.app.locals.frontendFilesFinal = frontendFilesFinal
   }
+  return frontendFiles
 }
 function register (options) {
   if (options === undefined) {
