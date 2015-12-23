@@ -80,7 +80,9 @@ app.set('port', settings.http.port)
 app.use(compress())
 app.use(logger(settings.logger))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 app.use(expressValidator())
 app.use(methodOverride())
 app.use(cookieParser())
@@ -88,7 +90,10 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: settings.sessionSecret,
-  store: new MongoStore({ url: settings.db, autoReconnect: true })
+  store: new MongoStore({
+    url: settings.db,
+    autoReconnect: true
+  })
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -123,7 +128,9 @@ var fileStructure = Register.all(settings)
  * build.routing(app, mongoose) - if reverting back to automatic
  */
 
-build.routing({mongoose: mongoose}, function (error, data) {
+build.routing({
+  mongoose: mongoose
+}, function (error, data) {
   if (error) console.log(error)
   _.forEach(data, function (m) {
     app.use(m.route, m.app)
@@ -133,29 +140,43 @@ build.routing({mongoose: mongoose}, function (error, data) {
 /**
  * Make Client Folder Public
  */
-app.use(express.static(path.join(__dirname, 'client/'), { maxAge: 31557600000 }))
+app.use(express.static(path.join(__dirname, 'client/'), {
+  maxAge: 31557600000
+}))
 // app.use(express.static(path.join(__dirname, 'client/uploads'), { maxAge: 31557600000 }))
 
 /**
  * Primary Failover routes.
  */
 app.get('/api/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in api'})
+  res.status(400).send({
+    error: 'nothing found in api'
+  })
 })
 app.get('/bower_components/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in bower_components'})
+  res.status(400).send({
+    error: 'nothing found in bower_components'
+  })
 })
 app.get('/images/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in images'})
+  res.status(400).send({
+    error: 'nothing found in images'
+  })
 })
 app.get('/scripts/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in scripts'})
+  res.status(400).send({
+    error: 'nothing found in scripts'
+  })
 })
 app.get('/styles/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in styles'})
+  res.status(400).send({
+    error: 'nothing found in styles'
+  })
 })
 app.get('/uploads/*', function (req, res) {
-  res.status(400).send({error: 'nothing found in uploads'})
+  res.status(400).send({
+    error: 'nothing found in uploads'
+  })
 })
 /**
  * Primary app routes.
@@ -230,7 +251,7 @@ if (environment === 'development') {
         fs.writeFileSync(path.resolve('./client/styles/compiled/' + fileData[fileData.length - 3] + '.' + fileData[fileData.length - 2] + '.' + fileData[fileData.length - 1] + '.css'), result.css)
       })
       _.forEach(fileStructure.style.less, function (l, k) {
-        var lessContents = fs.readFileSync(path.join(__dirname , l.orginal), 'utf8')
+        var lessContents = fs.readFileSync(path.join(__dirname, l.orginal), 'utf8')
         less.render(lessContents, function (err, result) {
           if (err) {
             console.log(chalk.red(err))
@@ -254,8 +275,7 @@ if (environment === 'development') {
           includePaths: [path.join(__dirname, './client/modules'), path.join(__dirname, './client/styles'), path.join(__dirname, './client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, './client/bower_components/Materialize/sass')],
           data: scssContents
         })
-        fs.writeFileSync(path.join(__dirname , s.compiled), result.css)
-
+        fs.writeFileSync(path.join(__dirname, s.compiled), result.css)
       })
       console.log(chalk.green('Recompiled Global SCSS'))
     }
