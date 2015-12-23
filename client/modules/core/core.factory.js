@@ -69,7 +69,7 @@
       // this.isAdmin = this.user.roles.indexOf('admin') > -1
       $rootScope.$emit('loggedin')
       if (destination) {
-        $location.path(destination)
+        $location.url(destination)
       }
       return ({
         error: false
@@ -78,7 +78,7 @@
 
     UserClass.prototype.onIdFail = function (error) {
       logger.error(error.data, error, 'Login')
-      // $location.path(response.redirect)
+      // $location.url(response.redirect)
       this.loginError = 'Authentication failed.'
       this.registerError = error
       $rootScope.$emit('loginfailed')
@@ -98,7 +98,7 @@
           vm.editProfile = success.data
           $timeout(deferred.resolve)
         } else { // Not Authenticated
-          $cookies.put('redirect', $location.path())
+          $cookies.put('redirect', $location.url())
           $timeout(deferred.reject)
           $location.url('/login')
           logger.error('Not Authenticated', success, 'Login')
@@ -214,7 +214,7 @@
         if (data.authenticated !== false) {
           $timeout(deferred.resolve)
         } else { // Not Authenticated
-          $cookies.put('redirect', $location.path())
+          $cookies.put('redirect', $location.url())
           $timeout(deferred.reject)
           $location.url('/login')
           logger.error('please sign in', {user: 'No User'}, 'Unauthenticated')
