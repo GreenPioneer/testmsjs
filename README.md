@@ -3,8 +3,7 @@
 [![dependencies](https://david-dm.org/greenpioneer/meanstackjs.svg)](https://david-dm.org/greenpioneer/meanstackjs)
 [![npm-issues](https://img.shields.io/github/issues/GreenPioneer/meanstackjs.svg)](https://github.com/GreenPioneer/meanstackjs/issues)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
-
-# [![meanstackjs Logo](http://meanstackjs.com/images/logo/header3x.png)](http://meanstackjs.com/)
+[![meanstackjs Logo](http://meanstackjs.com/images/logo/header3x.png)](http://meanstackjs.com/)
 -----------------
 Everything we are building in this framework is to make your life as a designer or developer easier. We believe in making this framework usable to designers , User Experience , Quality Assurance , Software Engineers , Frontend & Backend Developers & Full Stack Engineers ... etc. How were doing this in by having key features in the framework like we have listed below
 
@@ -35,21 +34,85 @@ What is Mean Stack JS
 
 Table of Contents
 -----------------
-
-- [Project Structure](#project-structure)
-- [Rules](#Rules)
-- [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [Framework Structure](#framework-structure)
+- [Styles](#Styles)
+- [Prerequisites](#prerequisites)
 - [Road Map](#RoadMap)
 - [Contributing](#contributing)
 - [License](#license)
 
+Getting Started
+---------------
+
+The easiest way to get started is to clone the repository:
+
+```bash
+# Get the latest snapshot
+git clone https://github.com/GreenPioneer/meanstackjs.git
+
+# Change directory
+cd meanstackjs
+
+# Install NPM dependencies
+npm install
+
+node server.js
+```
+
+**Note:** We highly recommend installing [Nodemon](https://github.com/remy/nodemon).
+It watches for any changes in your  node.js app and automatically restarts the
+server. Once installed, instead of `node server.js` use `nodemon server.js`. It will
+save you a lot of time in the long run, because you won't need to manually
+restart the server each time you make a small change in code. To install, run
+`sudo npm install -g nodemon`.
 
 
-Project Structure
+Documentation
 -----------------
 
-Talk about naming convention
+Coming Soon
+
+Framework Structure
+-----------------
+
+We have implemented modules with a specific file naming convention. Each module has a unique such as `blog`. Inside of each module you specific files named as such `UNIQUE_NAME.FILE_TYPE_IDENTIFIER.FILE_EXTENSION` 
+some examples on the frontend  include :
+- `blog.controller.js`
+- `email.controller.js`
+- `blog.factory.js`
+- `auth.factory.js`
+- `blog.module.js`
+- `blog.routes.js.js`
+- `blog.style.css`
+- `blog.style.scss`
+- `list.style.less`
+- `create.view.html`
+
+
+some examples on the backend  include :
+- `blog.controller.js`
+- `blog.model.js`
+- `blog.routes.js`
+
+Available Keywords to use for `FILE_TYPE_IDENTIFIER` 
+| FRONTEND                                | BACKEND                                                  |
+| ----------------------------------  | ------------------------------------------------------------ |
+|`module`|`models`|
+|`controller`|`controller`|
+|`routes`|routes|
+|`config`||
+|`service`||
+|`provider`||
+|`directive`||
+|`style`||
+|`json`||
+|`view`||
+
+
+
+## File Structure
 
 | Name                                | Description                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
@@ -94,14 +157,12 @@ commands
 
 
 
-Rules
+Styles
 -------------
 
-Rules
-	naming
-	js standard
-	john papa style
-	Camel casing
+## John Papa Angular Style Guide
+
+- [Check out here](https://github.com/johnpapa/angular-styleguide)
 
 ## JavaScript Standard Style
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
@@ -159,30 +220,6 @@ screencast by Alex Ford that teaches Node and Express from scratch. Alternativel
 here is another great tutorial for complete beginners - [Getting Started With Node.js, Express, MongoDB](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/).
 
 
-Getting Started
----------------
-
-The easiest way to get started is to clone the repository:
-
-```bash
-# Get the latest snapshot
-git clone https://github.com/GreenPioneer/meanstackjs.git
-
-# Change directory
-cd meanstackjs
-
-# Install NPM dependencies
-npm install
-
-node server.js
-```
-
-**Note:** We highly recommend installing [Nodemon](https://github.com/remy/nodemon).
-It watches for any changes in your  node.js app and automatically restarts the
-server. Once installed, instead of `node server.js` use `nodemon server.js`. It will
-save you a lot of time in the long run, because you won't need to manually
-restart the server each time you make a small change in code. To install, run
-`sudo npm install -g nodemon`.
 
 
 License
