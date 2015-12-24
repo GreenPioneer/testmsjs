@@ -349,13 +349,13 @@ RoadMap
 
 Influences
 ---------------------------------
-[Feross](https://github.com/feross)
-[Sahat](https://github.com/sahat) 
-[Johnpapa](https://github.com/johnpapa)
-[Linnovate with Mean io](https://github.com/linnovate/mean) 
-[Meanjs.org with Meanjs ](https://github.com/meanjs/mean) 
+- [Feross](https://github.com/feross)
+- [Sahat](https://github.com/sahat) 
+- [Johnpapa](https://github.com/johnpapa)
+- [Linnovate with Mean io](https://github.com/linnovate/mean) 
+- [Meanjs.org with Meanjs ](https://github.com/meanjs/mean) 
 
 Credit
 ---------------------------------
-[Green Pioneer with structure, layout & implementation](https://github.com/greenpioneer) 
-[6StringCodes with ux design](https://github.com/6StringCodes) 
+- [Green Pioneer with structure, layout & implementation](https://github.com/greenpioneer) 
+- [6StringCodes with ux design](https://github.com/6StringCodes) 
