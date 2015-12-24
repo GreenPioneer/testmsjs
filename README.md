@@ -5,22 +5,22 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![meanstackjs Logo](http://meanstackjs.com/images/logo/header3x.png)](http://meanstackjs.com/)
 -----------------
-Everything we are building in this framework is to make your life as a designer or developer easier. We believe in making this framework usable to designers , User Experience , Quality Assurance , Software Engineers , Frontend & Backend Developers & Full Stack Engineers ... etc. How were doing this in by having key features in the framework like we have listed below
+Everything we are building in this framework is to make your life as a designer or developer easier. We believe in making this framework usable to, User Experience Designers, Quality Assurance Engineers, Software Engineers, Frontend & Backend Developers & Full Stack Engineers ... etc. How were doing this in by having key features in the framework like we have listed below
 
 - LiveReload & Recompile in Development Env
 - Not Dependent on Grunt or Gulp 
 - Can Build Dynamic Api's based off Schema
 - Can Open Dynamic Query with routes
 - UI framework agnostic - Use Boostrap , Materialize or Foundation
-- Supports CSS, LESS, SASS & SCSS
+- Supports CSS, SCSS & LESS
 - Simple Project Structure
 - No Magic Wand
 - Customizable scaffolding of modules(Still in Development)
 - Uses JS Standard & John Papa Angular Style
 - Supports Clustering
-- Supports Environments: Development , Test & Production
+- Supports Environments: Development, Test & Production
 
-Those are just some of the reasons why we believe using mean stack js will help you in your development. What were going to do moving forward with this project is to layout a road map so that you can give your thougts and let us know what we can add to make your life easier with this framework. We welcome all of those who wish to contribute and be apart of this. Join us in building and using the newest style in mean stacks
+Those are just some of the reasons why we believe using mean stack js will help you in your development. What we want to do moving forward with this project is to layout a road map so that you can give your thougts and let us know what we can add to make your life easier with this framework. We welcome all of those who wish to contribute and be apart of this. Join us in building and using the newest style in mean stacks
 
 
 What is Mean Stack JS
@@ -230,9 +230,9 @@ in JavaScript Standard Style, or check out some of
 Prerequisites
 -------------
 
-- [Download](https://www.mongodb.org/downloads)and Install mongodb - <a href="https://docs.mongodb.org/manual/">Checkout their manual</a> if you're just starting.
+- [Download](https://www.mongodb.org/downloads) and Install mongodb - <a href="https://docs.mongodb.org/manual/">Checkout their manual</a> if you're just starting.
 
-- [Download](http://nodejs.org) and Install Node.js, nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started.
+- [Download](http://nodejs.org) and Install Node.js - nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started.
 
 - Command Line Tools
  - <img src="http://deluge-torrent.org/images/apple-logo.gif" height="17">&nbsp;**Mac OS X:** [Xcode](https://itunes.apple.com/us/app/xcode/id497799835?mt=12) (or **OS X 10.9 Mavericks**: `xcode-select --install`)
@@ -280,7 +280,7 @@ Contributing
 
 Support and contributions from the open source community are essential for keeping
 MEAN.js up to date and always improving! There are a few guidelines that we need
-contributors to follow to keep the project consistent, as well as allow us to keep
+contributors to follow to keep the project consistent, as well as allowing us to keep
 maintaining MEAN.js in a reasonable amount of time.
 
 ### Creating an Issue
