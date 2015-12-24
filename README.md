@@ -80,7 +80,9 @@ Framework Structure
 ## Modules
 
 We have implemented modules with a specific file naming convention for server & client side coding. Each module has a unique such as `blog`. Inside of each module you specific files named as such `UNIQUE_NAME.FILE_TYPE_IDENTIFIER.FILE_EXTENSION` 
-some examples on the frontend  include :
+
+Examples on the frontend  include :
+
 - `blog.controller.js`
 - `email.controller.js`
 - `blog.factory.js`
@@ -92,12 +94,13 @@ some examples on the frontend  include :
 - `list.style.less`
 - `create.view.html`
 
-some examples on the backend  include :
+Examples on the backend  include :
+
 - `blog.controller.js`
 - `blog.model.js`
 - `blog.routes.js`
 
- ## Available Keywords to use for `FILE_TYPE_IDENTIFIER`
+## Available Keywords to use for `FILE_TYPE_IDENTIFIER`
 
 | FRONTEND                                | BACKEND                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
