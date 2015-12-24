@@ -1,3 +1,5 @@
+Contributing
+---------------------------------
 # How to contribute
 
 Support and contributions from the open source community are essential for keeping
