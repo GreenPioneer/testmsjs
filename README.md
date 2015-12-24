@@ -36,7 +36,7 @@ Table of Contents
 -----------------
 - [Getting Started](#getting-started)
 - [Documentation](#documentation)
-- [Theming/Styling](#Theming/Styling)
+- [Theming Styling](#Theming-Styling)
 - [Framework Structure](#framework-structure)
 - [Styles](#Styles)
 - [Prerequisites](#prerequisites)
@@ -75,7 +75,7 @@ Documentation
 
 Coming Soon - Until this is documented please take a look a the code we have provide 
 
-Theming/Styling
+Theming Styling
 -----------------
 
 ### Overview
