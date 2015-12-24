@@ -5,7 +5,7 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![meanstackjs Logo](http://meanstackjs.com/images/logo/header3x.png)](http://meanstackjs.com/)
 -----------------
-Everything we are building in this framework is to make your life as a designer or developer easier. We believe in making this framework usable to, User Experience Designers, Quality Assurance Engineers, Software Engineers, Frontend & Backend Developers & Full Stack Engineers ... etc. How were doing this in by having key features in the framework like we have listed below
+We are building in this framework to make your life as a designer or developer easier. We believe in making this framework usable for User Experience Designers, Quality Assurance Engineers, Software Engineers, Frontend & Backend Developers & Full Stack Engineers... etc. Were doing this by having key features in the framework we like we listed below:
 
 - LiveReload & Recompile in Development Env
 - Not Dependent on Grunt or Gulp 
