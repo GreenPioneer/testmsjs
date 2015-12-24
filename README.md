@@ -77,7 +77,7 @@ Coming Soon
 Framework Structure
 -----------------
 
-## Modules
+### Modules
 
 We have implemented modules with a specific file naming convention for server & client side coding. Each module has a unique such as `blog`. Inside of each module you specific files named as such `UNIQUE_NAME.FILE_TYPE_IDENTIFIER.FILE_EXTENSION` 
 
@@ -100,7 +100,7 @@ Examples on the backend  include :
 - `blog.model.js`
 - `blog.routes.js`
 
-## Available Keywords to use for `FILE_TYPE_IDENTIFIER`
+### Available Keywords to use for `FILE_TYPE_IDENTIFIER`
 
 | FRONTEND                                | BACKEND                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
@@ -117,7 +117,7 @@ Examples on the backend  include :
 
 Once everthing is set up properly we then register all modules and all of its content appropriately on `server.js` startup. 
 
-## File Structure
+### File Structure
 
 | Name                                | Description                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
@@ -134,7 +134,7 @@ Once everthing is set up properly we then register all modules and all of its co
 | **README.md**                       | Documentation                                                |
 
 
-Client
+#### Client
 
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
@@ -145,7 +145,7 @@ Client
 | **client**/uploads/                | Folder:all Global uploads                                    |
 
 
-Server
+#### Server
 
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
@@ -153,7 +153,7 @@ Server
 | **server**/modules/                | Folder:all dynamic modules to run server side logic          |
 | **server**/register.js             | File:This runs and registers all fo the modules and files    |
 
-commands
+#### commands
 
 | Name                               | Description                                                  |
 | ---------------------------------- | ------------------------------------------------------------ |
@@ -165,11 +165,11 @@ commands
 Styles
 -------------
 
-## John Papa Angular Style Guide
+### John Papa Angular Style Guide
 
 - [Check out here](https://github.com/johnpapa/angular-styleguide)
 
-## JavaScript Standard Style
+### JavaScript Standard Style
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 - **2 spaces** – for indentation
 - **Single quotes for strings** – except to avoid escaping
@@ -254,21 +254,21 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Contributing
 ---------------------------------
-# How to contribute
+### How to contribute
 
 Support and contributions from the open source community are essential for keeping
 MEAN.js up to date and always improving! There are a few guidelines that we need
 contributors to follow to keep the project consistent, as well as allow us to keep
 maintaining MEAN.js in a reasonable amount of time.
 
-## Creating an Issue
+### Creating an Issue
 
 Before you create a new Issue:
 * Check the [Issues](https://github.com/meanjs/mean/issues) on Github to ensure one doesn't already exist.
 * Clearly describe the issue, including the steps to reproduce the issue.
 * If it's a new feature, enhancement, or restructure, Explain your reasoning on why you think it should be added, as well as a particular use case.
 
-## Making Changes
+### Making Changes
 
 * Create a topic branch from the master branch.
 * Check for unnecessary whitespace / changes with `git diff --check` before committing.
@@ -281,7 +281,8 @@ Before you create a new Issue:
 	* Don't rely on the existing tests to see if you've broken code elsewhere; test the changes you made in a browser too!
 * Update the Documentation to go along with any changes in functionality / improvements in a separate pull request against the gh-pages branch.
 
-## Commit Message Guidelines
+### Commit Message Guidelines
+
 ```
 Header
 Blank Line
@@ -321,7 +322,7 @@ Fixes #82
 * Refrence: [Angular Conventions](https://github.com/ajoslin/conventional-changelog/blob/master/conventions/angular.md)
 
 
-## Submitting the Pull Request
+### Submitting the Pull Request
 
 * Push your changes to your topic branch on your fork of the repo.
 * Submit a pull request from your topic branch to the master branch on the MEAN.JS repository.
@@ -330,11 +331,11 @@ Fixes #82
 * Small changes are usually accepted and merged in within a week (provided that 2 collaborators give the okay)
 * Larger changes usually spark further discussion and possible changes prior to being merged in.
 
-## Documentation (meanjs.org)
+### Documentation (meanjs.org)
 
 The code for the documentation and the website are located in the meanjs/mean repo on the gh-pages branch. The website is hosted by github pages and generated using jekyll. See the README in the gh-pages branch for more information on how to get your dev enviorment set-up.
 
-## Generating a new Release
+### Generating a new Release
 
 For those who will be generating releases:
 * Don't forget to update the changelog!
@@ -343,6 +344,7 @@ For those who will be generating releases:
 
 RoadMap
 ---------------------------------
+
 
 
 Influences
