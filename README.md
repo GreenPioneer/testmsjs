@@ -96,19 +96,20 @@ some examples on the backend  include :
 - `blog.model.js`
 - `blog.routes.js`
 
-Available Keywords to use for `FILE_TYPE_IDENTIFIER` 
+Available Keywords to use for `FILE_TYPE_IDENTIFIER`
+ 
 | FRONTEND                                | BACKEND                                                  |
 | ----------------------------------  | ------------------------------------------------------------ |
-|`module`|`models`|
-|`controller`|`controller`|
-|`routes`|routes|
-|`config`||
-|`service`||
-|`provider`||
-|`directive`||
-|`style`||
-|`json`||
-|`view`||
+| `module` | `models` |
+| `controller` | `controller` |
+| `routes` | `routes` |
+| `config` | |
+| `service` | |
+| `provider` | |
+| `directive` | |
+| `style` | |
+| `json` | |
+| `view` | |
 
 
 
