@@ -21,9 +21,6 @@
 <body ng-app="app">
     <div ng-include="'modules/core/core.view.html'">
     </div>
-    <script type="text/javascript">
-        window.user = {{user|json|safe}};
-    </script>
     {% for file in assets.js %}
     <script type="text/javascript" src="{{file}}"></script>
     {% endfor %}
@@ -38,10 +35,8 @@
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
       ga('create', '{{html.googleAnalytics}}', 'auto');
       ga('send', 'pageview');
-
     </script>
 </body>
 

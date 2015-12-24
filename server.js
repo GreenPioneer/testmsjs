@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser')
 var compress = require('compression')
 var session = require('express-session')
 var bodyParser = require('body-parser')
+var Promise = require('bluebird')
 var logger = require('morgan')
 var errorHandler = require('errorhandler')
 var methodOverride = require('method-override')
@@ -57,7 +58,7 @@ mongoose.connection.on('error', function () {
   console.log('MongoDB Connection Error. Please make sure that MongoDB is running.')
   process.exit(1)
 })
-
+mongoose.Promise = Promise
 /**
  * Swig configuration.
  */
@@ -124,15 +125,49 @@ app.use(build.query())
  */
 var fileStructure = Register.all(settings)
 /**
+ * Middleware to use throughout the backend
+ */
+var User = mongoose.model('User')
+app.locals.findUser = function (id, cb) {
+  User.findOne({
+    _id: id
+  }, function (err, user) {
+    if (err || !user) return cb(null)
+    cb(user)
+  })
+}
+app.locals.requiresLogin = function (req, res, next) {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send({
+      msg: 'User is not authorized'
+    })
+  }
+  app.locals.findUser(req.user._id, function (user) {
+    if (!user) return res.status(401).send({msg: 'User is not authorized'})
+    req.user = user
+    next()
+  })
+}
+app.locals.isMongoId = function (req, res, next) {
+  if ((_.size(req.params) === 1) && (!mongoose.Types.ObjectId.isValid(_.values(req.params)[0]))) {
+    return res.status(500).send('Parameter passed is not a valid Mongo ObjectId')
+  }
+  next()
+}
+/**
  * Dynamic Routes / Manually enabling them . You can change it back to automatic in the settings
  * build.routing(app, mongoose) - if reverting back to automatic
  */
-
 build.routing({
-  mongoose: mongoose
+  mongoose: mongoose,
+  remove: ['user'],
+  middleware: {
+    auth: [app.locals.requiresLogin]
+  }
 }, function (error, data) {
   if (error) console.log(error)
   _.forEach(data, function (m) {
+    console.log(chalk.green('Route Built by NPM buildreq ', m.route))
     app.use(m.route, m.app)
   })
 })
@@ -188,11 +223,11 @@ app.get('/*', function (req, res) {
   } else {
     req.user.authenticated = true
   }
+  // took out user
   res.render(path.resolve('server') + '/layout/index.html', {
     html: settings.html,
     assets: app.locals.frontendFilesFinal,
-    environment: environment,
-    user: req.user
+    environment: environment
   })
 })
 /**

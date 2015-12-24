@@ -35,7 +35,6 @@
   "dependencies": {
     "async": "^1.5.0",
     "bcrypt-nodejs": "^0.0.3",
-    "bitgo": "0.11.48",
     "bluebird": "^3.0.6",
     "body-parser": "^1.14.1",
     "buildreq": "latest",

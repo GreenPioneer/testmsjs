@@ -1,6 +1,23 @@
 // NEED TO REFACTOR AND REFINE
 // want to add async down the road
 // var async = require('async')
+
+/**
+ * Init
+ * Frontend & Backend : Look up  modules locations and gather all the files in them
+ * Frontend & Backend : Filter out all file starting with .   ex .DS_store .Git Ignore
+ * Frontend & Backend : Create obj with all relative information on each file
+ * Function ALL
+ * Backend : For each file register all models and routes. not controllers because routes call controllers
+ * Frontend : init variable to keep track of files and info
+ * Frontend : CHECK AND MAKE DIRECTORY - Check and make directory
+ * Frontend : Delete all previously compiled
+ * Frontend : Render the global style
+ * Frontend : Push all frontend files
+ * Frontend : Set Files to be rendered based on the env
+ * return frontendFiles
+ */
+
 var path = require('path')
 var _ = require('lodash')
 var fs = require('fs')
@@ -10,20 +27,6 @@ var less = require('less')
 var uglify = require('uglify-js')
 var concat = require('concat')
 var uglifycss = require('uglifycss')
-
-var rmdirAsync = function (url, callback) {
-  if (fs.existsSync(url)) {
-    fs.readdirSync(url).forEach(function (file, index) {
-      var curPath = path.resolve(url + '/' + file)
-      if (fs.lstatSync(curPath).isDirectory()) { // recurse
-        //
-      } else { // delete file
-        fs.unlinkSync(curPath)
-      }
-    })
-  // fs.rmdirSync(url)
-  }
-}
 /**
  * BACKEND
  */
@@ -109,24 +112,6 @@ _.forEach(frontEnddata.modules, function (value, key) {
   })
   frontEndConfigs.push(obj)
 })
-
-function Register (app) {
-  this.configs = configs
-  this.frontEndConfigs = frontEndConfigs
-  this.app = app
-}
-Register.prototype.all = function (meanSettings) {
-  function setup () {
-    return {
-      configs: this.configs,
-      frontEndConfigs: this.frontEndConfigs,
-      app: this.app,
-      meanSettings: meanSettings
-    }
-  }
-  // return functions.query(setup.bind(this))
-  return all(setup.bind(this))
-}
 function all (setup) {
   var settings = setup()
   /**
@@ -199,7 +184,6 @@ function all (setup) {
   rmdirAsync(__dirname + '/../client/scripts/compiled/', function () {
     // console.log(arguments)
   })
-
   // RENDER THE GLOBAL STYLE
   var globalContents = fs.readFileSync(__dirname + '/../client/styles/global.style.scss', 'utf8')
   var result = sass.renderSync({
@@ -241,9 +225,15 @@ function all (setup) {
             })
             fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
             if (j.ext === 'scss') {
-              frontendFiles.style.scss.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
+              frontendFiles.style.scss.push({
+                orginal: '/client/modules/' + r.name + '/' + j.orginal,
+                compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'
+              })
             } else {
-              frontendFiles.style.sass.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
+              frontendFiles.style.sass.push({
+                orginal: '/client/modules/' + r.name + '/' + j.orginal,
+                compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'
+              })
             }
             frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
             frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
@@ -254,7 +244,10 @@ function all (setup) {
                 console.log(chalk.red(err))
               }
               fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-              frontendFiles.style.less.push({orginal: '/client/modules/' + r.name + '/' + j.orginal,compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'})
+              frontendFiles.style.less.push({
+                orginal: '/client/modules/' + r.name + '/' + j.orginal,
+                compiled: '/client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'
+              })
               frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
               frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
             })
@@ -277,93 +270,7 @@ function all (setup) {
             console.log('Unknown', j)
           }
           break
-      //
       }
-    // if (j.type === 'controller') {
-    //   frontendFiles.controller.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'module') {
-    //   frontendFiles.module.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.unshift('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.unshift(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'routes') {
-    //   frontendFiles.routes.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'style') {
-    //   if (j.ext === 'css') {
-    //     frontendFiles.style.push('/modules/' + r.name + '/' + j.orginal)
-    //     frontendFilesFinal.css.push('/modules/' + r.name + '/' + j.orginal)
-    //     frontendFilesAggregate.css.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    //   } else if (j.ext === 'scss' || j.ext === 'sass') {
-    //     var scssContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-    //     // PLACED includePaths: so that @import 'global-variables.styles.scss'; work properly
-    //     var result = sass.renderSync({
-    //       includePaths: [path.join(__dirname, '../client/modules'), path.join(__dirname, '../client/styles'), path.join(__dirname, '../client/bower_components/bootstrap-sass/assets/stylesheets'), path.join(__dirname, '../client/bower_components/Materialize/sass')],
-    //       data: scssContents
-    //     })
-    //     fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-    //     frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-    //     frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-    //     frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
-    //   } else if (j.ext === 'less') {
-    //     var lessContents = fs.readFileSync(__dirname + '/../client/modules/' + r.name + '/' + j.orginal, 'utf8')
-    //     less.render(lessContents, function (err, result) {
-    //       if (err) {
-    //         console.log(chalk.red(err))
-    //       }
-    //       fs.writeFileSync(__dirname + '/../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css', result.css)
-    //       frontendFiles.style.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-    //       frontendFilesFinal.css.push('/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css')
-    //       frontendFilesAggregate.css.push(path.join(__dirname, '../client/styles/compiled/' + j.name + '.' + j.type + '.' + j.ext + '.css'))
-    //     })
-    //   } else {
-    //     console.log('Unknown Style', j)
-    //   }
-    // }
-    // else if (j.type === 'view') {
-    //   // HTML FILES DO NOT NEED TO BE LOADED
-    //   // MAYBE ADDED TO TEMPLATE CACHE
-    //   // frontendFiles.view.push('/modules/' + r.name + '/' + j.orginal)
-    //   // frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    // }
-    // else if (j.type === 'json') {
-    //   // bower.json FILES DO NOT NEED TO BE LOADED
-    // }
-    // else if (j.type === 'config') {
-    //   frontendFiles.config.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'factory') {
-    //   frontendFiles.factory.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'service') {
-    //   frontendFiles.service.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // }
-    // else if (j.type === 'provider') {
-    //   frontendFiles.provider.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //   frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    // } else {
-    //   if (j.ext === 'js') {
-    //     frontendFiles.else.push('/modules/' + r.name + '/' + j.orginal)
-    //     frontendFilesFinal.js.push('/modules/' + r.name + '/' + j.orginal)
-    //     frontendFilesAggregate.js.push(path.join(__dirname, '../client/modules/' + r.name + '/' + j.orginal))
-    //   }else if (j.ext === 'css') {
-    //     console.log('Did you name css wrong?', j)
-    //   } else {
-    //     console.log('Unknown', j)
-    //   }
-    // }
     })
   })
   frontendFilesFinal.js.unshift(/modules/ + mainFrontendFile)
@@ -419,16 +326,41 @@ function all (setup) {
   }
   return frontendFiles
 }
+function Register (app) {
+  this.configs = configs
+  this.frontEndConfigs = frontEndConfigs
+  this.app = app
+}
+Register.prototype.all = function (meanSettings) {
+  function setup () {
+    return {
+      configs: this.configs,
+      frontEndConfigs: this.frontEndConfigs,
+      app: this.app,
+      meanSettings: meanSettings
+    }
+  }
+  return all(setup.bind(this))
+}
+
+function rmdirAsync (url, callback) {
+  if (fs.existsSync(url)) {
+    fs.readdirSync(url).forEach(function (file, index) {
+      var curPath = path.resolve(url + '/' + file)
+      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+        //
+      } else { // delete file
+        fs.unlinkSync(curPath)
+      }
+    })
+  // fs.rmdirSync(url)
+  }
+}
 function register (options) {
   if (options === undefined) {
     return new Register()
   } else {
     return new Register(options)
   }
-
-// if (typeof options === 'object' && options !== null) {
-//   return new Register(options)
-// }
-// throw new TypeError(chalk.red('Expected object for argument options but got ' + chalk.red.underline.bold(options)))
 }
 module.exports = register

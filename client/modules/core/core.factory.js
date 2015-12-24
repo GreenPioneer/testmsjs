@@ -216,7 +216,7 @@
         } else { // Not Authenticated
           $cookies.put('redirect', $location.url())
           $timeout(deferred.reject)
-          $location.url('/login')
+          $location.url('/signin')
           logger.error('please sign in', {user: 'No User'}, 'Unauthenticated')
         }
       })
