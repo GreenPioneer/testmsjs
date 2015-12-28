@@ -19,17 +19,16 @@
     }
 
     $rootScope.$on('profileUpdated', function () {
-      // if you want to do anything extra 
-      vm.UserFactory = UserFactory
+      // if you want to do anything extra
+      // vm.UserFactory = _.merge(vm.UserFactory, UserFactory)
     })
     $rootScope.$on('loggedin', function () {
-      // if you want to do anything extra 
-      console.log(UserFactory, 'loggedin')
+      // if you want to do anything extra
       vm.UserFactory = UserFactory
     })
 
     $rootScope.$on('logout', function () {
-      // if you want to do anything extra 
+      // if you want to do anything extra
       vm.UserFactory = {}
     })
 

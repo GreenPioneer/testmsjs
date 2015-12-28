@@ -25,50 +25,24 @@ var baseLine = {
     // at all. The cookie will expunge when the browser is closed.
     maxAge: null
   },
+  html: {
+    googleAnalytics: 'UA-71654331-1',
+    keywords: 'MEAN, MEANSTACKJS, mongodb, expressjs, angularjs,nodejs, javascript',
+    description: 'The Meanstack js is a opensource framework that is made for and by developers'
+  },
 
   // The session cookie name
   sessionName: 'connect.meanstackjs',
   title: 'MEANSTACKJS',
-  // // 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.2/toastr.min.js',
-  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js',
-  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-sanitize.js',
-  //       'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.7/angular-resource.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js',
-  //       'https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js',
-  //       'https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.js',
-  // '/modules/client.module.js',
-  //     '/modules/system/system.module.js',
-  //     '/modules/user/user.module.js',
-  //     '/modules/blog/blog.module.js',
-  //     '/modules/exception/exception.module.js',
-  //     '/modules/logger/logger.module.js',
-  //     '/modules/router/router.module.js',
-  //     '/modules/layout/layout.module.js',
-  //     '/modules/header/header.module.js',
-  //     '/modules/footer/footer.module.js',
-  //     '/modules/core/core.module.js',
-  //     '/modules/core/config.js',
-  //     '/modules/core/constants.js',
-  //     '/modules/core/core.route.js',
-  //     '/modules/layout/layout.controller.js',
-  //     '/modules/header/header.controller.js',
-  //     '/modules/footer/footer.controller.js',
-  //     '/modules/exception/exception-handler.provider.js',
-  //     '/modules/exception/exception.js',
-  //     '/modules/logger/logger.js',
-  //     '/modules/router/router-helper.provider.js',
-  //     '/modules/system/system.controller.js',
-  //     '/modules/system/system.routes.js',
-  //     '/modules/user/user.controller.js',
-  //     '/modules/user/user.routes.js',
-  //     '/modules/blog/blog.controller.js',
-  //     '/modules/blog/blog.routes.js'
 
-  // /'/bower_components/bootstrap/dist/css/bootstrap.min.css',
+  // AGGREGATION
+  // bower_components -  Needs to be manually added below
+  // modules - aggregated automatically
+  // images - manually called in files
+  // styles - manually called  & automatically compiles the global style scss in COMPILED Folder
+  // uploads - Automatic uploads to be manually called in the files
+  // USE EXTERNAL FILES - 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js',
+  // OR USE INTERNAL FILES - '/bower_components/jquery/dist/jquery.js'
   assets: {
     js: [
       '/bower_components/ng-file-upload/ng-file-upload-all.js',
@@ -81,18 +55,20 @@ var baseLine = {
       '/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       '/bower_components/angular-moment/angular-moment.js',
       '/bower_components/moment/moment.js',
+      '/bower_components/lodash/lodash.js',
       '/bower_components/toastr/toastr.js',
       '/bower_components/bootstrap/dist/js/bootstrap.js',
       '/bower_components/angular/angular.js',
       '/bower_components/jquery/dist/jquery.js'
     ],
     css: [
-      '/styles/global.style.css',
+      '/styles/compiled/global.style.css',
       '/bower_components/toastr/toastr.css',
       '/bower_components/font-awesome/css/font-awesome.min.css'
     ]
   },
   buildreq: {
+    console: true,
     response: {
       method: 'get',
       data: {},

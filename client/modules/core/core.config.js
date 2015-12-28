@@ -1,5 +1,3 @@
-/* global angular:false toastr:false, moment:false */
-
 ;(function () {
   'use strict'
 
@@ -8,6 +6,7 @@
   core.config(toastrConfig)
   core.constant('toastr', toastr)
   core.constant('moment', moment)
+  core.constant('_', _)
   toastrConfig.$inject = ['toastr']
   /* @ngInject */
   function toastrConfig (toastr) {
@@ -15,7 +14,7 @@
     toastr.options.positionClass = 'toast-bottom-right'
   }
 
-/*$window change out*/
+  /*  $window change out*/
   var config = {
     appErrorPrefix: 'MeanStackJS',
     appTitle: 'MeanStackJS',
@@ -35,5 +34,4 @@
     exceptionHandlerProvider.configure(config.appErrorPrefix)
     routerHelperProvider.configure({docTitle: config.appTitle + ': '})
   }
-
 })()

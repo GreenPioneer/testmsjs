@@ -1,17 +1,14 @@
-<div class="container">
+<div class="container" ng-init="vm.find()">
     <div class="page-header">
         <h3>Profile Information</h3>
     </div>
-
 
     <!-- BRING BACK FOR LATER WHEN WE WANT TO UPLOAD
     <div class="btn btn-primary" ngf-select="vm.upload($file)"  name="file" ngf-pattern="'image/*'"
     accept="image/*" ngf-max-size="20MB" ngf-min-height="100" >Select</div> -->
 
 
-
-
-    <form ng-submit="vm.update()" method="POST" class="form-horizontal">
+    <form ng-submit="vm.update()" class="form-horizontal">
         <div class="form-group">
             <label for="email" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-4">

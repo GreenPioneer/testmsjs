@@ -1,5 +1,8 @@
 module.exports = {
-  title: 'MEANSTACKJS',
+  html: {
+    title: 'MEANSTACKJS'
+  },
+  logger: 'combined',
   buildreq: {
     console: false
   },

@@ -1,12 +1,14 @@
 /* global styling */
-@import 'global-variables.styles.scss';
-@import 'bootstrap';
+/* import css framework first - bootstrap example*/
+@import 'global-variables.styles.scss';/* copy of bootstrap variables for custom theme*/
+@import 'bootstrap';/*importing bootstrap scss files 
+/*@import 'foundation';*/
 /*@import 'materialize';*/
 
 body{
 	padding-top:50px;
 }
 
-a {
-  color: $brand-danger;
+h1{
+	color:$brand-primary;
 }
