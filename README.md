@@ -1,5 +1,3 @@
-
-
 [![dependencies](https://david-dm.org/greenpioneer/meanstackjs.svg)](https://david-dm.org/greenpioneer/meanstackjs)
 [![npm-issues](https://img.shields.io/github/issues/GreenPioneer/meanstackjs.svg)](https://github.com/GreenPioneer/meanstackjs/issues)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
@@ -62,7 +60,6 @@ $ npm install -g bower
 screencast by Alex Ford that teaches Node and Express from scratch. Alternatively,
 here is another great tutorial for complete beginners - [Getting Started With Node.js, Express, MongoDB](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/).
 
-
 Getting Started
 ---------------
 
@@ -90,7 +87,6 @@ server. Once installed, instead of `node server.js` use `nodemon server.js`. It 
 save you a lot of time in the long run, because you won't need to manually
 restart the server each time you make a small change in code. To install, run
 `sudo npm install -g nodemon`.
-
 
 Documentation
 -----------------
@@ -203,7 +199,6 @@ Once everthing is set up properly we then register all modules and all of its co
 | ---------------------------------- | ------------------------------------------------------------ |
 | **commands**/create.js             | `Create` Command for scaffolding.  |
 
-
 Styles
 -------------
 
@@ -240,7 +235,6 @@ To get a better idea, take a look at
 in JavaScript Standard Style, or check out some of
 [the repositories](https://github.com/feross/standard-packages/blob/master/standard.json) that use
 `standard`.
-
 
 License
 ---------------------------------
@@ -280,7 +274,6 @@ will be happy to accept your Pull Requests as long as those adhere to some basic
   * John Papa angular style guide
   * Pass All Test ( once testing has been implement)
 
-
 ### Creating an Issue
 
 Before you create a new Issue:
@@ -296,18 +289,13 @@ Before you create a new Issue:
 * Make Sure you have added any tests necessary to test your code.
 * Update the Documentation to go along with any changes in functionality / improvements in a separate pull request against the gh-pages branch.
 
-
-
 ### Submitting the Pull Request
 
 * Push your changes to your topic branch on your fork of the repo.
 * Submit a pull request from your topic branch to the development branch
 * We use [GitFlow](https://guides.github.com/introduction/flow/)
 * Be sure to tag any issues your pull request is taking care of / contributing to.
-  * By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
-
-
-
+	* By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
 
 Influences
 ---------------------------------
