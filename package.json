@@ -18,10 +18,10 @@
     "meanstackjs": "./commands/create.js"
   },
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start ./tests/karma.test.js  && ./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  && standard ",
+    "test": "npm run mocha && npm run karma && npm run standard",
     "mocha": "./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  ",
     "karma": "./node_modules/karma/bin/karma start ./tests/karma.test.js",
-    "standard":"standard",
+    "standard":"./node_modules/standard/bin/cmd.js",
     "postinstall": "bower install"
   },
   "repository": {
