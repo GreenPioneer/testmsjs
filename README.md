@@ -297,6 +297,11 @@ Before you create a new Issue:
 * Be sure to tag any issues your pull request is taking care of / contributing to.
 	* By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
 
+
+HotFiX
+---------------------------------
+0.0.11
+
 Influences
 ---------------------------------
 - [Feross](https://github.com/feross)
