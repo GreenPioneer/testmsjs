@@ -83,5 +83,4 @@
       logger.info('Activated Blog View')
     }
   }
-
 })()

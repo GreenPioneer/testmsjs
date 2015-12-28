@@ -9,14 +9,19 @@
       "toastr",
       "moment",
       "self",
-      "_"
+      "_",
+      "describe",
+      "it"
     ]
   },
   "bin": {
     "meanstackjs": "./commands/create.js"
   },
   "scripts": {
-    "test": "standard",
+    "test": "./node_modules/karma/bin/karma start ./tests/karma.test.js  && ./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  && standard ",
+    "mocha": "./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  ",
+    "karma": "./node_modules/karma/bin/karma start ./tests/karma.test.js",
+    "standard":"standard",
     "postinstall": "bower install"
   },
   "repository": {
@@ -79,9 +84,14 @@
   "devDependencies": {
     "blessed": "^0.1.81",
     "chai": "^3.4.1",
+    "karma": "^0.13.16",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.6",
+    "karma-mocha": "^0.2.1",
     "mocha": "^2.3.4",
     "multiline": "^1.0.2",
-    "supertest": "^1.1.0",
-    "standard": "latest"
+    "phantomjs": "^1.9.19",
+    "standard": "latest",
+    "supertest": "^1.1.0"
   }
 }
