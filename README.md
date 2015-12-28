@@ -295,8 +295,7 @@ Before you create a new Issue:
 * Submit a pull request from your topic branch to the development branch
 * We use [GitFlow](https://guides.github.com/introduction/flow/)
 * Be sure to tag any issues your pull request is taking care of / contributing to.
-  * By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
-
+	* By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
 
 Influences
 ---------------------------------
