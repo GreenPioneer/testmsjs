@@ -75,6 +75,9 @@ git clone https://github.com/GreenPioneer/meanstackjs.git
 # Change directory
 cd meanstackjs
 
+# Install NPM bower for frontend dependencies
+npm install -g bower
+
 # Install NPM dependencies
 npm install
 
@@ -318,3 +321,5 @@ Credit
 ---------------------------------
 - [Green Pioneer with structure, layout & implementation](https://github.com/greenpioneer) 
 - [6StringCodes with ux design](https://github.com/6StringCodes) 
+- [David Mogolov with content](http://davidmogolov.com/) 
+- [Rajee Jones with logo design](https://www.linkedin.com/in/rajeejones)
