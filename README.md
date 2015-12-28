@@ -1,5 +1,3 @@
-
-
 [![dependencies](https://david-dm.org/greenpioneer/meanstackjs.svg)](https://david-dm.org/greenpioneer/meanstackjs)
 [![npm-issues](https://img.shields.io/github/issues/GreenPioneer/meanstackjs.svg)](https://github.com/GreenPioneer/meanstackjs/issues)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
@@ -49,7 +47,7 @@ Prerequisites
 - <img src="https://www.mongodb.com/assets/global/favicon-bf23af61025ab0705dc84c3315c67e402d30ed0cba66caff15de0d57974d58ff.ico" height="17">&nbsp; [Download](https://www.mongodb.org/downloads) and Install mongodb - <a href="https://docs.mongodb.org/manual/">Checkout their manual</a> if you're just starting.
   - <img src="http://deluge-torrent.org/images/apple-logo.gif" height="17">&nbsp; [OSX MongoDB](https://docs.mongodb.org/manual/tutorial/install-mongodb-on-os-x/)
   - <img src="http://dc942d419843af05523b-ff74ae13537a01be6cfec5927837dcfe.r14.cf1.rackcdn.com/wp-content/uploads/windows-8-50x50.jpg" height="17">&nbsp; [Windows Mongodb](https://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/)
-  - <img src="https://lh5.googleusercontent.com/-2YS1ceHWyys/AAAAAAAAAAI/AAAAAAAAAAc/0LCb_tsTvmU/s46-c-k/photo.jpg" height="17">&nbsp; [Linux Mongodb](https://docs.mongodb.org/manual/tutorial/install-mongodb-on-windows/)
+  - <img src="https://lh5.googleusercontent.com/-2YS1ceHWyys/AAAAAAAAAAI/AAAAAAAAAAc/0LCb_tsTvmU/s46-c-k/photo.jpg" height="17">&nbsp; [Linux Mongodb](https://docs.mongodb.org/manual/administration/install-on-linux/)
 - <img src="https://nodejs.org/static/apple-touch-icon.png" height="17">&nbsp; [Download](http://nodejs.org) and Install Node.js  - nodeschool has free <a href=" http://nodeschool.io/#workshoppers">node tutorials</a> to get you started.
 
 - <img src="http://bower.io/img/bower-logo.png" height="17">&nbsp; [Install Bower](http://bower.io/)
@@ -61,7 +59,6 @@ $ npm install -g bower
 [Node.js and Express 101](https://www.youtube.com/watch?v=BN0JlMZCtNU)
 screencast by Alex Ford that teaches Node and Express from scratch. Alternatively,
 here is another great tutorial for complete beginners - [Getting Started With Node.js, Express, MongoDB](http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/).
-
 
 Getting Started
 ---------------
@@ -90,7 +87,6 @@ server. Once installed, instead of `node server.js` use `nodemon server.js`. It 
 save you a lot of time in the long run, because you won't need to manually
 restart the server each time you make a small change in code. To install, run
 `sudo npm install -g nodemon`.
-
 
 Documentation
 -----------------
@@ -203,7 +199,6 @@ Once everthing is set up properly we then register all modules and all of its co
 | ---------------------------------- | ------------------------------------------------------------ |
 | **commands**/create.js             | `Create` Command for scaffolding.  |
 
-
 Styles
 -------------
 
@@ -240,7 +235,6 @@ To get a better idea, take a look at
 in JavaScript Standard Style, or check out some of
 [the repositories](https://github.com/feross/standard-packages/blob/master/standard.json) that use
 `standard`.
-
 
 License
 ---------------------------------
@@ -280,7 +274,6 @@ will be happy to accept your Pull Requests as long as those adhere to some basic
   * John Papa angular style guide
   * Pass All Test ( once testing has been implement)
 
-
 ### Creating an Issue
 
 Before you create a new Issue:
@@ -296,8 +289,6 @@ Before you create a new Issue:
 * Make Sure you have added any tests necessary to test your code.
 * Update the Documentation to go along with any changes in functionality / improvements in a separate pull request against the gh-pages branch.
 
-
-
 ### Submitting the Pull Request
 
 * Push your changes to your topic branch on your fork of the repo.
@@ -305,6 +296,7 @@ Before you create a new Issue:
 * We use [GitFlow](https://guides.github.com/introduction/flow/)
 * Be sure to tag any issues your pull request is taking care of / contributing to.
 	* By adding "Closes #xyz" to a commit message will auto close the issue once the pull request is merged in.
+
 
 HotFiX
 ---------------------------------
