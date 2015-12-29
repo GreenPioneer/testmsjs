@@ -12,18 +12,6 @@
     var self
     var UserFactory = new UserClass()
 
-    // function escape (html) {
-    //   return String(html)
-    //     .replace(/&/g, '&amp;')
-    //     .replace(/"/g, '&quot;')
-    //     .replace(/'/g, '&#39;')
-    //     .replace(/</g, '&lt;')
-    //     .replace(/>/g, '&gt;')
-    // }
-    // function b64_to_utf8 (str) {
-    //   return decodeURIComponent(escape(window.atob(str)))
-    // }
-
     function UserClass () {
       this.name = 'users'
       this.user = {}
@@ -54,19 +42,13 @@
       if (!response) return ({error: true})
 
       var destination, data
-      // var encodedUser, user
-      // if (angular.isDefined(response.user.token)) {
-      //   localStorage.setItem('JWT', response.user.token)
-      //   encodedUser = decodeURI(b64_to_utf8(response.user.token.split('.')[1]))
-      //   user = JSON.parse(encodedUser)
-      // }
       destination = angular.isDefined(response.redirect || response.data) ? response.redirect || response.data.redirect : false
       data = response.data || response
       this.loggedin = data.authenticated
       this.user = data.user
       this.loginError = 0
       this.registerError = 0
-      // this.isAdmin = this.user.roles.indexOf('admin') > -1
+      if (this.user.roles)this.isAdmin = this.user.roles.indexOf('admin') > -1
       $rootScope.$emit('loggedin')
       if (destination) {
         $location.url(destination)
@@ -90,7 +72,6 @@
     UserClass.prototype.editProfile = function (vm) {
       var deferred = $q.defer()
 
-      // Make an AJAX call to check if the user is logged in
       $http.get('/api/login').then(function (success) {
         // Authenticated
         if (success.data !== '0') {
@@ -196,14 +177,6 @@
         $location.url('/')
       // this.user = {}
       })
-      // this.user = {}
-      // this.loggedin = false
-      // this.isAdmin = false
-
-    // $http.get('/api/logout').success(function (data) {
-    //   localStorage.removeItem('JWT')
-    //   $rootScope.$emit('logout')
-    // })
     }
 
     UserClass.prototype.checkLoggedin = function () {
@@ -225,8 +198,6 @@
     }
 
     UserClass.prototype.checkLoggedOut = function () {
-      // Check if the user is not connected
-      // Initialize a new promise
       var deferred = $q.defer()
 
       // Make an AJAX call to check if the user is logged in
@@ -247,11 +218,9 @@
     UserClass.prototype.checkAdmin = function () {
       var deferred = $q.defer()
 
-      // Make an AJAX call to check if the user is logged in
       $http.get('/api/login').success(function (data) {
         // Authenticated
         if (data.authenticated !== '0' && data.user.roles.indexOf('admin') !== -1) $timeout(deferred.resolve)
-
         // Not Authenticated or not Admin
         else {
           $timeout(deferred.reject)

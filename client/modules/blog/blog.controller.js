@@ -4,17 +4,10 @@
   angular
     .module('app.blog', [])
     .controller('BlogController', BlogController)
-    .config(config)
 
-  config.$inject = ['$httpProvider']
-  function config ($httpProvider) {
-    $httpProvider.defaults.xsrfHeaderName = '_csrf'
-    $httpProvider.defaults.xsrfCookieName = 'x-xsrf-token'
-  }
-
-  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'config', 'logger', '$location', 'UserFactory']
+  BlogController.$inject = ['$http', '$stateParams', 'BlogFactory', 'logger', '$location', 'UserFactory']
   /* @ngInject */
-  function BlogController ($http, $stateParams, BlogFactory, config, logger, $location, UserFactory) {
+  function BlogController ($http, $stateParams, BlogFactory, logger, $location, UserFactory) {
     var vm = this
     vm.title = 'System'
     vm.blog = {}

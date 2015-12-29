@@ -257,6 +257,7 @@ function all (setup) {
           break
         case 'json':
         case 'view':
+        case 'spec':
           // console.log(j.type)
           break
         default:

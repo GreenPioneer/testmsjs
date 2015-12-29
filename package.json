@@ -21,17 +21,30 @@
     "test": "npm run mocha && npm run karma && npm run standard",
     "mocha": "./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  ",
     "karma": "./node_modules/karma/bin/karma start ./tests/karma.test.js",
-    "standard":"./node_modules/standard/bin/cmd.js",
-    "postinstall": "bower install"
+    "standard": "node ./node_modules/standard/bin/cmd.js",
+    "postinstall": "./node_modules/bower/bin/bower install ||bower install",
+    "createModule":"node ./commands/create.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GreenPioneer/meanstackjs.git"
   },
+  "homepage": "http://meanstackjs.com/",
   "keywords": [
-    "Mean"
+    "Mean",
+    "Mean Stack",
+    "Mean Stack JS",
+    "Javascript framework",
+    "Mongodb",
+    "Expressjs",
+    "Express",
+    "Angular",
+    "Angularjs",
+    "Node",
+    "Nodejs"
   ],
-  "author": "Green Pioneer",
+  "author": "Green Pioneer <info@greenpioneersolutions.com>",
+  "contributors": "https://github.com/GreenPioneer/meanstackjs/graphs/contributors",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GreenPioneer/meanstackjs/issues"
@@ -83,6 +96,7 @@
   },
   "devDependencies": {
     "blessed": "^0.1.81",
+    "bower": "^1.7.1",
     "chai": "^3.4.1",
     "karma": "^0.13.16",
     "karma-chrome-launcher": "^0.2.2",
