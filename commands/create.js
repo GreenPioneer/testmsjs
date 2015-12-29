@@ -7,6 +7,9 @@ var _ = require('lodash')
 var mongoose = require('mongoose')
 var bcrypt = require('bcrypt-nodejs')
 var settings = require('../configs/settings.js')
+var fs = require('fs')
+var path = require('path')
+var shell = require('shelljs')
 mongoose.connect(settings.db, settings.dbOptions)
 mongoose.connection.on('error', function () {
   console.log('MongoDB Connection Error. Please make sure that MongoDB is running.')
@@ -239,6 +242,105 @@ var User = mongoose.model('User', userSchema)
 //   }
 // })
 
+function emptyDirectory (url, callback) {
+  fs.readdir('./' + url, function (err, files) {
+    if (err && err.code !== 'ENOENT') throw new Error(err)
+    callback(!files || !files.length)
+  })
+}
+function readDirectory (url, callback) {
+  fs.readdir('./' + url, function (err, files) {
+    if (err && err.code !== 'ENOENT') throw new Error(err)
+    callback(files)
+  })
+}
+function ensureEmpty (url, force, callback) {
+  emptyDirectory(url, function (empty) {
+    if (empty || force) {
+      callback()
+    } else {
+      console.log(chalk.yellow('Destination is not empty:'), url)
+    }
+  })
+}
+function write (url, str) {
+  fs.writeFile(url, str)
+  console.log(chalk.cyan('   Created File:'), url)
+}
+function readTemplate (url, data) {
+  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
+
+  for (var index in data) {
+    template = template.split('__' + index + '__').join(data[index])
+  }
+
+  return template
+}
+function readFile (url) {
+  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
+  return template
+}
+function mkdir (url, fn) {
+  shell.mkdir('-p', url)
+  shell.chmod(755, url)
+  console.log(chalk.cyan('   Created Directory:'), url)
+  if (fn) fn()
+}
+
+//
+//
+//
+
+function buildFront (data, cb) {
+  var change = {
+    name: data.name,
+    Name: _.capitalize(data.name)
+  }
+  var pathVar = './client'
+  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
+    mkdir(pathVar + '/modules/' + data.name + '/', function () {
+      readDirectory('./commands/template/client/', function (files) {
+        // FILTER OUT DC STORES ...etc anythin with a .
+        files = _.filter(files, function (n) {
+          return !_.startsWith(n, '.')
+        })
+        var clientModuleJs = readFile('../client/modules/client.module.js')
+        write('./client/modules/client.module.js', clientModuleJs.replace(/(\/\/ DONT REMOVE - APP GENERATOR)+/igm, ",\n 'app." + change.name + "' // DONT REMOVE - APP GENERATOR"))
+        _.forEach(files, function (n) {
+          if (path.extname(n) === '.html') {
+            write(pathVar + '/modules/' + data.name + '/' + n, readTemplate('./template/client/' + n, change))
+          } else {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/client/' + n, change))
+          }
+        })
+      })
+    })
+  })
+}
+function buildBack (data, cb) {
+  console.log('build', data.name)
+  console.log('build', data.schema)
+  var change = {
+    name: data.name,
+    Name: _.capitalize(data.name)
+  }
+  var pathVar = './server'
+  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
+    mkdir(pathVar + '/modules/' + data.name + '/', function () {
+      readDirectory('./commands/template/server/', function (files) {
+        // FILTER OUT DC STORES ...etc anythin with a .
+        files = _.filter(files, function (n) {
+          return !_.startsWith(n, '.')
+        })
+        _.forEach(files, function (n) {
+          console.log(n)
+
+          write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/server/' + n, change))
+        })
+      })
+    })
+  })
+}
 var introQuestions = [
   {
     type: 'list',
@@ -322,8 +424,6 @@ var schemaQuestions = [
     default: true
   }
 ]
-function buildFront (cb) {
-}
 
 function buildSchema (cb) {
   inquirer.prompt(schemaQuestions, function (answers) {
@@ -347,18 +447,39 @@ function buildSchema (cb) {
 
 function buildModule (front, back, cb) {
   inquirer.prompt(moduleQuestions, function (answers) {
-    console.log(front, back)
     try {
-      if (front) {
-        buildFront(function (data) {
-          console.log(data)
+      if (front && !back) {
+        buildFront({
+          name: answers.module
+        }, function (err) {
+          cb(err)
         })
-      }
-      if (back) {
+      } else if (back && !front) {
         buildSchema(function (data) {
-          cb({
+          buildBack({
             name: answers.module,
             schema: data
+          }, function (err) {
+            if (err)console.log(err)
+            cb({
+              name: answers.module,
+              schema: data
+            })
+          })
+        })
+      } else if (back && front) {
+        buildSchema(function (data) {
+          buildFront({
+            name: answers.module
+          }, function (err) {
+            if (err)console.log(err)
+          })
+          buildBack({
+            name: answers.module,
+            schema: data
+          }, function (err) {
+            if (err)console.log(err)
+            cb(err)
           })
         })
       }
@@ -458,17 +579,17 @@ function ask () {
     switch (answers.intro) {
       case 'Create Frontend Module':
         buildModule(true, false, function (data) {
-          console.log(_.capitalize(data), ':ModuleName')
+          // console.log(_.capitalize(data), ':ModuleName')
         })
         break
       case 'Create Backend Module':
         buildModule(false, true, function (data) {
-          console.log(_.capitalize(data.module), ':ModuleName')
+          // console.log(_.capitalize(data.module), ':ModuleName')
         })
         break
       case 'Create Frontend & Backend Module':
         buildModule(true, true, function (data) {
-          console.log(_.capitalize(data.module), ':ModuleName')
+          // console.log(_.capitalize(data.module), ':ModuleName')
         })
         break
       case 'Create User':
