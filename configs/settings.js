@@ -57,7 +57,7 @@ var baseLine = {
       '/bower_components/moment/moment.js',
       '/bower_components/lodash/lodash.js',
       '/bower_components/toastr/toastr.js',
-      '/bower_components/bootstrap/dist/js/bootstrap.js',
+      '/bower_components/bootstrap-sass/assets/javascripts/bootstrap.min.js',
       '/bower_components/angular/angular.js',
       '/bower_components/jquery/dist/jquery.js'
     ],
