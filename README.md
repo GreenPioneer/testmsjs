@@ -5,7 +5,7 @@
 -----------------
 We are building in this framework to make your life as a designer or developer easier. We believe in making this framework usable for User Experience Designers, Quality Assurance Engineers, Software Engineers, Frontend & Backend Developers & Full Stack Engineers... etc. Were doing this by having key features in the framework we like we listed below:
 
-- Customizable scaffolding of modules(Still in Development)
+- Customizable CLI for scaffolding of modules
 - Can Build Dynamic Api's based off Schema
 - Can Open Dynamic Query with routes
 - LiveReload & Recompile in Development Env
@@ -38,6 +38,7 @@ Table of Contents
 - [Theming Styling](#Theming-Styling)
 - [Framework Structure](#framework-structure)
 - [Framework Coding Styles](#Styles)
+- [Working with CLI](#cli)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -232,6 +233,29 @@ To get a better idea, take a look at
 in JavaScript Standard Style, or check out some of
 [the repositories](https://github.com/feross/standard-packages/blob/master/standard.json) that use
 `standard`.
+
+CLI
+---------------------------------
+[![meanstackjs CLI](http://meanstackjs.com/images/CLI.png)](http://meanstackjs.com/)
+```bash
+$ npm run cli
+```
+
+### Current Menu Options
+
+- Module Creation:
+   - Create Schema
+   - Create Frontend Module
+   - Create Backend Module
+   - Create Frontend & Backend Module
+
+- User Management:
+   - Create User(In Dev - Currently N/A)
+   - Change Password
+   - Change User Roles
+   - View User
+- Exit
+
 
 License
 ---------------------------------

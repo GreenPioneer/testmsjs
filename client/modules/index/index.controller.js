@@ -5,10 +5,11 @@
     .module('app.index', [])
     .controller('IndexController', IndexController)
 
-  IndexController.$inject = ['logger', '$state']
+  IndexController.$inject = ['logger']
   /* @ngInject */
-  function IndexController (logger, $state) {
+  function IndexController (logger) {
     var vm = this
+    vm.title = 'System'
 
     activate()
 

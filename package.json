@@ -14,9 +14,6 @@
       "it"
     ]
   },
-  "bin": {
-    "cli": "./commands/cli.js"
-  },
   "scripts": {
     "test": "npm run mocha && npm run karma && npm run standard",
     "mocha": "./node_modules/mocha/bin/mocha ./tests/server.test.js && ./node_modules/mocha/bin/mocha ./server/modules/**/*.spec.js  ",

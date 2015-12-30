@@ -9,6 +9,6 @@
     'app.header',
     'app.footer',
     'app.user',
-    'app.blog'
+    'app.blog' // DONT REMOVE - APP GENERATOR
   ])
 })()

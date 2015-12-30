@@ -13,7 +13,6 @@
     vm.location = 'Header'
     vm.UserFactory = UserFactory
     vm.routes = $state.get()
-    console.log(vm.routes)
 
     vm.logout = function () {
       vm.UserFactory = {}

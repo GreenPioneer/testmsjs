@@ -84,275 +84,7 @@ userSchema.pre('save', function (next) {
   })
 })
 var User = mongoose.model('User', userSchema)
-// var questions = [
-//   {
-//     type: 'list',
-//     name: 'theme',
-//     message: 'What do you want to do?',
-//     choices: [
-//       'Order a pizza',
-//       'Make a reservation',
-//       new inquirer.Separator(),
-//       'Ask opening hours',
-//       'Talk to the receptionnist'
-//     ]
-//   },
-//   {
-//     type: 'list',
-//     name: 'size',
-//     message: 'What size do you need',
-//     choices: [ 'Jumbo', 'Large', 'Standard', 'Medium', 'Small', 'Micro' ],
-//     filter: function (val) { return val.toLowerCase(); }
-//   },
-//   {
-//     type: 'confirm',
-//     name: 'bacon',
-//     message: 'Do you like bacon?'
-//   },
-//   {
-//     type: 'input',
-//     name: 'favorite',
-//     message: 'Bacon lover, what is your favorite type of bacon?',
-//     when: function (answers) {
-//       return answers.bacon
-//     }
-//   },
-//   {
-//     type: 'confirm',
-//     name: 'pizza',
-//     message: 'Ok... Do you like pizza?',
-//     when: function (answers) {
-//       return !likesFood('bacon')(answers)
-//     }
-//   },
-//   {
-//     type: 'input',
-//     name: 'favorite',
-//     message: 'Whew! What is your favorite type of pizza?',
-//     when: likesFood('pizza')
-//   },
-//   {
-//     type: 'password',
-//     message: 'Enter your git password',
-//     name: 'password'
-//   },
-//   {
-//     type: 'input',
-//     name: 'first_name',
-//     message: "What's your first name",
-//     default: function () { return 'Jason' }
-//   },
-//   {
-//     type: 'input',
-//     name: 'last_name',
-//     message: "What's your last name",
-//     default: function () { return 'Doe' }
-//   },
-//   {
-//     type: 'input',
-//     name: 'phone',
-//     message: "What's your phone number",
-//     validate: function (value) {
-//       var pass = value.match(/^([01]{1})?[\-\.\s]?\(?(\d{3})\)?[\-\.\s]?(\d{3})[\-\.\s]?(\d{4})\s?((?:#|ext\.?\s?|x\.?\s?){1}(?:\d+)?)?$/i)
-//       if (pass) {
-//         return true
-//       } else {
-//         return 'Please enter a valid phone number'
-//       }
-//     },
-//     default: function () { return '2392851674' }
-//   },
-//   {
-//     type: 'checkbox',
-//     message: 'Select toppings',
-//     name: 'toppings',
-//     choices: [
-//       new inquirer.Separator('The usual:'),
-//       {
-//         name: 'Peperonni'
-//       },
-//       {
-//         name: 'Cheese',
-//         checked: true
-//       },
-//       {
-//         name: 'Mushroom'
-//       },
-//       new inquirer.Separator('The extras:'),
-//       {
-//         name: 'Pineapple'
-//       },
-//       {
-//         name: 'Bacon'
-//       },
-//       {
-//         name: 'Olives',
-//         disabled: 'out of stock'
-//       },
-//       {
-//         name: 'Extra cheese'
-//       }
-//     ],
-//     validate: function (answer) {
-//       if (answer.length < 1) {
-//         return 'You must choose at least one topping.'
-//       }
-//       return true
-//     }
-//   }
-// ]
 
-// function likesFood (aFood) {
-//   return function (answers) {
-//     return answers[ aFood ]
-//   }
-// }
-// inquirer.prompt(questions, function (answers) {
-//   console.log(JSON.stringify(answers, null, '  '))
-
-//   inquirer.prompt({
-//     type: 'list',
-//     name: 'chocolate',
-//     message: "What's your favorite chocolate?",
-//     choices: [ 'Mars', 'Oh Henry', 'Hershey' ]
-//   }, function (answers) {
-//     console.log(answers)
-//     inquirer.prompt({
-//       type: 'list',
-//       name: 'beverage',
-//       message: 'And your favorite beverage?',
-//       choices: [ 'Pepsi', 'Coke', '7up', 'Mountain Dew', 'Red Bull' ]
-//     })
-//   })
-// })
-// ,
-//   {
-//     type: 'confirm',
-//     name: 'askAgain',
-//     message: 'Want to do another action (just hit enter for YES)?',
-//     default: true
-//   }
-// var output = []
-// inquirer.prompt(questions, function (answers) {
-//   output.push(answers)
-//   console.log(answers)
-//   if (answers.askAgain) {
-//     ask()
-//   } else {
-//     console.log('Your favorite TV Shows:', output.join(', '))
-//   }
-// })
-
-function emptyDirectory (url, callback) {
-  fs.readdir('./' + url, function (err, files) {
-    if (err && err.code !== 'ENOENT') throw new Error(err)
-    callback(!files || !files.length)
-  })
-}
-function readDirectory (url, callback) {
-  fs.readdir('./' + url, function (err, files) {
-    if (err && err.code !== 'ENOENT') throw new Error(err)
-    callback(files)
-  })
-}
-function ensureEmpty (url, force, callback) {
-  emptyDirectory(url, function (empty) {
-    if (empty || force) {
-      callback()
-    } else {
-      console.log(chalk.red('Destination is not empty:'), url)
-      ask()
-    }
-  })
-}
-function write (url, str) {
-  fs.writeFile(url, str)
-  console.log(chalk.cyan('   Created File:'), url)
-}
-function readTemplate (url, data) {
-  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
-
-  for (var index in data) {
-    template = template.split('__' + index + '__').join(data[index])
-  }
-
-  return template
-}
-function useTemplate (template, data) {
-  for (var index in data) {
-    template = template.split('__' + index + '__').join(data[index])
-  }
-
-  return template
-}
-function readFile (url) {
-  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
-  return template
-}
-function mkdir (url, fn) {
-  shell.mkdir('-p', url)
-  shell.chmod(755, url)
-  console.log(chalk.cyan('   Created Directory:'), url)
-  if (fn) fn()
-}
-
-//
-//
-//
-
-function buildFront (data, cb) {
-  var change = {
-    name: data.name,
-    Name: _.capitalize(data.name)
-  }
-  var pathVar = './client'
-  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
-    mkdir(pathVar + '/modules/' + data.name + '/', function () {
-      readDirectory('./commands/template/client/', function (files) {
-        // FILTER OUT DC STORES ...etc anythin with a .
-        files = _.filter(files, function (n) {
-          return !_.startsWith(n, '.')
-        })
-        var clientModuleJs = readFile('../client/modules/client.module.js')
-        write('./client/modules/client.module.js', clientModuleJs.replace(/(\/\/ DONT REMOVE - APP GENERATOR)+/igm, ",\n 'app." + change.name + "' // DONT REMOVE - APP GENERATOR"))
-        _.forEach(files, function (n) {
-          if (path.extname(n) === '.html') {
-            write(pathVar + '/modules/' + data.name + '/' + n, readTemplate('./template/client/' + n, change))
-          } else {
-            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/client/' + n, change))
-          }
-        })
-        cb()
-      })
-    })
-  })
-}
-function buildBack (data, cb) {
-  var change = {
-    name: data.name,
-    Name: _.capitalize(data.name)
-  }
-  var pathVar = './server'
-  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
-    mkdir(pathVar + '/modules/' + data.name + '/', function () {
-      readDirectory('./commands/template/server/', function (files) {
-        // FILTER OUT DC STORES ...etc anythin with a .
-        files = _.filter(files, function (n) {
-          return !_.startsWith(n, '.')
-        })
-        _.forEach(files, function (n) {
-          console.log(n)
-          if (n === 'model.js' && data.schema.created) {
-            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, useTemplate(data.schema.modelFile, change))
-          } else {
-            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/server/' + n, change))
-          }
-        })
-        cb()
-      })
-    })
-  })
-}
 var introQuestions = [
   {
     type: 'list',
@@ -462,11 +194,115 @@ var updateRoles = [
     message: 'Name of the Role'
   }
 ]
+
+function emptyDirectory (url, callback) {
+  fs.readdir('./' + url, function (err, files) {
+    if (err && err.code !== 'ENOENT') throw new Error(err)
+    callback(!files || !files.length)
+  })
+}
+function readDirectory (url, callback) {
+  fs.readdir('./' + url, function (err, files) {
+    if (err && err.code !== 'ENOENT') throw new Error(err)
+    callback(files)
+  })
+}
+function ensureEmpty (url, force, callback) {
+  emptyDirectory(url, function (empty) {
+    if (empty || force) {
+      callback()
+    } else {
+      console.log(chalk.red('Destination is not empty:'), url)
+      ask()
+    }
+  })
+}
+function write (url, str) {
+  fs.writeFile(url, str)
+  console.log(chalk.cyan('   Created File:'), url)
+}
+function readTemplate (url, data) {
+  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
+
+  for (var index in data) {
+    template = template.split('__' + index + '__').join(data[index])
+  }
+
+  return template
+}
+function useTemplate (template, data) {
+  for (var index in data) {
+    template = template.split('__' + index + '__').join(data[index])
+  }
+
+  return template
+}
+function readFile (url) {
+  var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
+  return template
+}
+function mkdir (url, fn) {
+  shell.mkdir('-p', url)
+  shell.chmod(755, url)
+  console.log(chalk.cyan('   Created Directory:'), url)
+  if (fn) fn()
+}
+
+function buildFront (data, cb) {
+  var change = {
+    name: data.name,
+    Name: _.capitalize(data.name)
+  }
+  var pathVar = './client'
+  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
+    mkdir(pathVar + '/modules/' + data.name + '/', function () {
+      readDirectory('./commands/template/client/', function (files) {
+        // FILTER OUT DC STORES ...etc anythin with a .
+        files = _.filter(files, function (n) {
+          return !_.startsWith(n, '.')
+        })
+        var clientModuleJs = readFile('../client/modules/client.module.js')
+        write('./client/modules/client.module.js', clientModuleJs.replace(/(\/\/ DONT REMOVE - APP GENERATOR)+/igm, ",\n 'app." + change.name + "' // DONT REMOVE - APP GENERATOR"))
+        _.forEach(files, function (n) {
+          if (path.extname(n) === '.html') {
+            write(pathVar + '/modules/' + data.name + '/' + n, readTemplate('./template/client/' + n, change))
+          } else {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/client/' + n, change))
+          }
+        })
+        cb()
+      })
+    })
+  })
+}
+function buildBack (data, cb) {
+  var change = {
+    name: data.name,
+    Name: _.capitalize(data.name)
+  }
+  var pathVar = './server'
+  ensureEmpty(pathVar + '/modules/' + data.name + '/', false, function () {
+    mkdir(pathVar + '/modules/' + data.name + '/', function () {
+      readDirectory('./commands/template/server/', function (files) {
+        // FILTER OUT DC STORES ...etc anythin with a .
+        files = _.filter(files, function (n) {
+          return !_.startsWith(n, '.')
+        })
+        _.forEach(files, function (n) {
+          if (n === 'model.js' && data.schema.created) {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, useTemplate(data.schema.modelFile, change))
+          } else {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/server/' + n, change))
+          }
+        })
+        cb()
+      })
+    })
+  })
+}
+
 function buildSchema (cb) {
-  console.log('just Schema')
   inquirer.prompt(schemaPreQuestion, function (answers) {
-    console.log('questions')
-    console.log(answers)
     if (answers.askAgain) {
       inquirer.prompt(schemaQuestions, function (answers) {
         schemaOutput.push(answers)
@@ -520,53 +356,6 @@ module.exports = {
   })
 }
 
-function buildModule (front, back, cb) {
-  inquirer.prompt(moduleQuestions, function (answers) {
-    try {
-      if (front && !back) {
-        buildFront({
-          name: answers.module
-        }, function (err) {
-          cb(err)
-        })
-      } else if (back && !front) {
-        console.log('just backend')
-        buildSchema(function (data) {
-          console.log(arguments)
-          buildBack({
-            name: answers.module,
-            schema: data
-          }, function (err) {
-            if (err)console.log(err)
-            cb({
-              name: answers.module,
-              schema: data
-            })
-          })
-        })
-      } else if (back && front) {
-        buildSchema(function (data) {
-          buildFront({
-            name: answers.module
-          }, function (err) {
-            if (err)console.log(err)
-          })
-          buildBack({
-            name: answers.module,
-            schema: data
-          }, function (err) {
-            if (err)console.log(err)
-            cb(err)
-          })
-        })
-      }
-    } catch (err) {
-      console.log(err)
-    } finally {
-      cb(answers)
-    }
-  })
-}
 function findUser (cb) {
   inquirer.prompt(userQuestions, function (answers) {
     User.findOne({ email: answers.email }, function (err, existingUser) {
@@ -585,7 +374,6 @@ function updateUser (answers, cb) {
     if (answers.user.password)user.password = answers.user.password
     if (answers.user.roles)user.roles = answers.user.roles
     user.save(function (err, data) {
-      console.log(arguments)
       if (err) {
         cb(err, null)
       }
@@ -650,10 +438,6 @@ function ask () {
   inquirer.prompt(introQuestions, function (answers) {
     switch (answers.intro) {
       case 'Create Frontend Module':
-        // buildModule(true, false, function (data) {
-        //   // console.log(_.capitalize(data), ':ModuleName')
-        //   ask()
-        // })
         inquirer.prompt(moduleQuestions, function (modules) {
           buildFront({
             name: modules.module
@@ -678,10 +462,6 @@ function ask () {
 
         break
       case 'Create Frontend & Backend Module':
-        // buildModule(true, true, function (data) {
-        //   // console.log(_.capitalize(data.module), ':ModuleName')
-        //   ask()
-        // })
         inquirer.prompt(moduleQuestions, function (modules) {
           buildSchema(function (data) {
             buildFront({
