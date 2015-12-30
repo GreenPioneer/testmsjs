@@ -15,7 +15,7 @@
     ]
   },
   "bin": {
-    "meanstackjs": "./commands/create.js"
+    "cli": "./commands/cli.js"
   },
   "scripts": {
     "test": "npm run mocha && npm run karma && npm run standard",
@@ -23,7 +23,7 @@
     "karma": "./node_modules/karma/bin/karma start ./tests/karma.test.js",
     "standard": "node ./node_modules/standard/bin/cmd.js",
     "postinstall": "./node_modules/bower/bin/bower install ||bower install",
-    "createModule": "node ./commands/create.js"
+    "cli": "node ./commands/cli.js"
   },
   "repository": {
     "type": "git",

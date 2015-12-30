@@ -7,7 +7,7 @@
   </div> 
   <div class="row">
     <div class="center-block __name__-main ">
-      <h1 ng-show="!vm.__name__s">No __name__ Post <a href="/create">Create One Now</a></h1>
+      <h1 ng-show="!vm.__name__s">No __name__ Data Points <a href="/create">Create One Now</a></h1>
       
       <div class="__name__-post" ng-repeat="(key, value) in vm.__name__s | orderBy:'-date'">
         <a href="/__name__/view/{{value._id}}"><h2 class="__name__-post-title">{{value.title}}</h2></a>
@@ -17,7 +17,7 @@
         </span>
         
         <p class="__name__-post-meta">
-          by {{value.user}} - {{value.created |date:'medium'}}
+          on {{value.created |date:'medium'}}
         </p>
         
         <p>{{value.content}}</p>

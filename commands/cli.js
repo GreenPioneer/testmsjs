@@ -10,6 +10,7 @@ var settings = require('../configs/settings.js')
 var fs = require('fs')
 var path = require('path')
 var shell = require('shelljs')
+var multiline = require('multiline')
 mongoose.connect(settings.db, settings.dbOptions)
 mongoose.connection.on('error', function () {
   console.log('MongoDB Connection Error. Please make sure that MongoDB is running.')
@@ -259,7 +260,8 @@ function ensureEmpty (url, force, callback) {
     if (empty || force) {
       callback()
     } else {
-      console.log(chalk.yellow('Destination is not empty:'), url)
+      console.log(chalk.red('Destination is not empty:'), url)
+      ask()
     }
   })
 }
@@ -270,6 +272,13 @@ function write (url, str) {
 function readTemplate (url, data) {
   var template = fs.readFileSync(__dirname + '/' + url, 'utf8')
 
+  for (var index in data) {
+    template = template.split('__' + index + '__').join(data[index])
+  }
+
+  return template
+}
+function useTemplate (template, data) {
   for (var index in data) {
     template = template.split('__' + index + '__').join(data[index])
   }
@@ -313,13 +322,12 @@ function buildFront (data, cb) {
             write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/client/' + n, change))
           }
         })
+        cb()
       })
     })
   })
 }
 function buildBack (data, cb) {
-  console.log('build', data.name)
-  console.log('build', data.schema)
   var change = {
     name: data.name,
     Name: _.capitalize(data.name)
@@ -334,9 +342,13 @@ function buildBack (data, cb) {
         })
         _.forEach(files, function (n) {
           console.log(n)
-
-          write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/server/' + n, change))
+          if (n === 'model.js' && data.schema.created) {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, useTemplate(data.schema.modelFile, change))
+          } else {
+            write(pathVar + '/modules/' + data.name + '/' + data.name + '.' + n, readTemplate('./template/server/' + n, change))
+          }
         })
+        cb()
       })
     })
   })
@@ -347,15 +359,19 @@ var introQuestions = [
     name: 'intro',
     message: 'What do you want to do?',
     choices: [
+
       new inquirer.Separator('Module Creation:'),
+      'Create Schema',
       'Create Frontend Module',
       'Create Backend Module',
       'Create Frontend & Backend Module',
+
       new inquirer.Separator('User Management:'),
-      'Create User',
+      // 'Create User',
       'Change Password',
       'Change User Roles',
-      'View User'
+      'View User',
+      'Exit'
     ]
   }
 ]
@@ -375,7 +391,7 @@ var userQuestions = [
     type: 'input',
     name: 'email',
     message: 'Email of the User',
-    default: function () { return 'test@test.com' }
+    default: function () { return 'testing@test.com' }
   }
 ]
 var moduleQuestions = [
@@ -388,6 +404,14 @@ var moduleQuestions = [
 ]
 var schemaOutput = []
 
+var schemaPreQuestion = [
+  {
+    type: 'confirm',
+    name: 'askAgain',
+    message: 'Do you want to custom your schema (just hit enter for YES)?',
+    default: true
+  }
+]
 var schemaQuestions = [
   {
     type: 'input',
@@ -424,23 +448,74 @@ var schemaQuestions = [
     default: true
   }
 ]
-
+var updatePasswords = [
+  {
+    type: 'password',
+    name: 'password',
+    message: 'New Password of the User'
+  }
+]
+var updateRoles = [
+  {
+    type: 'input',
+    name: 'role',
+    message: 'Name of the Role'
+  }
+]
 function buildSchema (cb) {
-  inquirer.prompt(schemaQuestions, function (answers) {
-    schemaOutput.push(answers)
+  console.log('just Schema')
+  inquirer.prompt(schemaPreQuestion, function (answers) {
+    console.log('questions')
+    console.log(answers)
     if (answers.askAgain) {
-      buildSchema(cb)
-    } else {
-      var schema = {}
-      _.forEach(schemaOutput, function (n) {
-        schema[_.camelCase(n.field)] = {
-          field: _.camelCase(n.field),
-          type: n.type,
-          default: n.default
+      inquirer.prompt(schemaQuestions, function (answers) {
+        schemaOutput.push(answers)
+        if (answers.askAgain) {
+          buildSchema(cb)
+        } else {
+          var schema = {}
+          var modelFile = multiline(function () { /*
+var mongoose = require('mongoose')
+var __name__Schema = mongoose.Schema({
+	*/
+          })
+
+          _.forEach(schemaOutput, function (n, k) {
+            n.default = n.default || '""'
+            schema[_.camelCase(n.field)] = {
+              field: _.camelCase(n.field),
+              type: n.type,
+              default: n.default,
+              string: _.camelCase(n.field) + ':{type:' + n.type + ',default:' + n.default + '}'
+            }
+            if (schemaOutput.length === k + 1) {
+              modelFile += '\n' + _.camelCase(n.field) + ':{ \n type:' + n.type + ', \n default:' + n.default + '\n} \n'
+            } else {
+              modelFile += '\n' + _.camelCase(n.field) + ':{ \n type:' + n.type + ', \n default:' + n.default + '\n},'
+            }
+          })
+          modelFile += multiline(function () { /*
+})
+var __Name__ = mongoose.model('__Name__', __name__Schema)
+module.exports = {
+  __Name__: __Name__
+}
+	*/
+          })
+          cb({
+            modelFile: modelFile,
+            schema: schema,
+            created: true
+          })
+          schemaOutput = []
         }
       })
-      cb(schema)
-      schemaOutput = []
+    } else {
+      cb({
+        modelFile: false,
+        schema: false,
+        created: false
+      })
     }
   })
 }
@@ -455,7 +530,9 @@ function buildModule (front, back, cb) {
           cb(err)
         })
       } else if (back && !front) {
+        console.log('just backend')
         buildSchema(function (data) {
+          console.log(arguments)
           buildBack({
             name: answers.module,
             schema: data
@@ -497,31 +574,29 @@ function findUser (cb) {
     })
   })
 }
-var updatePasswords = [
-  {
-    type: 'password',
-    name: 'password',
-    message: 'New Password of the User'
-  }
-]
+
 function updateUser (answers, cb) {
-  User.findOne({ email: answers.email }, function (err, user) {
+  User.findOne({ _id: answers._id }, function (err, user) {
     if (err) {
       cb(err, null)
     }
-    user = _.merge(user, answers.user)
-    user.save(function (err) {
+    if (answers.user.profile)user.profile = answers.user.profile
+    if (answers.user.email)user.email = answers.user.email
+    if (answers.user.password)user.password = answers.user.password
+    if (answers.user.roles)user.roles = answers.user.roles
+    user.save(function (err, data) {
+      console.log(arguments)
       if (err) {
         cb(err, null)
       }
-      cb(null, user)
+      cb(null, data)
     })
   })
 }
 function updatePassword (user, cb) {
   inquirer.prompt(updatePasswords, function (answers) {
     updateUser({
-      email: user.email,
+      _id: user._id,
       user: {
         password: answers.password
       }
@@ -534,19 +609,12 @@ function updatePassword (user, cb) {
   })
 }
 
-var updateRoles = [
-  {
-    type: 'input',
-    name: 'role',
-    message: 'Name of the Role'
-  }
-]
 function addRoles (user, cb) {
   inquirer.prompt(updateRoles, function (answers) {
     user.roles.push(answers.role)
     user.roles = _.uniq(user.roles)
     updateUser({
-      email: user.email,
+      _id: user._id,
       user: {
         roles: user.roles
       }
@@ -560,9 +628,13 @@ function addRoles (user, cb) {
 }
 function removeRoles (user, cb) {
   inquirer.prompt(updateRoles, function (answers) {
-    user.roles = _.remove(user.roles, answers.role)
+    _.forEach(user.roles, function (n, i) {
+      if (n === answers.role) {
+        user.roles.splice(i, 1)
+      }
+    })
     updateUser({
-      email: user.email,
+      _id: user._id,
       user: {
         roles: user.roles
       }
@@ -578,49 +650,100 @@ function ask () {
   inquirer.prompt(introQuestions, function (answers) {
     switch (answers.intro) {
       case 'Create Frontend Module':
-        buildModule(true, false, function (data) {
-          // console.log(_.capitalize(data), ':ModuleName')
+        // buildModule(true, false, function (data) {
+        //   // console.log(_.capitalize(data), ':ModuleName')
+        //   ask()
+        // })
+        inquirer.prompt(moduleQuestions, function (modules) {
+          buildFront({
+            name: modules.module
+          }, function (err) {
+            if (err)console.log(err)
+            ask()
+          })
         })
         break
       case 'Create Backend Module':
-        buildModule(false, true, function (data) {
-          // console.log(_.capitalize(data.module), ':ModuleName')
+        inquirer.prompt(moduleQuestions, function (modules) {
+          buildSchema(function (data) {
+            buildBack({
+              name: modules.module,
+              schema: data
+            }, function (err) {
+              if (err)console.log(err)
+              ask()
+            })
+          })
         })
+
         break
       case 'Create Frontend & Backend Module':
-        buildModule(true, true, function (data) {
-          // console.log(_.capitalize(data.module), ':ModuleName')
+        // buildModule(true, true, function (data) {
+        //   // console.log(_.capitalize(data.module), ':ModuleName')
+        //   ask()
+        // })
+        inquirer.prompt(moduleQuestions, function (modules) {
+          buildSchema(function (data) {
+            buildFront({
+              name: modules.module
+            }, function (err) {
+              if (err)console.log(err)
+            })
+            buildBack({
+              name: modules.module,
+              schema: data
+            }, function (err) {
+              if (err)console.log(err)
+              ask()
+            })
+          })
         })
         break
-      case 'Create User':
-        findUser(function (err, data) {
-          if (err) {
-            console.log(chalk.red(err))
-          } else {
-            if (data === null) {
-              console.log(chalk.red('No User Found Under That Email'))
-            } else {
-              console.log(chalk.green(data))
-            }
-          }
+      case 'Create Schema':
+        buildSchema(function (data) {
+          console.log(chalk.blue(
+            useTemplate(data.modelFile, {
+              name: 'example',
+              Name: 'Example'
+            })
+          ))
+          ask()
         })
         break
+      // case 'Create User':
+      //   findUser(function (err, data) {
+      //     if (err) {
+      //       console.log(chalk.red(err))
+      //     } else {
+      //       if (data === null) {
+      //         console.log(chalk.red('No User Found Under That Email'))
+      //       } else {
+      //         console.log(chalk.green(data))
+      //       }
+      //     }
+      //   })
+      //   break
       case 'Change Password':
         findUser(function (err, user) {
           if (err) {
-            console.log(chalk.red(err))
+            console.log('Starting Over - Error:', chalk.red(err))
+            ask()
           } else {
             if (user === null) {
               console.log(chalk.red('No User Found Under That Email'))
+              ask()
             } else {
               updatePassword(user, function (err, data) {
                 if (err) {
-                  console.log(chalk.red(err))
+                  console.log('Starting Over - Error:', chalk.red(err))
+                  ask()
                 } else {
                   if (data === null) {
                     console.log(chalk.red('No User Found Under That Email'))
+                    ask()
                   } else {
                     console.log(chalk.green(data))
+                    ask()
                   }
                 }
               })
@@ -632,33 +755,41 @@ function ask () {
       case 'Change User Roles':
         findUser(function (err, user) {
           if (err) {
-            console.log(chalk.red(err))
+            console.log('Starting Over - Error:', chalk.red(err))
+            ask()
           } else {
             if (user === null) {
               console.log(chalk.red('No User Found Under That Email'))
+              ask()
             } else {
               inquirer.prompt(rolesQuestions, function (answers) {
                 if (answers.role === 'Add Role') {
                   addRoles(user, function (err, data) {
                     if (err) {
-                      console.log(chalk.red(err))
+                      console.log('Starting Over - Error:', chalk.red(err))
+                      ask()
                     } else {
                       if (data === null) {
                         console.log(chalk.red('No User Found Under That Email'))
+                        ask()
                       } else {
                         console.log(chalk.green(data))
+                        ask()
                       }
                     }
                   })
                 } else {
                   removeRoles(user, function (err, data) {
                     if (err) {
-                      console.log(chalk.red(err))
+                      console.log('Starting Over - Error:', chalk.red(err))
+                      ask()
                     } else {
                       if (data === null) {
                         console.log(chalk.red('No User Found Under That Email'))
+                        ask()
                       } else {
                         console.log(chalk.green(data))
+                        ask()
                       }
                     }
                   })
@@ -672,15 +803,21 @@ function ask () {
       case 'View User':
         findUser(function (err, user) {
           if (err) {
-            console.log(chalk.red(err))
+            console.log('Starting Over - Error:', chalk.red(err))
+            ask()
           } else {
             if (user === null) {
               console.log(chalk.red('No User Found Under That Email'))
+              ask()
             } else {
               console.log(chalk.green(user))
+              ask()
             }
           }
         })
+        break
+      case 'Exit':
+        process.exit()
         break
     }
   })
