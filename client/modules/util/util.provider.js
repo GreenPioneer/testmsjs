@@ -43,8 +43,6 @@
 
       return service
 
-      // /////////////
-
       function configureStates (states, otherwisePath) {
         states.forEach(function (state) {
           state.config.resolve =
@@ -75,7 +73,7 @@
               (error.data || '') + '. <br/>' + (error.statusText || '') +
               ': ' + (error.status || '')
             logger.warning(msg, [toState])
-            $location.path('/')
+            $location.url('/')
           }
         )
       }

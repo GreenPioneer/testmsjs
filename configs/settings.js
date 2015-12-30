@@ -113,8 +113,6 @@ if (process.env.NODE_ENV === 'test') {
   settings = _.merge(baseLine, require('./environments/production.js'))
 } else {
   settings = _.merge(baseLine, require('./environments/development.js'))
-
-// var settings = require('./configs/settings.js')
 }
 
 module.exports = settings
