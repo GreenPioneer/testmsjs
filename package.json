@@ -1,7 +1,7 @@
 {
   "name": "meanstackjs",
   "version": "0.1.1",
-  "description": "The Test Repo used for meanstackjs",
+  "description": "The Test Repo used for meanstackjs - not live",
   "main": "index.js",
   "standard": {
     "globals": [
